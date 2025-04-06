@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <title>ASHURA STORE</title>
-  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="home.css" />
   <script type="module" src="home.js" defer></script>
 </head>
 <body>
-  <div class="notice-banner" id="noticeBanner" style="display: none;"></div>
-
-  <header>
+  <div class="header">
     <h1 id="storeTitle">ASHURA STORE</h1>
-    <nav>
-      <button>Order History</button>
-      <button>Profile</button>
-    </nav>
-  </header>
+    <p id="noticeBox" class="notice"></p>
+    <div class="top-actions">
+      <button onclick="alert('Order history coming soon')">Order History</button>
+      <button onclick="alert('Profile page coming soon')">Profile</button>
+    </div>
+  </div>
 
-  <main id="productContainer">
-    <!-- Products will load here -->
-  </main>
+  <div class="product-list" id="productList">
+    <!-- Products will be loaded here -->
+  </div>
 </body>
 </html>
