@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>ASHURA STORE</title>
-  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="index.css">
   <script defer src="index.js"></script>
 </head>
 <body>
-  <!-- Hamburger Menu -->
+  <!-- Drawer -->
+  <div class="drawer" id="drawer">
+    <a href="https://t.me/GodXAshura" target="_blank">
+      <img src="https://img.icons8.com/color/48/telegram-app.png" alt="Telegram"> JOIN TELEGRAM
+    </a>
+    <a href="https://wa.me/917636935859" target="_blank">
+      <img src="https://img.icons8.com/color/48/whatsapp.png" alt="WhatsApp"> CONTACT US
+    </a>
+  </div>
+
+  <!-- Hamburger -->
   <div class="hamburger" onclick="toggleDrawer()">
     <div></div>
     <div></div>
     <div></div>
   </div>
 
-  <!-- Drawer Menu -->
-  <div class="drawer" id="drawer">
-    <a href="https://t.me/GodXAshura" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
-      Join Telegram
-    </a>
-    <a href="https://wa.me/917636935859" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" />
-      Contact Us
-    </a>
+  <!-- Christmas Lights -->
+  <div class="lights">
+    <div class="light red"></div>
+    <div class="light green"></div>
+    <div class="light blue"></div>
+    <div class="light yellow"></div>
+    <div class="light red"></div>
+    <div class="light green"></div>
   </div>
 
-  <!-- Main Hero Section -->
-  <div class="hero">
+  <!-- Hero Section -->
+  <div class="hero" id="hero">
     <div class="overlay"></div>
     <div class="content">
-      <img class="ashura-img" src="https://i.pinimg.com/originals/44/9e/98/449e9882de6bc8d6a9e1304d77f6efdb.png" alt="Ashura Anime" />
+      <img src="https://i.pinimg.com/736x/82/76/02/827602f6b84f75c2f4506b03cdcf39cb.jpg" alt="Ashura" class="ashura-img">
       <h1>ASHURA STORE</h1>
-      <p class="tagline">Your Gateway to Prediction Tools, Tips & Victory</p>
-      <p class="desc">ASHURA STORE offers the most reliable prediction tools like 91Club Predictor, expert insights, and premium support. Built for winners.</p>
+      <p class="tagline">Unlock Premium Tools & Services</p>
+      <p class="desc">ASHURA STORE provides exclusive access to prediction tools like 91club, premium memberships, and fast support. Built for both PC and mobile users with style and speed.</p>
       <button onclick="startApp()">Get Started</button>
     </div>
   </div>
