@@ -1,38 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Panel - ASHURA STORE</title>
+  <meta charset="UTF-8" />
+  <title>ASHURA ADMIN PANEL</title>
   <link rel="stylesheet" href="admin.css">
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-  <script src="admin.js" defer></script>
+  <script type="module" src="admin.js" defer></script>
 </head>
 <body>
   <div class="admin-container">
-    <h1>Admin Panel</h1>
+    <h1>Admin Panel - ASHURA STORE</h1>
 
     <section>
-      <h2>Store Settings</h2>
-      <input type="text" id="storeName" placeholder="New Store Name">
-      <input type="text" id="notification" placeholder="Floating Notification">
-      <button onclick="updateSettings()">Update Settings</button>
+      <h2>Change Store Title</h2>
+      <input type="text" id="storeTitleInput" placeholder="Enter new store title" />
+      <button onclick="updateStoreTitle()">Update Title</button>
+    </section>
+
+    <section>
+      <h2>Send Notification</h2>
+      <input type="text" id="noticeInput" placeholder="Notice to users" />
+      <button onclick="sendNotice()">Send Notification</button>
     </section>
 
     <section>
       <h2>Add Product</h2>
-      <input type="text" id="productName" placeholder="Product Name">
-      <input type="text" id="productPrice" placeholder="Product Price">
-      <input type="file" id="productImage">
+      <input type="text" id="productName" placeholder="Product name" />
+      <input type="number" id="productPrice" placeholder="Price" />
+      <input type="file" id="productImage" />
       <button onclick="uploadProduct()">Add Product</button>
     </section>
-
-    <section>
-      <h2>Registered Users</h2>
-      <ul id="userList"></ul>
-    </section>
-
-    <div id="loading" class="loading hidden">Loading...</div>
   </div>
 </body>
 </html>
