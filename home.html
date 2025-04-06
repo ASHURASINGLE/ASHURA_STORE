@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ASHURA STORE</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+  <script src="home.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>ASHURA STORE</h1>
+  </header>
+  <div class="product">
+    <img src="91club-logo.png" alt="91club Tool">
+    <div>
+      <h2>91club Predictor Tool</h2>
+      <p>Price: $19.99</p>
+    </div>
+  </div>
+  <div class="features">
+    <button onclick="showOrderHistory()">Order History</button>
+    <button onclick="showProfile()">Profile</button>
+  </div>
+  <div id="loading" class="loading hidden">Loading...</div>
+</body>
+</html>
