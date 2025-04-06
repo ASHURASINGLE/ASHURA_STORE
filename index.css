@@ -1,3 +1,4 @@
+/* Reset and base */
 body, html {
   margin: 0;
   padding: 0;
@@ -6,6 +7,7 @@ body, html {
   overflow: hidden;
 }
 
+/* Hacker-style hero */
 .hero {
   position: relative;
   width: 100%;
@@ -23,21 +25,27 @@ body, html {
   background: rgba(0, 0, 0, 0.7);
 }
 
-.sidebar {
+/* Drawer */
+.drawer {
   position: fixed;
   top: 0;
-  left: 0;
-  background: #111;
-  width: 180px;
+  left: -220px;
+  width: 220px;
   height: 100%;
+  background: #111;
   padding-top: 100px;
   display: flex;
   flex-direction: column;
-  z-index: 10;
-  box-shadow: 2px 0 10px rgba(0,255,200,0.2);
+  transition: left 0.3s ease;
+  z-index: 100;
+  box-shadow: 3px 0 12px rgba(0, 255, 200, 0.2);
 }
 
-.sidebar a {
+.drawer.open {
+  left: 0;
+}
+
+.drawer a {
   color: #00ffc8;
   text-decoration: none;
   font-weight: bold;
@@ -47,18 +55,34 @@ body, html {
   transition: background 0.3s ease;
 }
 
-.sidebar a:hover {
+.drawer a:hover {
   background: rgba(0, 255, 200, 0.1);
 }
 
-.sidebar img {
+.drawer img {
   width: 24px;
   margin-right: 10px;
 }
 
+/* Hamburger menu */
+.hamburger {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 101;
+  cursor: pointer;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 4px;
+  background: #00ffc8;
+  margin: 6px 0;
+  transition: 0.4s;
+}
+
+/* Main content */
 .content {
-  margin-left: 180px;
-  position: relative;
   text-align: center;
   color: #00ffc8;
   z-index: 2;
@@ -120,26 +144,6 @@ body, html {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .sidebar {
-    width: 100%;
-    height: auto;
-    flex-direction: row;
-    justify-content: center;
-    padding: 10px 0;
-    position: fixed;
-    top: 0;
-  }
-
-  .sidebar a {
-    padding: 10px;
-    font-size: 0.9rem;
-  }
-
-  .content {
-    margin-left: 0;
-    padding-top: 120px;
-  }
-
   .ashura-img {
     width: 80px;
   }
