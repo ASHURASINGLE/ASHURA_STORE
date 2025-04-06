@@ -7,36 +7,36 @@
   <link rel="stylesheet" href="index.css" />
 </head>
 <body>
-  <div class="drawer-toggle" onclick="toggleDrawer()">☰</div>
-
-  <aside id="drawer" class="drawer">
+  <div class="drawer" id="drawer">
+    <button class="close-btn" onclick="toggleDrawer()">✕</button>
     <a href="https://t.me/GodXAshura" target="_blank">
-      <img src="https://img.icons8.com/ios-filled/50/telegram-app.png" alt="Telegram" />
+      <img src="https://img.icons8.com/color/48/telegram-app.png" />
       Join Telegram
     </a>
     <a href="https://wa.me/917636935859" target="_blank">
-      <img src="https://img.icons8.com/ios-filled/50/whatsapp.png" alt="WhatsApp" />
+      <img src="https://img.icons8.com/color/48/whatsapp.png" />
       Contact Us
     </a>
-  </aside>
+  </div>
 
-  <main class="main-section">
-    <div class="hero-text">
-      <h1>Unlock premium tools with every click</h1>
-      <p class="desc">
-        Welcome to <strong>ASHURA STORE</strong> — your one-stop platform for exclusive digital products and advanced tools like 91club predictor, all tailored to boost your potential. Join us to experience smart automation and seamless access.
+  <header>
+    <button class="menu-btn" onclick="toggleDrawer()">☰</button>
+    <h1>ASHURA STORE</h1>
+  </header>
+
+  <main>
+    <div class="content">
+      <h2>Unlock growth with every action</h2>
+      <p>
+        Welcome to ASHURA STORE – your gateway to premium tools and services.
+        From predictors to automation tools, explore what fuels your edge. Built for users. Powered by community.
       </p>
       <div class="buttons">
-        <button onclick="startLoading()">Get Started</button>
-        <button class="secondary" onclick="window.location.href='https://wa.me/917636935859'">Talk to Support</button>
+        <button onclick="goToLogin()">Get Started</button>
+        <button onclick="talkToSupport()">Talk to Support</button>
       </div>
     </div>
-    <div class="hero-image">
-      <img src="https://cdn-icons-png.flaticon.com/512/10379/10379383.png" alt="Tech Icon" />
-    </div>
   </main>
-
-  <div id="loader" class="loader hidden">Loading...</div>
 
   <script src="index.js"></script>
 </body>
