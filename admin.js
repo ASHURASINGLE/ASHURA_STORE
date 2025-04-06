@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -15,47 +14,49 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const storage = getStorage(app);
 
-// Change store title
+// Update store title
 window.updateStoreTitle = () => {
-  const title = document.getElementById("storeTitleInput").value;
+  const title = document.getElementById("storeTitleInput").value.trim();
+  if (!title) return alert("Please enter a title.");
   set(ref(db, "settings/title"), title)
-    .then(() => alert("Title updated successfully!"))
+    .then(() => alert("Store title updated!"))
     .catch(err => alert("Error: " + err.message));
 };
 
-// Send notification
+// Send notice
 window.sendNotice = () => {
-  const notice = document.getElementById("noticeInput").value;
+  const notice = document.getElementById("noticeInput").value.trim();
+  if (!notice) return alert("Please enter a message.");
   set(ref(db, "settings/notice"), notice)
     .then(() => alert("Notice sent!"))
     .catch(err => alert("Error: " + err.message));
 };
 
-// Upload product
+// Add product using public image URL
 window.uploadProduct = () => {
-  const name = document.getElementById("productName").value;
-  const price = document.getElementById("productPrice").value;
-  const file = document.getElementById("productImage").files[0];
+  const name = document.getElementById("productName").value.trim();
+  const price = document.getElementById("productPrice").value.trim();
+  const imageURL = document.getElementById("productImageURL").value.trim();
 
-  if (!name || !price || !file) {
+  if (!name || !price || !imageURL) {
     alert("Please fill all fields.");
     return;
   }
 
-  const fileRef = sRef(storage, "products/" + file.name);
-
-  uploadBytes(fileRef, file)
-    .then(snapshot => getDownloadURL(snapshot.ref))
-    .then(url => {
-      const productRef = ref(db, "products/" + name.replace(/\s+/g, "_"));
-      return set(productRef, {
-        name,
-        price,
-        image: url
-      });
+  const productRef = ref(db, "products/" + name.replace(/\s+/g, "_"));
+  set(productRef, {
+    name,
+    price,
+    image: imageURL
+  })
+    .then(() => {
+      alert("Product added!");
+      document.getElementById("productName").value = "";
+      document.getElementById("productPrice").value = "";
+      document.getElementById("productImageURL").value = "";
     })
-    .then(() => alert("Product added successfully!"))
-    .catch(err => alert("Error: " + err.message));
+    .catch(err => {
+      alert("Error: " + err.message);
+    });
 };
