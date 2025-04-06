@@ -2,42 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ASHURA STORE</title>
-  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="drawer" id="drawer">
-    <button class="close-btn" onclick="toggleDrawer()">✕</button>
+  <div class="drawer-toggle" onclick="toggleDrawer()">☰</div>
+  <nav class="drawer" id="drawer">
     <a href="https://t.me/GodXAshura" target="_blank">
-      <img src="https://img.icons8.com/color/48/telegram-app.png" />
-      Join Telegram
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" /> Join Telegram
     </a>
     <a href="https://wa.me/917636935859" target="_blank">
-      <img src="https://img.icons8.com/color/48/whatsapp.png" />
-      Contact Us
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" /> Contact Us
     </a>
-  </div>
+  </nav>
 
-  <header>
-    <button class="menu-btn" onclick="toggleDrawer()">☰</button>
-    <h1>ASHURA STORE</h1>
-  </header>
-
-  <main>
-    <div class="content">
-      <h2>Unlock growth with every action</h2>
-      <p>
-        Welcome to ASHURA STORE – your gateway to premium tools and services.
-        From predictors to automation tools, explore what fuels your edge. Built for users. Powered by community.
-      </p>
+  <main class="hero">
+    <div class="hero-content">
+      <h1>Welcome to ASHURA STORE</h1>
+      <p>Your one-stop shop for exclusive digital products, game tools, scripts, and more. We bring power, performance, and customization at your fingertips — built by creators, for creators.</p>
       <div class="buttons">
-        <button onclick="goToLogin()">Get Started</button>
-        <button onclick="talkToSupport()">Talk to Support</button>
+        <a href="login.html" class="btn primary">Get Started</a>
+        <a href="https://wa.me/917636935859" class="btn">Talk to Support</a>
       </div>
     </div>
   </main>
 
-  <script src="index.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
