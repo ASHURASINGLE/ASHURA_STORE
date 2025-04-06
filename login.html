@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ASHURA STORE LOGIN</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="login.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <h2>ASHURA STORE LOGIN</h2>
+    <div class="tabs">
+      <button onclick="showLogin()">Login</button>
+      <button onclick="showRegister()">Register</button>
+    </div>
+    <div id="loginBox" class="form-box">
+      <input type="email" id="loginEmail" placeholder="Email">
+      <input type="password" id="loginPassword" placeholder="Password">
+      <button onclick="loginUser()">Login</button>
+    </div>
+    <div id="registerBox" class="form-box hidden">
+      <input type="email" id="regEmail" placeholder="Email">
+      <input type="text" id="regPhone" placeholder="Phone Number">
+      <input type="password" id="regPassword" placeholder="Password">
+      <button onclick="registerUser()">Register</button>
+    </div>
+    <div id="loading" class="loading hidden">Loading...</div>
+  </div>
+</body>
+</html>
