@@ -1,3 +1,16 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import {
+  getDatabase,
+  ref,
+  set
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
   authDomain: "ashura-6cb98.firebaseapp.com",
@@ -8,44 +21,58 @@ const firebaseConfig = {
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
 
-function showLogin() {
-  document.getElementById('loginBox').classList.remove('hidden');
-  document.getElementById('registerBox').classList.add('hidden');
-}
+// Toggle views
+window.showLogin = () => {
+  document.getElementById("loginBox").classList.remove("hidden");
+  document.getElementById("registerBox").classList.add("hidden");
+};
 
-function showRegister() {
-  document.getElementById('registerBox').classList.remove('hidden');
-  document.getElementById('loginBox').classList.add('hidden');
-}
+window.showRegister = () => {
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("registerBox").classList.remove("hidden");
+};
 
-function showLoading(show) {
-  document.getElementById('loading').classList.toggle('hidden', !show);
-}
+// Register User
+window.registerUser = () => {
+  const email = document.getElementById("regEmail").value;
+  const phone = document.getElementById("regPhone").value;
+  const password = document.getElementById("regPassword").value;
 
-function loginUser() {
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
-  showLoading(true);
-  auth.signInWithEmailAndPassword(email, password)
-    .then(() => location.href = 'home.html')
-    .catch(err => alert(err.message))
-    .finally(() => showLoading(false));
-}
-
-function registerUser() {
-  const email = document.getElementById('regEmail').value;
-  const phone = document.getElementById('regPhone').value;
-  const password = document.getElementById('regPassword').value;
-  showLoading(true);
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(cred => {
-      return db.ref('users/' + cred.user.uid).set({ email, phone });
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const uid = userCredential.user.uid;
+      set(ref(db, "users/" + uid), {
+        email: email,
+        phone: phone
+      });
+      window.location.href = "home.html";
     })
-    .then(() => location.href = 'home.html')
-    .catch(err => alert(err.message))
-    .finally(() => showLoading(false));
-}
+    .catch((error) => {
+      alert("Registration failed: " + error.message);
+    });
+};
+
+// Login User
+window.loginUser = () => {
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      window.location.href = "home.html";
+    })
+    .catch(() => {
+      const errMsg = document.getElementById("errorMessage");
+      errMsg.classList.remove("hidden");
+      errMsg.classList.add("show");
+
+      setTimeout(() => {
+        errMsg.classList.remove("show");
+        errMsg.classList.add("hidden");
+      }, 4000);
+    });
+};
