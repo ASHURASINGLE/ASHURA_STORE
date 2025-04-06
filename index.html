@@ -2,30 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ASHURA STORE</title>
-  <link rel="stylesheet" href="index.css" />
+  <title>ASHURA STORE LOGIN</title>
+  <link rel="stylesheet" href="login.css" />
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+  <script src="login.js" defer></script>
 </head>
 <body>
-  <div class="drawer-toggle" onclick="toggleDrawer()">
-    <span>&#9776;</span>
-  </div>
+  <div class="login-container">
+    <h2>ASHURA STORE LOGIN</h2>
 
-  <div class="drawer" id="drawer">
-    <a href="https://t.me/yourtelegram" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111644.png" alt="Telegram" /> Telegram
-    </a>
-    <a href="mailto:contact@example.com">
-      <img src="https://cdn-icons-png.flaticon.com/512/725/725643.png" alt="Contact" /> Contact Us
-    </a>
-  </div>
+    <div class="tabs">
+      <button onclick="showLogin()">Login</button>
+      <button onclick="showRegister()">Register</button>
+    </div>
 
-  <div class="container" onclick="glowButton()">
-    <h1>Welcome to ASHURA STORE</h1>
-    <p>Your gateway to digital excellence in the crypto world.</p>
-    <button class="start-button" onclick="event.stopPropagation(); location.href='login.html';">GET START</button>
-  </div>
+    <div id="loginBox" class="form-box">
+      <input type="email" id="loginEmail" placeholder="Email" />
+      <input type="password" id="loginPassword" placeholder="Password" />
+      <button onclick="loginUser()">Login</button>
+      <p id="loginError" class="error-message hidden">Wrong Email or Password</p>
+    </div>
 
-  <script src="index.js"></script>
+    <div id="registerBox" class="form-box hidden">
+      <input type="email" id="regEmail" placeholder="Email" />
+      <input type="text" id="regPhone" placeholder="Phone Number" />
+      <input type="password" id="regPassword" placeholder="Password" />
+      <button onclick="registerUser()">Register</button>
+      <p id="registerError" class="error-message hidden">Registration Failed</p>
+    </div>
+  </div>
 </body>
 </html>
