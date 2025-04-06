@@ -1,16 +1,59 @@
-function toggleDrawer() {
-  const drawer = document.getElementById("drawer");
-  if (drawer.style.left === "0px") {
-    drawer.style.left = "-200px";
-  } else {
-    drawer.style.left = "0px";
-  }
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
+  authDomain: "ashura-6cb98.firebaseapp.com",
+  databaseURL: "https://ashura-6cb98-default-rtdb.firebaseio.com",
+  projectId: "ashura-6cb98",
+  storageBucket: "ashura-6cb98.appspot.com",
+  messagingSenderId: "990827476073",
+  appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+// Toggle tabs
+function showLogin() {
+  document.getElementById('loginBox').classList.remove('hidden');
+  document.getElementById('registerBox').classList.add('hidden');
 }
 
-function glowButton() {
-  const btn = document.querySelector(".start-button");
-  btn.style.boxShadow = "0 0 30px red";
-  setTimeout(() => {
-    btn.style.boxShadow = "0 0 10px red";
-  }, 300);
+function showRegister() {
+  document.getElementById('registerBox').classList.remove('hidden');
+  document.getElementById('loginBox').classList.add('hidden');
+}
+
+// Login
+function loginUser() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      window.location.href = "home.html";
+    })
+    .catch(() => {
+      document.getElementById('loginError').classList.remove('hidden');
+    });
+}
+
+// Register
+function registerUser() {
+  const email = document.getElementById('regEmail').value;
+  const phone = document.getElementById('regPhone').value;
+  const password = document.getElementById('regPassword').value;
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      const uid = userCredential.user.uid;
+      db.ref("users/" + uid).set({
+        email: email,
+        phone: phone
+      });
+      window.location.href = "home.html";
+    })
+    .catch(() => {
+      document.getElementById('registerError').classList.remove('hidden');
+    });
 }
