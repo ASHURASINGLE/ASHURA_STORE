@@ -4,21 +4,20 @@ function toggleDrawer() {
 }
 
 function startLoading() {
-  const loader = document.getElementById('loader');
-  loader.classList.remove('hidden');
+  document.getElementById("loader").classList.remove("hidden");
 
   setTimeout(() => {
     window.location.href = "login.html";
-  }, 1500); // Simulate loading time
+  }, 1000);
 }
 
-// Set a random background image on each refresh
+// Change background image on refresh
 const images = [
-  'https://source.unsplash.com/1920x1080/?technology,dark',
-  'https://source.unsplash.com/1920x1080/?hacker,cyber',
-  'https://source.unsplash.com/1920x1080/?business,technology',
-  'https://source.unsplash.com/1920x1080/?coding,workspace',
-  'https://source.unsplash.com/1920x1080/?finance,abstract'
+  'https://source.unsplash.com/1600x900/?cyber,technology',
+  'https://source.unsplash.com/1600x900/?digital,futuristic',
+  'https://source.unsplash.com/1600x900/?coding,terminal',
+  'https://source.unsplash.com/1600x900/?ai,network',
+  'https://source.unsplash.com/1600x900/?server,datacenter'
 ];
-
-document.body.style.backgroundImage = `url('${images[Math.floor(Math.random() * images.length)]}')`;
+const randomImage = images[Math.floor(Math.random() * images.length)];
+document.body.style.backgroundImage = `url(${randomImage})`;
