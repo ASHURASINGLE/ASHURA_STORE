@@ -1,9 +1,9 @@
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
-  authDomain: "https://ashura-6cb98-default-rtdb.firebaseio.com",
+  authDomain: "ashura-6cb98.firebaseapp.com",
   databaseURL: "https://ashura-6cb98-default-rtdb.firebaseio.com",
   projectId: "ashura-6cb98",
-  storageBucket: "ashura-6cb98.firebasestorage.app",
+  storageBucket: "ashura-6cb98.appspot.com",
   messagingSenderId: "990827476073",
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
