@@ -5,7 +5,7 @@ import {
   onValue
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-// Firebase config
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
   authDomain: "ashura-6cb98.firebaseapp.com",
@@ -19,7 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Load store title
+// Load title
 onValue(ref(db, "settings/title"), (snap) => {
   const title = snap.val() || "ASHURA STORE";
   document.title = title;
