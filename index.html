@@ -6,25 +6,26 @@
   <title>ASHURA STORE</title>
   <link rel="stylesheet" href="index.css" />
   <script defer src="index.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-  <div class="drawer-toggle" onclick="toggleDrawer()">&#9776;</div>
-
   <div class="drawer" id="drawer">
-    <a href="https://t.me/ashurastore" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
-      Telegram
+    <button class="close-btn" onclick="toggleDrawer()">×</button>
+    <a href="https://t.me/yourtelegram" target="_blank">
+      <i class="fab fa-telegram"></i> Telegram
     </a>
-    <a href="mailto:support@ashurastore.com">
-      <img src="https://cdn-icons-png.flaticon.com/512/726/726623.png" alt="Contact Us" />
-      Contact Us
+    <a href="https://wa.me/yourwhatsapplink" target="_blank">
+      <i class="fab fa-whatsapp"></i> Contact Us
     </a>
   </div>
 
-  <div class="container" onclick="glowEffect(event)">
-    <h1>Welcome to ASHURA STORE</h1>
-    <p>Your gateway to exclusive digital tools, game utilities, scripts, and more. Explore the world of innovation with performance at your fingertips.</p>
-    <button class="glow-button" onclick="location.href='login.html'">GET START</button>
+  <div class="main" onclick="createGlow(event)">
+    <button class="menu-btn" onclick="toggleDrawer()">☰</button>
+    <div class="content">
+      <h1>ASHURA STORE</h1>
+      <p>Your gateway to digital goods, tools, and power-packed performance.</p>
+      <a href="login.html" class="glow-btn">GET START</a>
+    </div>
   </div>
 </body>
 </html>
