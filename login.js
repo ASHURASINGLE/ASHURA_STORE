@@ -1,6 +1,6 @@
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
-  authDomain: "https://ashura-6cb98.firebaseapp.com/__/auth/action?mode=action&oobCode=code",
+  authDomain: "https://ashura-6cb98-default-rtdb.firebaseio.com",
   databaseURL: "https://ashura-6cb98-default-rtdb.firebaseio.com",
   projectId: "ashura-6cb98",
   storageBucket: "ashura-6cb98.firebasestorage.app",
