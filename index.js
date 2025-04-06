@@ -1,4 +1,4 @@
-// Firebase configuration
+// Firebase config (replace this with your own if needed)
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
   authDomain: "ashura-6cb98.firebaseapp.com",
@@ -9,6 +9,7 @@ const firebaseConfig = {
   appId: "1:990827476073:web:your-app-id"
 };
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
@@ -46,7 +47,7 @@ function registerUser() {
   errorBox.classList.add("hidden");
 
   auth.createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
+    .then(userCredential => {
       const user = userCredential.user;
       db.ref("users/" + user.uid).set({ email, phone });
       window.location.href = "home.html";
@@ -56,9 +57,7 @@ function registerUser() {
     });
 }
 
-// Redirect protection for home.html
-auth.onAuthStateChanged(user => {
-  if (!user && window.location.pathname.includes("home.html")) {
-    window.location.href = "index.html";
-  }
-});
+// Optional: Add this to home.html to protect access
+// auth.onAuthStateChanged(user => {
+//   if (!user) window.location.href = "index.html";
+// });
