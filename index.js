@@ -1,13 +1,14 @@
-const images = [
-  'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80',
-  'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80',
-  'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80',
-  'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80'
+const professionalImages = [
+  'https://images.unsplash.com/photo-1581090700227-1e8e8e7f0db9?auto=format&fit=crop&w=1600&q=80',
+  'https://images.unsplash.com/photo-1612832020764-61d827a5c07c?auto=format&fit=crop&w=1600&q=80',
+  'https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=1600&q=80',
+  'https://images.unsplash.com/photo-1587614382346-4ec1f9da246c?auto=format&fit=crop&w=1600&q=80',
+  'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80'
 ];
 
 window.onload = () => {
   const hero = document.getElementById('hero');
-  const bg = images[Math.floor(Math.random() * images.length)];
+  const bg = professionalImages[Math.floor(Math.random() * professionalImages.length)];
   hero.style.backgroundImage = `url('${bg}')`;
 };
 
