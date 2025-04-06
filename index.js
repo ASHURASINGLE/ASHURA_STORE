@@ -1,5 +1,10 @@
+function toggleDrawer() {
+  const drawer = document.getElementById("drawer");
+  drawer.classList.toggle("open");
+}
+
 function startApp() {
-  const btn = document.querySelector('button');
+  const btn = document.querySelector("button");
   btn.innerText = "Loading...";
   btn.disabled = true;
   setTimeout(() => {
