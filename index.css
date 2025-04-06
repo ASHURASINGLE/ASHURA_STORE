@@ -1,85 +1,86 @@
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: url('https://images.unsplash.com/photo-1612831662051-cdba2a50b24b?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
-  background-size: cover;
+  padding: 0;
+  background: #0f0f0f;
   color: white;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
-  overflow: hidden;
 }
 
-.container {
+.login-container {
+  width: 90%;
+  max-width: 400px;
+  padding: 2rem;
+  background: #1a1a1a;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #222;
   text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 20px;
 }
 
-h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+h2 {
+  margin-bottom: 1rem;
+  color: #e50914;
 }
 
-p {
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
 }
 
-.start-button {
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
+.tabs button {
+  flex: 1;
+  padding: 0.5rem;
+  background: #2a2a2a;
+  color: white;
   border: none;
-  background: red;
-  color: white;
-  border-radius: 5px;
   cursor: pointer;
-  box-shadow: 0 0 10px red;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  transition: background 0.3s;
 }
 
-.start-button:hover {
-  box-shadow: 0 0 20px red;
-  transform: scale(1.05);
+.tabs button:hover {
+  background: #e50914;
 }
 
-.drawer-toggle {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  font-size: 1.5rem;
-  color: white;
-  cursor: pointer;
-  z-index: 1001;
-}
-
-.drawer {
-  position: fixed;
-  left: -200px;
-  top: 0;
-  width: 200px;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  padding: 2rem 1rem;
-  transition: left 0.3s ease;
-  z-index: 1000;
+.form-box {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 0.7rem;
 }
 
-.drawer a {
+.form-box input {
+  padding: 0.7rem;
+  border: none;
+  border-radius: 5px;
+}
+
+.form-box button {
+  padding: 0.7rem;
+  background: #e50914;
+  border: none;
+  border-radius: 5px;
   color: white;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1rem;
+  cursor: pointer;
 }
 
-.drawer a img {
-  width: 20px;
-  height: 20px;
+.form-box button:hover {
+  background: #ff1e2d;
+}
+
+.hidden {
+  display: none;
+}
+
+.error-message {
+  color: red;
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 }
