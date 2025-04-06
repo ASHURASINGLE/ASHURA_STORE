@@ -4,30 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ASHURA STORE</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="index.css" />
+  <script defer src="index.js"></script>
 </head>
 <body>
-  <div class="drawer-toggle" onclick="toggleDrawer()">☰</div>
-  <nav class="drawer" id="drawer">
-    <a href="https://t.me/GodXAshura" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" /> Join Telegram
-    </a>
-    <a href="https://wa.me/917636935859" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" /> Contact Us
-    </a>
-  </nav>
+  <div class="drawer-toggle" onclick="toggleDrawer()">&#9776;</div>
 
-  <main class="hero">
-    <div class="hero-content">
-      <h1>Welcome to ASHURA STORE</h1>
-      <p>Your one-stop shop for exclusive digital products, game tools, scripts, and more. We bring power, performance, and customization at your fingertips — built by creators, for creators.</p>
-      <div class="buttons">
-        <a href="login.html" class="btn primary">Get Started</a>
-        <a href="https://wa.me/917636935859" class="btn">Talk to Support</a>
-      </div>
-    </div>
-  </main>
+  <div class="drawer" id="drawer">
+    <a href="https://t.me/ashurastore" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
+      Telegram
+    </a>
+    <a href="mailto:support@ashurastore.com">
+      <img src="https://cdn-icons-png.flaticon.com/512/726/726623.png" alt="Contact Us" />
+      Contact Us
+    </a>
+  </div>
 
-  <script src="script.js"></script>
+  <div class="container" onclick="glowEffect(event)">
+    <h1>Welcome to ASHURA STORE</h1>
+    <p>Your gateway to exclusive digital tools, game utilities, scripts, and more. Explore the world of innovation with performance at your fingertips.</p>
+    <button class="glow-button" onclick="location.href='login.html'">GET START</button>
+  </div>
 </body>
 </html>
