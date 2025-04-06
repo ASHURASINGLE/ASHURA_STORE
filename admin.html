@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ASHURA ADMIN PANEL</title>
-  <link rel="stylesheet" href="admin.css">
+  <title>Admin Panel - ASHURA STORE</title>
+  <link rel="stylesheet" href="admin.css" />
   <script type="module" src="admin.js" defer></script>
 </head>
 <body>
@@ -12,21 +12,21 @@
 
     <section>
       <h2>Change Store Title</h2>
-      <input type="text" id="storeTitleInput" placeholder="Enter new store title" />
+      <input type="text" id="storeTitleInput" placeholder="New Store Title" />
       <button onclick="updateStoreTitle()">Update Title</button>
     </section>
 
     <section>
       <h2>Send Notification</h2>
-      <input type="text" id="noticeInput" placeholder="Notice to users" />
-      <button onclick="sendNotice()">Send Notification</button>
+      <input type="text" id="noticeInput" placeholder="Write a notice..." />
+      <button onclick="sendNotice()">Send Notice</button>
     </section>
 
     <section>
-      <h2>Add Product</h2>
-      <input type="text" id="productName" placeholder="Product name" />
-      <input type="number" id="productPrice" placeholder="Price" />
-      <input type="file" id="productImage" />
+      <h2>Add Product (via Image URL)</h2>
+      <input type="text" id="productName" placeholder="Product Name" />
+      <input type="text" id="productPrice" placeholder="Price" />
+      <input type="text" id="productImageURL" placeholder="Image URL" />
       <button onclick="uploadProduct()">Add Product</button>
     </section>
   </div>
