@@ -1,12 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>ASHURA STORE LOGIN</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-  <script src="login.js" defer></script>
+  
+  <!-- Firebase v9 Modular SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
+      authDomain: "ashura-6cb98.firebaseapp.com",
+      databaseURL: "https://ashura-6cb98-default-rtdb.firebaseio.com",
+      projectId: "ashura-6cb98",
+      storageBucket: "ashura-6cb98.appspot.com",
+      messagingSenderId: "990827476073",
+      appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    // Show Login/Register tabs
+    window.showLogin = () => {
+      document.getElementById("loginBox").classList.remove("hidden");
+      document.getElementById("registerBox").classList.add("hidden");
+    };
+
+    window.showRegister = () => {
+      document.getElementById("registerBox").classList.remove("hidden");
+      document.getElementById("loginBox").classList.add("hidden");
+    };
+
+    // Register
+    window.registerUser = () => {
+      const email = document.getElementById("regEmail").value;
+      const password = document.getElementById("regPassword").value;
+      const phone = document.getElementById("regPhone").value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(userCredential => {
+          const user = userCredential.user;
+          return set(ref(db, 'users/' + user.uid), {
+            email: email,
+            phone: phone
+          });
+        })
+        .then(() => {
+          alert("Registered successfully!");
+          window.location.href = "home.html";
+        })
+        .catch(error => alert(error.message));
+    };
+
+    // Login
+    window.loginUser = () => {
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          alert("Login successful!");
+          window.location.href = "home.html";
+        })
+        .catch(error => alert(error.message));
+    };
+  </script>
 </head>
 <body>
   <div class="container">
@@ -26,5 +89,6 @@
       <input type="password" id="regPassword" placeholder="Password">
       <button onclick="registerUser()">Register</button>
     </div>
+  </div>
 </body>
 </html>
