@@ -1,15 +1,16 @@
 function toggleDrawer() {
-  document.getElementById('drawer').classList.toggle('open');
+  const drawer = document.getElementById("drawer");
+  drawer.style.left = drawer.style.left === "0px" ? "-250px" : "0px";
 }
 
-function glowEffect(e) {
-  const btn = document.querySelector('.glow-button');
-  const ripple = document.createElement('span');
-  ripple.className = 'ripple';
-  ripple.style.left = `${e.clientX}px`;
-  ripple.style.top = `${e.clientY}px`;
-  document.body.appendChild(ripple);
+function createGlow(e) {
+  const glow = document.createElement("span");
+  glow.classList.add("click-glow");
+  glow.style.left = `${e.clientX - 30}px`;
+  glow.style.top = `${e.clientY - 30}px`;
+  document.body.appendChild(glow);
+
   setTimeout(() => {
-    ripple.remove();
-  }, 1000);
+    glow.remove();
+  }, 500);
 }
