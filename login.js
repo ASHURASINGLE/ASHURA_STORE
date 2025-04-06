@@ -1,4 +1,4 @@
-// Initialize Firebase
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
   authDomain: "ashura-6cb98.firebaseapp.com",
@@ -9,11 +9,12 @@ const firebaseConfig = {
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-// Toggle views
+// Show login/register boxes
 function showLogin() {
   document.getElementById("loginBox").classList.remove("hidden");
   document.getElementById("registerBox").classList.add("hidden");
@@ -23,7 +24,7 @@ function showRegister() {
   document.getElementById("registerBox").classList.remove("hidden");
 }
 
-// Register
+// Register User
 function registerUser() {
   const email = document.getElementById("regEmail").value;
   const phone = document.getElementById("regPhone").value;
@@ -43,7 +44,7 @@ function registerUser() {
     });
 }
 
-// Login
+// Login User
 function loginUser() {
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
