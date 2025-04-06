@@ -5,40 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ASHURA STORE</title>
   <link rel="stylesheet" href="index.css" />
-  <script defer src="index.js"></script>
 </head>
 <body>
-  <!-- Drawer overlay -->
-  <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
+  <div class="drawer-toggle" onclick="toggleDrawer()">☰</div>
 
-  <!-- Drawer -->
-  <div class="drawer" id="drawer">
+  <aside id="drawer" class="drawer">
     <a href="https://t.me/GodXAshura" target="_blank">
-      <img src="https://img.icons8.com/color/48/telegram-app.png" alt="Telegram" /> JOIN TELEGRAM
+      <img src="https://img.icons8.com/ios-filled/50/telegram-app.png" alt="Telegram" />
+      Join Telegram
     </a>
     <a href="https://wa.me/917636935859" target="_blank">
-      <img src="https://img.icons8.com/color/48/whatsapp.png" alt="WhatsApp" /> CONTACT US
+      <img src="https://img.icons8.com/ios-filled/50/whatsapp.png" alt="WhatsApp" />
+      Contact Us
     </a>
+  </aside>
+
+  <div class="main-content">
+    <header>
+      <h1 class="title">ASHURA STORE</h1>
+      <p class="subtitle">Unlock tools, services, and exclusive access tailored for your needs.</p>
+      <button onclick="startLoading()">Get Started</button>
+    </header>
   </div>
 
-  <!-- Hamburger menu -->
-  <div class="hamburger" onclick="toggleDrawer()">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
+  <div id="loader" class="loader hidden">Loading...</div>
 
-  <!-- Main Section -->
-  <section class="hero" id="hero">
-    <div class="overlay"></div>
-    <div class="content">
-      <h1>ASHURA STORE</h1>
-      <p class="desc">
-        Explore powerful tools and services with enhanced security and speed.
-        Designed for professionals and enthusiasts alike.
-      </p>
-      <button onclick="startApp()">Get Started</button>
-    </div>
-  </section>
+  <script src="index.js"></script>
 </body>
 </html>
