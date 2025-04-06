@@ -1,16 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import {
-  getDatabase,
-  ref,
-  set
-} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-
-// Firebase config
+// Initialize Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
   authDomain: "ashura-6cb98.firebaseapp.com",
@@ -21,47 +9,46 @@ const firebaseConfig = {
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
 
 // Toggle views
-window.showLogin = () => {
+function showLogin() {
   document.getElementById("loginBox").classList.remove("hidden");
   document.getElementById("registerBox").classList.add("hidden");
-};
-
-window.showRegister = () => {
+}
+function showRegister() {
   document.getElementById("loginBox").classList.add("hidden");
   document.getElementById("registerBox").classList.remove("hidden");
-};
+}
 
-// Register User
-window.registerUser = () => {
+// Register
+function registerUser() {
   const email = document.getElementById("regEmail").value;
   const phone = document.getElementById("regPhone").value;
   const password = document.getElementById("regPassword").value;
 
-  createUserWithEmailAndPassword(auth, email, password)
+  auth.createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
       const uid = userCredential.user.uid;
-      set(ref(db, "users/" + uid), {
+      db.ref("users/" + uid).set({
         email: email,
         phone: phone
       });
       window.location.href = "home.html";
     })
     .catch((error) => {
-      alert("Registration failed: " + error.message);
+      alert("Register error: " + error.message);
     });
-};
+}
 
-// Login User
-window.loginUser = () => {
+// Login
+function loginUser() {
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
 
-  signInWithEmailAndPassword(auth, email, password)
+  auth.signInWithEmailAndPassword(email, password)
     .then(() => {
       window.location.href = "home.html";
     })
@@ -69,10 +56,9 @@ window.loginUser = () => {
       const errMsg = document.getElementById("errorMessage");
       errMsg.classList.remove("hidden");
       errMsg.classList.add("show");
-
       setTimeout(() => {
         errMsg.classList.remove("show");
         errMsg.classList.add("hidden");
       }, 4000);
     });
-};
+}
