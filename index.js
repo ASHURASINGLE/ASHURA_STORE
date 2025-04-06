@@ -1,37 +1,19 @@
 const images = [
-  'https://wallpapercave.com/wp/wp8449990.jpg',
-  'https://wallpapercave.com/wp/wp9079152.jpg',
-  'https://wallpapercave.com/wp/wp8841650.jpg',
-  'https://wallpapercave.com/wp/wp7370870.jpg',
-  'https://wallpapercave.com/wp/wp12385320.jpg'
+  'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80',
+  'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80',
+  'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80',
+  'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80'
 ];
 
 window.onload = () => {
-  // Random background
   const hero = document.getElementById('hero');
   const bg = images[Math.floor(Math.random() * images.length)];
   hero.style.backgroundImage = `url('${bg}')`;
-
-  // Create snowflakes
-  for (let i = 0; i < 100; i++) {
-    let snowflake = document.createElement('div');
-    snowflake.classList.add('snowflake');
-    snowflake.style.position = 'absolute';
-    snowflake.style.top = `${Math.random() * 100}%`;
-    snowflake.style.left = `${Math.random() * 100}%`;
-    snowflake.style.width = '6px';
-    snowflake.style.height = '6px';
-    snowflake.style.borderRadius = '50%';
-    snowflake.style.background = '#fff';
-    snowflake.style.opacity = Math.random();
-    snowflake.style.animation = `fall ${5 + Math.random() * 5}s linear infinite`;
-    document.getElementById('snow').appendChild(snowflake);
-  }
 };
 
 function startApp() {
   const btn = document.querySelector('button');
-  btn.innerText = "Loading...";
+  btn.textContent = 'Loading...';
   btn.disabled = true;
   setTimeout(() => {
     window.location.href = 'login.html';
