@@ -1,40 +1,39 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ASHURA STORE - Login</title>
   <link rel="stylesheet" href="index.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
-  <script src="index.js" defer></script>
 </head>
 <body>
   <div class="container">
-    <div class="auth-box">
-      <h1 class="title">ASHURA STORE</h1>
-
-      <div class="tab-buttons">
-        <button id="loginTab" class="active" onclick="showLogin()">Login</button>
-        <button id="registerTab" onclick="showRegister()">Register</button>
-      </div>
-
-      <div id="loginForm" class="form active">
-        <input type="email" id="loginEmail" placeholder="Email" />
-        <input type="password" id="loginPassword" placeholder="Password" />
-        <button onclick="loginUser()">Login</button>
-        <p id="loginError" class="error hidden">Wrong email or password</p>
-      </div>
-
-      <div id="registerForm" class="form">
-        <input type="email" id="regEmail" placeholder="Email" />
-        <input type="text" id="regPhone" placeholder="Phone Number" />
-        <input type="password" id="regPassword" placeholder="Password" />
-        <button onclick="registerUser()">Register</button>
-        <p id="registerError" class="error hidden">Registration failed</p>
-      </div>
+    <h1>ASHURA STORE</h1>
+    <div class="tab-buttons">
+      <button id="loginTab" class="active">Login</button>
+      <button id="registerTab">Register</button>
     </div>
+
+    <div id="loginForm" class="form">
+      <input type="email" id="loginEmail" placeholder="Email" required />
+      <input type="password" id="loginPassword" placeholder="Password" required />
+      <button onclick="loginUser()">Login</button>
+    </div>
+
+    <div id="registerForm" class="form hidden">
+      <input type="email" id="registerEmail" placeholder="Email" required />
+      <input type="text" id="registerPhone" placeholder="Phone Number" required />
+      <input type="password" id="registerPassword" placeholder="Password" required />
+      <button onclick="registerUser()">Register</button>
+    </div>
+
+    <p id="statusMessage"></p>
   </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script type="module" src="index.js"></script>
 </body>
 </html>
