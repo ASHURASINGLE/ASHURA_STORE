@@ -1,127 +1,40 @@
-body {
-  margin: 0;
-  font-family: "Segoe UI", sans-serif;
-  background-color: #0d0d0d;
-  color: white;
-}
+/* home.css - Hacker Style UI with Responsive Layout */
 
-.header {
-  background-color: #111;
-  padding: 16px;
-  text-align: center;
-  border-bottom: 2px solid #444;
-}
+body { margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; background-color: #0d0d0d; color: #33ff33; display: flex; flex-direction: column; min-height: 100vh; }
 
-.header h1 {
-  margin: 0;
-  font-size: 28px;
-  color: #e60000;
-}
+.header { background-color: #111; padding: 20px; text-align: center; border-bottom: 2px solid #33ff33; }
 
-.notice {
-  font-size: 14px;
-  color: #ccc;
-}
+.header h1 { margin: 0; font-size: 28px; letter-spacing: 1px; }
 
-.tabs {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px 0;
-}
+.tabs { display: flex; justify-content: space-around; background-color: #111; border-bottom: 1px solid #33ff33; }
 
-.tabs button {
-  background-color: #222;
-  color: white;
-  border: 1px solid #444;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: 0.3s;
-}
+.tabs button { flex: 1; padding: 12px 0; background: none; border: none; color: #33ff33; font-size: 16px; cursor: pointer; border-right: 1px solid #33ff33; }
 
-.tabs button.active,
-.tabs button:hover {
-  background-color: #e60000;
-  color: white;
-}
+.tabs button:last-child { border-right: none; }
 
-.content-section {
-  display: none;
-  padding: 20px;
-}
+.tabs button.active { background-color: #1a1a1a; font-weight: bold; color: #00ff00; }
 
-.content-section.active {
-  display: block;
-}
+.tab-content { display: none; padding: 20px; }
 
-.product-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-}
+.tab-content.active { display: block; }
 
-.product {
-  background-color: #1a1a1a;
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid #333;
-  transition: 0.3s;
-}
+.product-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 20px; }
 
-.product:hover {
-  border-color: #e60000;
-}
+.product-card { background-color: #111; border: 1px solid #33ff33; border-radius: 8px; padding: 16px; width: 280px; text-align: center; }
 
-.product img {
-  max-width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
+.product-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 4px; margin-bottom: 12px; }
 
-.product h3 {
-  margin: 0 0 8px 0;
-  font-size: 20px;
-  color: #fff;
-}
+.product-card h3 { margin: 8px 0 4px; font-size: 18px; }
 
-.product p {
-  margin: 0 0 12px 0;
-  color: #ccc;
-}
+.product-card p { margin: 4px 0; font-size: 14px; color: #ccc; }
 
-.product button {
-  background-color: #e60000;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.3s;
-}
+.product-card button { background-color: #33ff33; color: #000; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s ease; }
 
-.product button:hover {
-  background-color: #ff1a1a;
-}
+.product-card button:hover { background-color: #00cc00; }
 
-.orders-list,
-.profile-details {
-  color: #ccc;
-}
+/* Responsive */ @media (max-width: 768px) { .tabs button { font-size: 14px; padding: 10px 0; }
 
-@media (max-width: 600px) {
-  .product img {
-    height: 140px;
-  }
+.product-card { width: 90%; }
 
-  .header h1 {
-    font-size: 20px;
-  }
+.header h1 { font-size: 24px; } }
 
-  .tabs button {
-    padding: 8px 12px;
-    font-size: 14px;
-  }
-}
