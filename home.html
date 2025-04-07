@@ -3,32 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <title>ASHURA STORE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="home.css" />
   <script type="module" src="home.js" defer></script>
 </head>
 <body>
-  <header class="header">
-    <h1>ASHURA STORE</h1>
-    <nav>
-      <button onclick="showTab('home')">Home</button>
-      <button onclick="showTab('orders')">Orders</button>
-      <button onclick="showTab('profile')">Profile</button>
-    </nav>
-  </header>
+  <div class="navbar">
+    <button onclick="showSection('home')">Home</button>
+    <button onclick="showSection('orders')">Orders</button>
+    <button onclick="showSection('profile')">Profile</button>
+  </div>
 
-  <section id="homeTab" class="tab">
-    <h2>Products</h2>
-    <div class="product-list" id="productList"></div>
+  <section id="home" class="section">
+    <h1 class="section-title">Welcome to ASHURA STORE</h1>
+    <div id="productList" class="product-list"></div>
   </section>
 
-  <section id="ordersTab" class="tab hidden">
-    <h2>Order History</h2>
-    <ul id="orderList"></ul>
+  <section id="orders" class="section hidden">
+    <h1 class="section-title">Your Orders</h1>
+    <div id="orderHistory" class="order-list"></div>
   </section>
 
-  <section id="profileTab" class="tab hidden">
-    <h2>User Profile</h2>
-    <div id="profileBox"></div>
+  <section id="profile" class="section hidden">
+    <h1 class="section-title">Your Profile</h1>
+    <div id="profileInfo" class="profile-details"></div>
   </section>
 </body>
 </html>
