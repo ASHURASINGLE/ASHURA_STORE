@@ -1,10 +1,9 @@
-/* index.css */
 body {
-  margin: 0;
-  padding: 0;
   background-color: #0d0d0d;
   font-family: 'Courier New', monospace;
-  color: #00ff99;
+  color: #fff;
+  margin: 0;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,83 +11,73 @@ body {
 }
 
 .container {
-  background-color: #1a1a1a;
-  padding: 30px 20px;
-  border-radius: 12px;
+  background-color: #111;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #0f0;
   width: 90%;
   max-width: 400px;
-  box-shadow: 0 0 15px #00ff99;
-  text-align: center;
 }
 
 h1 {
+  text-align: center;
+  color: #f00;
   margin-bottom: 20px;
-  font-size: 26px;
-  color: #00ff99;
-  letter-spacing: 2px;
 }
 
-.tab-buttons {
+.tabs {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  justify-content: space-around;
+  margin-bottom: 15px;
 }
 
-.tab-buttons button {
-  background-color: transparent;
-  border: 2px solid #00ff99;
-  color: #00ff99;
-  padding: 8px 20px;
-  border-radius: 8px;
+.tabs button {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 16px;
   cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s, color 0.3s;
 }
 
-.tab-buttons button.active,
-.tab-buttons button:hover {
-  background-color: #00ff99;
-  color: #0d0d0d;
+.tabs .active {
+  color: #0f0;
+  font-weight: bold;
+  border-bottom: 2px solid #0f0;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
-.form input {
+input {
   padding: 10px;
-  border: 1px solid #00ff99;
-  background-color: transparent;
-  color: #00ff99;
-  border-radius: 6px;
-  outline: none;
-}
-
-.form button {
-  background-color: #00ff99;
-  color: #0d0d0d;
-  padding: 10px;
-  font-weight: bold;
   border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: background 0.3s;
+  border-radius: 5px;
+  background: #222;
+  color: #fff;
 }
 
-.form button:hover {
-  background-color: #00cc7a;
+button {
+  background-color: #f00;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #c00;
 }
 
 .hidden {
   display: none;
 }
 
-#statusMessage {
+#message {
   margin-top: 15px;
-  color: #ff4d4d;
-  font-size: 13px;
+  text-align: center;
+  color: #0f0;
 }
