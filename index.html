@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,30 +9,27 @@
 <body>
   <div class="container">
     <h1>ASHURA STORE</h1>
-    <div class="tab-buttons">
+    <div class="tabs">
       <button id="loginTab" class="active">Login</button>
       <button id="registerTab">Register</button>
     </div>
 
     <div id="loginForm" class="form">
-      <input type="email" id="loginEmail" placeholder="Email" required />
-      <input type="password" id="loginPassword" placeholder="Password" required />
-      <button onclick="loginUser()">Login</button>
+      <input type="email" id="loginEmail" placeholder="Email" />
+      <input type="password" id="loginPassword" placeholder="Password" />
+      <button id="loginButton">Login</button>
     </div>
 
     <div id="registerForm" class="form hidden">
-      <input type="email" id="registerEmail" placeholder="Email" required />
-      <input type="text" id="registerPhone" placeholder="Phone Number" required />
-      <input type="password" id="registerPassword" placeholder="Password" required />
-      <button onclick="registerUser()">Register</button>
+      <input type="email" id="registerEmail" placeholder="Email" />
+      <input type="text" id="registerPhone" placeholder="Phone Number" />
+      <input type="password" id="registerPassword" placeholder="Password" />
+      <button id="registerButton">Register</button>
     </div>
 
-    <p id="statusMessage"></p>
+    <p id="message"></p>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <script type="module" src="index.js"></script>
 </body>
 </html>
