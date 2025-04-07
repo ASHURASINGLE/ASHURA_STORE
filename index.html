@@ -2,39 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ASHURA STORE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASHURA STORE - Login</title>
   <link rel="stylesheet" href="index.css" />
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
   <script src="index.js" defer></script>
 </head>
 <body>
-  <div class="auth-container">
-    <h1 class="title">ASHURA STORE</h1>
+  <div class="container">
+    <div class="auth-box">
+      <h1 class="title">ASHURA STORE</h1>
 
-    <div class="tab-buttons">
-      <button id="loginTab" onclick="showLogin()">Login</button>
-      <button id="registerTab" onclick="showRegister()">Register</button>
-    </div>
+      <div class="tab-buttons">
+        <button id="loginTab" class="active" onclick="showLogin()">Login</button>
+        <button id="registerTab" onclick="showRegister()">Register</button>
+      </div>
 
-    <!-- Login Section -->
-    <div id="loginBox" class="form-box">
-      <input type="email" id="loginEmail" placeholder="Email" />
-      <input type="password" id="loginPassword" placeholder="Password" />
-      <button onclick="loginUser()">Login</button>
-      <p id="loginError" class="error-message hidden">Wrong Email or Password</p>
-    </div>
+      <div id="loginForm" class="form active">
+        <input type="email" id="loginEmail" placeholder="Email" />
+        <input type="password" id="loginPassword" placeholder="Password" />
+        <button onclick="loginUser()">Login</button>
+        <p id="loginError" class="error hidden">Wrong email or password</p>
+      </div>
 
-    <!-- Register Section -->
-    <div id="registerBox" class="form-box hidden">
-      <input type="email" id="regEmail" placeholder="Email" />
-      <input type="text" id="regPhone" placeholder="Phone Number" />
-      <input type="password" id="regPassword" placeholder="Password" />
-      <button onclick="registerUser()">Register</button>
-      <p id="regError" class="error-message hidden">Registration Failed</p>
+      <div id="registerForm" class="form">
+        <input type="email" id="regEmail" placeholder="Email" />
+        <input type="text" id="regPhone" placeholder="Phone Number" />
+        <input type="password" id="regPassword" placeholder="Password" />
+        <button onclick="registerUser()">Register</button>
+        <p id="registerError" class="error hidden">Registration failed</p>
+      </div>
     </div>
   </div>
 </body>
