@@ -1,4 +1,18 @@
-// Firebase config
+// Firebase Config
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+import {
+  getDatabase,
+  ref,
+  set
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
   authDomain: "ashura-6cb98.firebaseapp.com",
@@ -9,68 +23,81 @@ const firebaseConfig = {
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
 
-// Show/hide tabs
-function showLogin() {
-  document.getElementById("loginBox").classList.remove("hidden");
-  document.getElementById("registerBox").classList.add("hidden");
-}
-function showRegister() {
-  document.getElementById("loginBox").classList.add("hidden");
-  document.getElementById("registerBox").classList.remove("hidden");
-}
+// Elements
+const loginTab = document.getElementById("loginTab");
+const registerTab = document.getElementById("registerTab");
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
+const loginError = document.getElementById("loginError");
+const regError = document.getElementById("regError");
 
-// Login User
-function loginUser() {
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
+// Toggle Tabs
+loginTab.addEventListener("click", () => {
+  loginForm.classList.add("active");
+  registerForm.classList.remove("active");
+  loginTab.classList.add("active");
+  registerTab.classList.remove("active");
+  loginError.classList.add("hidden");
+});
 
-  auth.signInWithEmailAndPassword(email, password)
+registerTab.addEventListener("click", () => {
+  registerForm.classList.add("active");
+  loginForm.classList.remove("active");
+  registerTab.classList.add("active");
+  loginTab.classList.remove("active");
+  regError.classList.add("hidden");
+});
+
+// Login
+document.getElementById("loginBtn").addEventListener("click", () => {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  signInWithEmailAndPassword(auth, email, password)
     .then(() => {
       window.location.href = "home.html";
     })
     .catch(() => {
-      document.getElementById("errorMessage").classList.remove("hidden");
+      loginError.classList.remove("hidden");
     });
-}
+});
 
-// Register User
-function registerUser() {
-  const email = document.getElementById("regEmail").value;
-  const phone = document.getElementById("regPhone").value;
-  const password = document.getElementById("regPassword").value;
+// Register
+document.getElementById("registerBtn").addEventListener("click", () => {
+  const email = document.getElementById("regEmail").value.trim();
+  const phone = document.getElementById("regPhone").value.trim();
+  const password = document.getElementById("regPassword").value.trim();
 
-  auth.createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      const uid = userCredential.user.uid;
-      return db.ref("users/" + uid).set({
-        email: email,
-        phone: phone
+  if (email && password && phone) {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCred) => {
+        const uid = userCred.user.uid;
+        return set(ref(db, "users/" + uid), {
+          email: email,
+          phone: phone
+        });
+      })
+      .then(() => {
+        window.location.href = "home.html";
+      })
+      .catch(() => {
+        regError.classList.remove("hidden");
       });
-    })
-    .then(() => {
-      alert("Registered successfully!");
-      showLogin();
-    })
-    .catch((error) => {
-      alert("Error: " + error.message);
-    });
-}
-
-// Auth state check
-auth.onAuthStateChanged((user) => {
-  const currentPage = window.location.pathname.split("/").pop();
-  if (user) {
-    if (currentPage === "index.html" || currentPage === "") {
-      window.location.href = "home.html";
-    }
   } else {
-    if (currentPage !== "index.html" && currentPage !== "") {
-      window.location.href = "index.html";
-    }
+    regError.classList.remove("hidden");
+  }
+});
+
+// Protect Routes
+onAuthStateChanged(auth, (user) => {
+  const protectedPages = ["home.html"];
+  const currentPage = window.location.pathname.split("/").pop();
+
+  if (!user && protectedPages.includes(currentPage)) {
+    window.location.href = "index.html";
   }
 });
