@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ASHURA STORE - LOGIN</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>ASHURA STORE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="index.css" />
   <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
-  <script src="script.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="index.js" defer></script>
 </head>
 <body>
   <div class="container">
     <h1>ASHURA STORE</h1>
+
     <div class="tabs">
       <button onclick="showLogin()">Login</button>
       <button onclick="showRegister()">Register</button>
@@ -31,7 +32,7 @@
       <input type="text" id="regPhone" placeholder="Phone Number" />
       <input type="password" id="regPassword" placeholder="Password" />
       <button onclick="registerUser()">Register</button>
-      <p id="registerError" class="error-message hidden">Registration failed</p>
+      <p id="regError" class="error-message hidden">Registration Error</p>
     </div>
   </div>
 </body>
