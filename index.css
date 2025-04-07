@@ -1,4 +1,3 @@
-/* Reset & base styles */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -8,7 +7,7 @@
 body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #0d0d0d;
-  color: #fff;
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,19 +16,18 @@ body {
 }
 
 .container {
-  background: #1a1a1a;
+  background-color: #1e1e1e;
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 0 25px rgba(255, 0, 0, 0.5);
   max-width: 400px;
   width: 100%;
-  text-align: center;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
 }
 
 h1 {
-  margin-bottom: 20px;
   color: #ff0040;
-  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .tabs {
@@ -40,17 +38,11 @@ h1 {
 }
 
 .tabs button {
-  background: transparent;
+  background: none;
   border: none;
   color: #ff0040;
-  font-weight: bold;
   font-size: 16px;
   cursor: pointer;
-  transition: 0.3s;
-}
-
-.tabs button:hover {
-  text-decoration: underline;
 }
 
 .form-box {
@@ -63,21 +55,19 @@ input {
   padding: 12px;
   border-radius: 6px;
   border: none;
-  outline: none;
   font-size: 16px;
-  background: #2a2a2a;
-  color: #fff;
+  background-color: #333;
+  color: white;
 }
 
 button {
   padding: 12px;
   background-color: #ff0040;
+  color: white;
   border: none;
   border-radius: 8px;
   font-size: 16px;
-  color: white;
   cursor: pointer;
-  transition: 0.3s ease;
 }
 
 button:hover {
@@ -85,28 +75,17 @@ button:hover {
 }
 
 .error-message {
-  color: #ff4d4d;
+  color: red;
   font-size: 14px;
-  animation: shake 0.3s ease;
 }
 
 .hidden {
   display: none;
 }
 
-@keyframes shake {
-  0% { transform: translateX(-5px); }
-  25% { transform: translateX(5px); }
-  50% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
-  100% { transform: translateX(0); }
-}
-
-/* Responsive */
 @media (max-width: 480px) {
   .container {
     padding: 20px;
-    box-shadow: none;
   }
 
   h1 {
