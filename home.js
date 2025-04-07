@@ -1,87 +1,41 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+// home.js - Firebase + Hacker Style UI
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
-  authDomain: "ashura-6cb98.firebaseapp.com",
-  databaseURL: "https://ashura-6cb98-default-rtdb.firebaseio.com",
-  projectId: "ashura-6cb98",
-  storageBucket: "ashura-6cb98.appspot.com",
-  messagingSenderId: "990827476073",
-  appId: "1:990827476073:web:833691f1a9f1d4b7a51ef8"
-};
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"; import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"; import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
+const firebaseConfig = { apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY", authDomain: "ashura-6cb98.firebaseapp.com", databaseURL: "https://ashura-6cb98-default-rtdb.firebaseio.com", projectId: "ashura-6cb98", storageBucket: "ashura-6cb98.appspot.com", messagingSenderId: "990827476073", appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8" };
 
-const productList = document.getElementById("productList");
-const orderList = document.getElementById("orderList");
-const profileBox = document.getElementById("profileBox");
+const app = initializeApp(firebaseConfig); const auth = getAuth(app); const database = getDatabase(app);
 
-function loadProducts() {
-  const productsRef = ref(db, "products");
-  onValue(productsRef, (snapshot) => {
-    productList.innerHTML = "";
-    snapshot.forEach((child) => {
-      const item = child.val();
-      const div = document.createElement("div");
-      div.className = "product";
-      div.innerHTML = `
-        <img src="${item.image}" alt="${item.name}">
-        <h3>${item.name}</h3>
-        <p>${item.description}</p>
-        <button onclick="location.href='buy.html?id=${child.key}'">Buy</button>
-      `;
-      productList.appendChild(div);
-    });
-  });
-}
+const homeSection = document.getElementById("homeSection"); const ordersSection = document.getElementById("ordersSection"); const profileSection = document.getElementById("profileSection"); const productList = document.getElementById("productList"); const storeTitle = document.getElementById("storeTitle");
 
-function loadOrders(uid) {
-  const ordersRef = ref(db, `orders/${uid}`);
-  onValue(ordersRef, (snapshot) => {
-    orderList.innerHTML = "<h3>Your Orders</h3>";
-    if (!snapshot.exists()) {
-      orderList.innerHTML += "<p>No orders found.</p>";
-      return;
-    }
-    snapshot.forEach((child) => {
-      const order = child.val();
-      orderList.innerHTML += `<p>${order.name} - UTR: ${order.utr}</p>`;
-    });
-  });
-}
+function showSection(sectionId) { document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active")); document.querySelectorAll(".navbar button").forEach(btn => btn.classList.remove("active")); document.getElementById(sectionId).classList.add("active"); document.querySelector(button[data-section='${sectionId}']).classList.add("active"); }
 
-function loadProfile(user) {
-  const userRef = ref(db, `users/${user.uid}`);
-  onValue(userRef, (snapshot) => {
-    const data = snapshot.val();
-    profileBox.innerHTML = `
-      <h3>Profile Details</h3>
-      <p><strong>Email:</strong> ${user.email}</p>
-      <p><strong>Phone:</strong> ${data?.phone || "N/A"}</p>
-    `;
-  });
-}
+document.querySelectorAll(".navbar button").forEach(button => { button.addEventListener("click", () => { const section = button.getAttribute("data-section"); showSection(section); }); });
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    loadProducts();
-    loadOrders(user.uid);
-    loadProfile(user);
-  } else {
-    window.location.href = "index.html";
+function renderProducts(products) { productList.innerHTML = ""; products.forEach(product => { const card = document.createElement("div"); card.className = "product-card"; card.innerHTML = <img src="${product.image}" alt="${product.name}" /> <h3>${product.name}</h3> <p>${product.description}</p> <button onclick="location.href='buy.html?id=${product.id}'">Buy</button>; productList.appendChild(card); }); }
+
+function renderOrders(orders) { const container = document.getElementById("ordersSection"); container.innerHTML = orders.map(order => <div class="product-card"> <h3>${order.productName}</h3> <p>UTR: ${order.utr}</p> <p>Status: ${order.status || "Pending"}</p> </div>).join(""); }
+
+function renderProfile(user, userData) { const container = document.getElementById("profileSection"); container.innerHTML = <div class="product-card"> <h3>Email: ${user.email}</h3> <p>Phone: ${userData.phone}</p> <button onclick="logout()">Logout</button> </div>; }
+
+function logout() { signOut(auth).then(() => { window.location.href = "index.html"; }); }
+
+onAuthStateChanged(auth, (user) => { if (!user) { window.location.href = "index.html"; return; }
+
+const uid = user.uid; const userRef = ref(database, users/${uid});
+
+get(userRef).then(snapshot => { if (!snapshot.exists()) { alert("User data not found."); return; } const userData = snapshot.val(); renderProfile(user, userData);
+
+const ordersRef = ref(database, `orders/${uid}`);
+onValue(ordersRef, snap => {
+  const orderData = snap.val();
+  if (orderData) {
+    const orders = Object.values(orderData);
+    renderOrders(orders);
   }
 });
 
-// Tab switching
-document.querySelectorAll(".tabs button").forEach((btn, idx) => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".content-section").forEach(s => s.classList.remove("active"));
-    btn.classList.add("active");
-    document.querySelectorAll(".content-section")[idx].classList.add("active");
-  });
 });
+
+const productsRef = ref(database, 'products'); onValue(productsRef, (snapshot) => { const products = snapshot.exists() ? Object.values(snapshot.val()) : []; renderProducts(products); }); });
+
