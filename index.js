@@ -9,60 +9,68 @@ const firebaseConfig = {
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
+// Show/hide tabs
 function showLogin() {
-  document.getElementById('loginBox').classList.remove('hidden');
-  document.getElementById('registerBox').classList.add('hidden');
+  document.getElementById("loginBox").classList.remove("hidden");
+  document.getElementById("registerBox").classList.add("hidden");
 }
-
 function showRegister() {
-  document.getElementById('registerBox').classList.remove('hidden');
-  document.getElementById('loginBox').classList.add('hidden');
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("registerBox").classList.remove("hidden");
 }
 
+// Login User
 function loginUser() {
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
-  const errorMsg = document.getElementById('loginError');
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
 
   auth.signInWithEmailAndPassword(email, password)
     .then(() => {
       window.location.href = "home.html";
     })
     .catch(() => {
-      errorMsg.classList.remove('hidden');
+      document.getElementById("errorMessage").classList.remove("hidden");
     });
 }
 
+// Register User
 function registerUser() {
-  const email = document.getElementById('regEmail').value;
-  const password = document.getElementById('regPassword').value;
-  const phone = document.getElementById('regPhone').value;
-  const errorMsg = document.getElementById('registerError');
+  const email = document.getElementById("regEmail").value;
+  const phone = document.getElementById("regPhone").value;
+  const password = document.getElementById("regPassword").value;
 
   auth.createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
-      const userId = userCredential.user.uid;
-      db.ref('users/' + userId).set({
+      const uid = userCredential.user.uid;
+      return db.ref("users/" + uid).set({
         email: email,
         phone: phone
       });
+    })
+    .then(() => {
+      alert("Registered successfully!");
       showLogin();
     })
-    .catch(() => {
-      errorMsg.classList.remove('hidden');
+    .catch((error) => {
+      alert("Error: " + error.message);
     });
 }
 
-// Redirection protection for pages
+// Auth state check
 auth.onAuthStateChanged((user) => {
-  const currentPage = window.location.pathname;
-  const isProtectedPage = currentPage.includes('home.html') || currentPage.includes('admin.html');
-
-  if (isProtectedPage && !user) {
-    window.location.href = "index.html";
+  const currentPage = window.location.pathname.split("/").pop();
+  if (user) {
+    if (currentPage === "index.html" || currentPage === "") {
+      window.location.href = "home.html";
+    }
+  } else {
+    if (currentPage !== "index.html" && currentPage !== "") {
+      window.location.href = "index.html";
+    }
   }
 });
