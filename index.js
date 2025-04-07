@@ -11,9 +11,8 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-const database = firebase.database();
+const db = firebase.database();
 
-// UI logic
 function showLogin() {
   document.getElementById('loginBox').classList.remove('hidden');
   document.getElementById('registerBox').classList.add('hidden');
@@ -24,46 +23,46 @@ function showRegister() {
   document.getElementById('loginBox').classList.add('hidden');
 }
 
-// Register function
-function registerUser() {
-  const email = document.getElementById("regEmail").value;
-  const phone = document.getElementById("regPhone").value;
-  const password = document.getElementById("regPassword").value;
-
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(userCred => {
-      const uid = userCred.user.uid;
-      return database.ref("users/" + uid).set({ email, phone });
-    })
-    .then(() => {
-      alert("Registered Successfully!");
-      window.location.href = "home.html";
-    })
-    .catch(err => {
-      document.getElementById("registerError").classList.remove("hidden");
-      console.error(err.message);
-    });
-}
-
-// Login function
 function loginUser() {
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  const errorMsg = document.getElementById('loginError');
 
   auth.signInWithEmailAndPassword(email, password)
     .then(() => {
       window.location.href = "home.html";
     })
-    .catch(err => {
-      document.getElementById("errorMessage").classList.remove("hidden");
-      console.error(err.message);
+    .catch(() => {
+      errorMsg.classList.remove('hidden');
     });
 }
 
-// Redirect protection
-auth.onAuthStateChanged(user => {
-  const path = window.location.pathname;
-  if (!user && path.includes("home.html")) {
+function registerUser() {
+  const email = document.getElementById('regEmail').value;
+  const password = document.getElementById('regPassword').value;
+  const phone = document.getElementById('regPhone').value;
+  const errorMsg = document.getElementById('registerError');
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      const userId = userCredential.user.uid;
+      db.ref('users/' + userId).set({
+        email: email,
+        phone: phone
+      });
+      showLogin();
+    })
+    .catch(() => {
+      errorMsg.classList.remove('hidden');
+    });
+}
+
+// Redirection protection for pages
+auth.onAuthStateChanged((user) => {
+  const currentPage = window.location.pathname;
+  const isProtectedPage = currentPage.includes('home.html') || currentPage.includes('admin.html');
+
+  if (isProtectedPage && !user) {
     window.location.href = "index.html";
   }
 });
