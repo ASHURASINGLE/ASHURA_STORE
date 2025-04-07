@@ -12,14 +12,15 @@
   <script src="index.js" defer></script>
 </head>
 <body>
-  <div class="container">
-    <h1>ASHURA STORE</h1>
+  <div class="auth-container">
+    <h1 class="title">ASHURA STORE</h1>
 
-    <div class="tabs">
-      <button onclick="showLogin()">Login</button>
-      <button onclick="showRegister()">Register</button>
+    <div class="tab-buttons">
+      <button id="loginTab" onclick="showLogin()">Login</button>
+      <button id="registerTab" onclick="showRegister()">Register</button>
     </div>
 
+    <!-- Login Section -->
     <div id="loginBox" class="form-box">
       <input type="email" id="loginEmail" placeholder="Email" />
       <input type="password" id="loginPassword" placeholder="Password" />
@@ -27,12 +28,13 @@
       <p id="loginError" class="error-message hidden">Wrong Email or Password</p>
     </div>
 
+    <!-- Register Section -->
     <div id="registerBox" class="form-box hidden">
       <input type="email" id="regEmail" placeholder="Email" />
       <input type="text" id="regPhone" placeholder="Phone Number" />
       <input type="password" id="regPassword" placeholder="Password" />
       <button onclick="registerUser()">Register</button>
-      <p id="regError" class="error-message hidden">Registration Error</p>
+      <p id="regError" class="error-message hidden">Registration Failed</p>
     </div>
   </div>
 </body>
