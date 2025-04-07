@@ -1,4 +1,6 @@
-// index.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -11,72 +13,64 @@ const firebaseConfig = {
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const database = firebase.database();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
 
-// Tab switching
-const loginTab = document.getElementById('loginTab');
-const registerTab = document.getElementById('registerTab');
-const loginForm = document.getElementById('loginForm');
-const registerForm = document.getElementById('registerForm');
-const statusMessage = document.getElementById('statusMessage');
+const loginTab = document.getElementById("loginTab");
+const registerTab = document.getElementById("registerTab");
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
+const message = document.getElementById("message");
 
-loginTab.onclick = () => {
-  loginForm.classList.remove('hidden');
-  registerForm.classList.add('hidden');
-  loginTab.classList.add('active');
-  registerTab.classList.remove('active');
-};
+loginTab.addEventListener("click", () => {
+  loginForm.classList.remove("hidden");
+  registerForm.classList.add("hidden");
+  loginTab.classList.add("active");
+  registerTab.classList.remove("active");
+});
 
-registerTab.onclick = () => {
-  registerForm.classList.remove('hidden');
-  loginForm.classList.add('hidden');
-  registerTab.classList.add('active');
-  loginTab.classList.remove('active');
-};
+registerTab.addEventListener("click", () => {
+  loginForm.classList.add("hidden");
+  registerForm.classList.remove("hidden");
+  loginTab.classList.remove("active");
+  registerTab.classList.add("active");
+});
 
-// Login logic
-document.getElementById('loginBtn').addEventListener('click', () => {
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
+// Login
+document.getElementById("loginButton").addEventListener("click", () => {
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
 
-  auth.signInWithEmailAndPassword(email, password)
-    .then(userCredential => {
-      statusMessage.innerText = "Login successful!";
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      message.textContent = "Login successful!";
       window.location.href = "home.html";
     })
-    .catch(error => {
-      statusMessage.innerText = "Login failed: " + error.message;
+    .catch((error) => {
+      message.textContent = "Login failed: " + error.message;
+      message.style.color = "red";
     });
 });
 
-// Register logic
-document.getElementById('registerBtn').addEventListener('click', () => {
-  const email = document.getElementById('registerEmail').value;
-  const phone = document.getElementById('registerPhone').value;
-  const password = document.getElementById('registerPassword').value;
+// Register
+document.getElementById("registerButton").addEventListener("click", () => {
+  const email = document.getElementById("registerEmail").value;
+  const phone = document.getElementById("registerPhone").value;
+  const password = document.getElementById("registerPassword").value;
 
-  if (!email || !phone || !password) {
-    statusMessage.innerText = "Please fill in all fields.";
-    return;
-  }
-
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(userCredential => {
-      const user = userCredential.user;
-      return database.ref('users/' + user.uid).set({
-        email: email,
-        phone: phone,
-        uid: user.uid
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const userId = userCredential.user.uid;
+      set(ref(db, 'users/' + userId), {
+        email,
+        phone
       });
-    })
-    .then(() => {
-      statusMessage.innerText = "Registration successful!";
+      message.textContent = "Registration successful!";
       window.location.href = "home.html";
     })
-    .catch(error => {
-      statusMessage.innerText = "Registration failed: " + error.message;
+    .catch((error) => {
+      message.textContent = "Registration failed: " + error.message;
+      message.style.color = "red";
     });
 });
