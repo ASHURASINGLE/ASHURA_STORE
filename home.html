@@ -7,17 +7,28 @@
   <script type="module" src="home.js" defer></script>
 </head>
 <body>
-  <div class="header">
-    <h1 id="storeTitle">ASHURA STORE</h1>
-    <p id="noticeBox" class="notice"></p>
-    <div class="top-actions">
-      <button onclick="alert('Order history feature coming soon.')">Order History</button>
-      <button onclick="alert('Profile feature coming soon.')">Profile</button>
-    </div>
-  </div>
+  <header class="header">
+    <h1>ASHURA STORE</h1>
+    <nav>
+      <button onclick="showTab('home')">Home</button>
+      <button onclick="showTab('orders')">Orders</button>
+      <button onclick="showTab('profile')">Profile</button>
+    </nav>
+  </header>
 
-  <section class="product-list" id="productList">
-    <!-- Products will be loaded here -->
+  <section id="homeTab" class="tab">
+    <h2>Products</h2>
+    <div class="product-list" id="productList"></div>
+  </section>
+
+  <section id="ordersTab" class="tab hidden">
+    <h2>Order History</h2>
+    <ul id="orderList"></ul>
+  </section>
+
+  <section id="profileTab" class="tab hidden">
+    <h2>User Profile</h2>
+    <div id="profileBox"></div>
   </section>
 </body>
 </html>
