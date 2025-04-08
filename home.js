@@ -13,7 +13,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-// Tab switch logic
+// Tabs switch
 const tabs = document.querySelectorAll(".tabs button");
 const sections = document.querySelectorAll(".section");
 
@@ -26,12 +26,13 @@ tabs.forEach((tab, index) => {
   });
 });
 
-// Auth listener
+// Check login
 auth.onAuthStateChanged(user => {
   if (user) {
     loadProducts();
     loadProfile(user);
     loadOrders(user.uid);
+    loadStoreInfo();
   } else {
     window.location.href = "index.html";
   }
@@ -43,7 +44,7 @@ function loadProducts() {
   db.ref("products").once("value", snapshot => {
     container.innerHTML = "";
     if (!snapshot.exists()) {
-      container.innerHTML = "<p>No products found.</p>";
+      container.innerHTML = "<p>No products available.</p>";
       return;
     }
     snapshot.forEach(child => {
@@ -52,7 +53,7 @@ function loadProducts() {
       div.className = "product-card";
       div.innerHTML = `
         <h3>${product.name}</h3>
-        <p>Price: ₹${product.price}</p>
+        <p><b>Price:</b> ₹${product.price}</p>
         <p>${product.description}</p>
         <button onclick="buyProduct('${child.key}')">Buy</button>
       `;
@@ -61,12 +62,12 @@ function loadProducts() {
   });
 }
 
-// Buy redirect
+// Redirect to buy page
 function buyProduct(productId) {
   window.location.href = `buy.html?id=${productId}`;
 }
 
-// Load profile
+// Load profile section
 function loadProfile(user) {
   const profileSection = document.getElementById("profile-section");
   db.ref("users/" + user.uid).once("value", snapshot => {
@@ -81,7 +82,7 @@ function loadProfile(user) {
   });
 }
 
-// Load orders
+// Load user orders
 function loadOrders(uid) {
   const orderSection = document.getElementById("order-section");
   db.ref("orders").orderByChild("uid").equalTo(uid).once("value", snapshot => {
@@ -105,7 +106,19 @@ function loadOrders(uid) {
   });
 }
 
-// Logout
+// Load and display store name and description
+function loadStoreInfo() {
+  const storeNameEl = document.getElementById("store-name");
+  const storeDescEl = document.getElementById("store-desc");
+
+  db.ref("storeInfo").once("value", snapshot => {
+    const info = snapshot.val();
+    storeNameEl.textContent = info?.name || "ASHURA STORE";
+    storeDescEl.textContent = info?.description || "Welcome to our dark store.";
+  });
+}
+
+// Logout function
 function logout() {
   auth.signOut().then(() => {
     window.location.href = "index.html";
