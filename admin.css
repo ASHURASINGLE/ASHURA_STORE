@@ -1,74 +1,77 @@
 body {
   margin: 0;
-  font-family: monospace;
-  background: black;
-  color: lime;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #0e0e0e;
+  color: #e0e0e0;
 }
 
-.admin-container {
+header {
+  background-color: #1f1f1f;
+  padding: 16px;
   display: flex;
-  height: 100vh;
+  justify-content: space-between;
+  align-items: center;
+  color: #00ff91;
+  border-bottom: 1px solid #333;
+}
+
+h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+#drawerToggle {
+  background-color: #00ff91;
+  color: black;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 4px;
 }
 
 .drawer {
-  background: #111;
-  padding: 20px;
-  width: 200px;
-  flex-shrink: 0;
+  position: fixed;
+  left: -250px;
+  top: 0;
+  height: 100%;
+  width: 250px;
+  background-color: #161616;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.7);
+  transition: left 0.3s ease;
+  z-index: 1000;
 }
 
-.drawer h2 {
-  color: lime;
-  margin-bottom: 20px;
+.drawer.open {
+  left: 0;
 }
 
 .drawer ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .drawer li {
-  padding: 10px;
-  cursor: pointer;
+  border-bottom: 1px solid #333;
 }
 
-.drawer li:hover {
-  background: lime;
-  color: black;
-}
-
-.content {
-  flex-grow: 1;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-.admin-section {
-  display: none;
-}
-
-.admin-section.active {
+.drawer a {
   display: block;
-}
-
-input {
-  display: block;
-  margin: 10px 0;
-  padding: 10px;
-  width: 100%;
-  max-width: 400px;
-  font-family: monospace;
-}
-
-button {
-  padding: 10px 20px;
-  background: lime;
-  color: black;
-  border: none;
+  padding: 14px 20px;
+  color: #00ff91;
+  text-decoration: none;
   font-weight: bold;
-  cursor: pointer;
 }
 
-button:hover {
-  background: white;
+.drawer a:hover {
+  background-color: #262626;
+}
+
+main {
+  margin: 20px;
+  padding: 20px;
+  background-color: #1c1c1c;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,255,145,0.2);
 }
