@@ -1,38 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel - ASHURA STORE</title>
-  <link rel="stylesheet" href="admin.css" />
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <div class="admin-header">
-    <button id="toggleDrawer">☰</button>
-    <h1>ASHURA STORE Admin Panel</h1>
-    <button id="logoutBtn">Logout</button>
-  </div>
+  <header>
+    <div class="top-bar">
+      <h1>ASHURA STORE - ADMIN</h1>
+      <button id="drawerToggle">☰</button>
+    </div>
+  </header>
 
-  <div id="adminDrawer" class="admin-drawer">
+  <div class="drawer" id="adminDrawer">
+    <button class="drawer-close" onclick="toggleDrawer()">✕</button>
     <ul>
-      <li><a href="admin.html">Dashboard</a></li>
-      <li><a href="users.html">Manage Users</a></li>
-      <li><a href="products.html">Manage Products</a></li>
-      <li><a href="qr.html">QR Code</a></li>
-      <li><a href="orders.html">Orders</a></li>
-      <li><a href="store.html">Store Info</a></li>
-      <li><a href="notices.html">Notices</a></li>
+      <li onclick="navigate('dashboard')">Dashboard</li>
+      <li onclick="navigate('users')">Manage Users</li>
+      <li onclick="navigate('orders')">View Orders</li>
+      <li onclick="navigate('products')">Manage Products</li>
+      <li onclick="navigate('qr')">Manage QR Code</li>
+      <li onclick="navigate('storeInfo')">Store Info</li>
+      <li onclick="navigate('notices')">Send Notices</li>
+      <li onclick="logout()">Logout</li>
     </ul>
   </div>
 
-  <div class="admin-content">
-    <h2>Welcome, Admin</h2>
-    <p>Use the drawer to manage store settings, users, products, and more.</p>
-  </div>
+  <main>
+    <section id="dashboard" class="admin-section active">
+      <h2>Dashboard</h2>
+      <p>Total Users: <span id="totalUsers">0</span></p>
+      <p>Total Orders: <span id="totalOrders">0</span></p>
+    </section>
 
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <section id="users" class="admin-section">
+      <h2>Manage Users</h2>
+      <div id="userList"></div>
+    </section>
+
+    <section id="orders" class="admin-section">
+      <h2>Orders</h2>
+      <div id="orderList"></div>
+    </section>
+
+    <section id="products" class="admin-section">
+      <h2>Manage Products</h2>
+      <input type="text" id="newProductName" placeholder="Product Name">
+      <textarea id="newProductDesc" placeholder="Product Description"></textarea>
+      <input type="file" id="newProductImage">
+      <button onclick="addProduct()">Add Product</button>
+      <div id="productList"></div>
+    </section>
+
+    <section id="qr" class="admin-section">
+      <h2>Manage QR Code</h2>
+      <img id="currentQr" src="assets/default_qr.png" alt="QR Code" width="200">
+      <input type="file" id="qrUpload">
+      <button onclick="uploadQr()">Upload New QR</button>
+    </section>
+
+    <section id="storeInfo" class="admin-section">
+      <h2>Store Information</h2>
+      <input type="text" id="storeName" placeholder="Store Name">
+      <textarea id="storeDescription" placeholder="Store Description"></textarea>
+      <button onclick="updateStoreInfo()">Update Info</button>
+    </section>
+
+    <section id="notices" class="admin-section">
+      <h2>Notices</h2>
+      <textarea id="maintenanceNotice" placeholder="Maintenance Notice"></textarea>
+      <button onclick="sendMaintenance()">Send Maintenance</button>
+      <textarea id="floatingNotice" placeholder="Floating Notice"></textarea>
+      <button onclick="sendFloating()">Send Floating Notice</button>
+    </section>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>
