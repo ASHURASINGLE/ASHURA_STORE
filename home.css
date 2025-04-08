@@ -1,88 +1,104 @@
+/* Reset and base styles */
 body {
   margin: 0;
   font-family: 'Courier New', monospace;
-  background-color: #0d0d0d;
+  background-color: #0f0f0f;
   color: #fff;
 }
 
-.header {
-  text-align: center;
+.container {
   padding: 20px;
-  background: #111;
+}
+
+header {
+  text-align: center;
+  padding: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #00ff00;
   border-bottom: 1px solid #333;
 }
 
-h1 {
-  color: #f50057;
-}
-
-.tab-content {
-  display: none;
-  padding: 20px;
-}
-
-.tab-content.active {
-  display: block;
-}
-
 .product-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
 }
 
-.product {
-  background-color: #1a1a1a;
+.product-card {
+  background: #1a1a1a;
   border: 1px solid #333;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 15px;
-  width: 220px;
-  text-align: center;
   transition: 0.3s;
 }
 
-.product:hover {
-  background-color: #262626;
+.product-card:hover {
+  border-color: #00ff00;
+  box-shadow: 0 0 10px #00ff00;
 }
 
-.product h3 {
-  color: #00ff99;
+.product-card h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #00ff00;
 }
 
-.buy-btn {
+.product-card p {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.product-card button {
   margin-top: 10px;
-  background-color: #f50057;
-  color: #fff;
-  border: none;
   padding: 8px 12px;
-  border-radius: 4px;
+  background-color: #00ff00;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
   cursor: pointer;
 }
 
-.bottom-nav {
+.tab-bar {
   position: fixed;
   bottom: 0;
   left: 0;
-  right: 0;
-  background-color: #111;
+  width: 100%;
+  background: #111;
+  border-top: 1px solid #222;
   display: flex;
   justify-content: space-around;
-  border-top: 1px solid #333;
-  z-index: 10;
+  padding: 10px 0;
 }
 
-.nav-btn {
-  background: none;
-  border: none;
-  color: #ccc;
-  padding: 15px 10px;
-  font-size: 16px;
-  flex-grow: 1;
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #888;
+  font-size: 12px;
   cursor: pointer;
 }
 
-.nav-btn.active {
-  color: #f50057;
-  border-top: 2px solid #f50057;
+.tab.active {
+  color: #00ff00;
+}
+
+.tab i {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.hidden {
+  display: none;
+}
+
+.profile-info,
+.order-history {
+  padding: 20px;
+  background-color: #1a1a1a;
+  border-radius: 10px;
+  margin-top: 20px;
 }
