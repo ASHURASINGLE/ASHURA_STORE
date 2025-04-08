@@ -1,94 +1,136 @@
 body {
   margin: 0;
-  font-family: 'Courier New', monospace;
+  padding: 0;
   background-color: #0d0d0d;
-  color: #f5f5f5;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 header {
   text-align: center;
-  padding: 20px;
-  border-bottom: 1px solid #444;
+  padding: 20px 10px;
+  background-color: #0d0d0d;
+  border-bottom: 2px solid red;
 }
 
 header h1 {
   font-size: 2em;
-  color: #ff0033;
+  color: white;
+  margin-bottom: 10px;
+  text-shadow: 0 0 5px red;
 }
 
 header p {
+  margin: 5px 0;
   font-size: 1em;
   color: #ccc;
 }
 
-.tabs {
-  display: flex;
-  justify-content: space-around;
-  border-bottom: 1px solid #333;
-  background-color: #111;
+.notice-box {
+  background: #1a1a1a;
+  color: red;
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+  border: 1px solid red;
+  border-radius: 10px;
+  box-shadow: 0 0 10px red;
 }
 
-.tabs button {
-  flex: 1;
+main {
+  flex-grow: 1;
   padding: 15px;
-  background: transparent;
-  border: none;
-  color: #ccc;
-  cursor: pointer;
-  font-weight: bold;
-  border-right: 1px solid #222;
 }
 
-.tabs button.active {
-  background-color: #222;
-  color: #ff0033;
-}
-
-.section {
+section {
   display: none;
-  padding: 20px;
 }
 
-.section.active {
+section.active {
   display: block;
 }
 
-.product-card, .order-item {
-  background-color: #1a1a1a;
-  margin-bottom: 15px;
-  padding: 15px;
-  border-left: 3px solid #ff0033;
-  border-radius: 6px;
+#products {
+  display: grid;
+  gap: 15px;
 }
 
-.product-card h3 {
-  margin: 0 0 10px 0;
-  color: #ff6666;
+.product-card {
+  background: #1a1a1a;
+  border: 1px solid red;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 0 10px red;
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 5px;
 }
 
 .product-card button {
-  background-color: #ff0033;
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
   margin-top: 10px;
-  border-radius: 4px;
-}
-
-.profile-info {
-  background-color: #1f1f1f;
   padding: 10px;
-  margin-bottom: 10px;
-  border-left: 3px solid #00ccff;
-}
-
-.logout-btn {
-  background-color: #cc0000;
-  color: #fff;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
   width: 100%;
+  background: red;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  box-shadow: 0 0 5px red;
+}
+
+.bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  background-color: #111;
+  padding: 10px 0;
+  border-top: 2px solid red;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.bottom-nav button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 1em;
+  padding: 8px;
+  text-shadow: 0 0 5px red;
+  cursor: pointer;
+}
+
+.bottom-nav button:hover {
+  color: red;
+}
+
+button {
+  background: red;
+  border: none;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
   margin-top: 10px;
+  box-shadow: 0 0 8px red;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  #products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  #products {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
