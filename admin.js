@@ -1,4 +1,4 @@
-// Firebase config
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
   authDomain: "ashura-6cb98.firebaseapp.com",
@@ -8,131 +8,99 @@ const firebaseConfig = {
   messagingSenderId: "990827476073",
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
-
 firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-const auth = firebase.auth();
 
-// Drawer toggle
-document.getElementById("menuToggle").addEventListener("click", () => {
-  const drawer = document.getElementById("drawer");
-  drawer.style.display = drawer.style.display === "block" ? "none" : "block";
-});
+const db = firebase.database();
 
-// Logout
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  auth.signOut().then(() => {
+function logout() {
+  firebase.auth().signOut().then(() => {
     window.location.href = "index.html";
   });
-});
+}
 
-// Dashboard
-function updateDashboard() {
-  database.ref("users").once("value", snapshot => {
-    const users = snapshot.numChildren();
-    document.getElementById("totalUsers").innerText = `Total Users: ${users}`;
+function toggleDrawer() {
+  document.getElementById('drawer').classList.toggle('hidden');
+}
+
+function showSection(id) {
+  document.querySelectorAll(".admin-section").forEach(sec => sec.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+  toggleDrawer(); // hide drawer after click
+}
+
+function loadDashboard() {
+  db.ref("users").once("value", snapshot => {
+    document.getElementById("totalUsers").textContent = snapshot.numChildren();
   });
-
-  database.ref("orders").once("value", snapshot => {
-    const orders = snapshot.numChildren();
-    document.getElementById("totalOrders").innerText = `Total Orders: ${orders}`;
+  db.ref("orders").once("value", snapshot => {
+    document.getElementById("totalOrders").textContent = snapshot.numChildren();
   });
 }
-updateDashboard();
 
-// Add Product
-document.getElementById("addProductBtn").addEventListener("click", () => {
+function addProduct() {
   const name = document.getElementById("productName").value;
-  const desc = document.getElementById("productDesc").value;
+  const desc = document.getElementById("productDescription").value;
   const price = document.getElementById("productPrice").value;
-  const imgFile = document.getElementById("productImage").files[0];
+  const file = document.getElementById("productImage").files[0];
 
-  if (!name || !desc || !price || !imgFile) return alert("Fill all fields");
-
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    const productData = {
-      name: name,
-      description: desc,
-      price: price,
-      imageUrl: e.target.result
-    };
-    const key = database.ref("products").push().key;
-    database.ref("products/" + key).set(productData, () => {
-      alert("Product Added!");
-      document.getElementById("productName").value = "";
-      document.getElementById("productDesc").value = "";
-      document.getElementById("productPrice").value = "";
-      document.getElementById("productImage").value = "";
-    });
-  };
-  reader.readAsDataURL(imgFile);
-});
-
-// Upload QR Code
-document.getElementById("uploadQRBtn").addEventListener("click", () => {
-  const file = document.getElementById("qrImage").files[0];
-  if (!file) return alert("Select a QR image");
+  if (!name || !desc || !price || !file) return alert("Fill all fields");
 
   const reader = new FileReader();
-  reader.onload = function (e) {
-    database.ref("store/qr").set(e.target.result, () => {
-      alert("QR Code Updated");
-      document.getElementById("qrImage").value = "";
-      loadQRImage();
-    });
+  reader.onload = () => {
+    const id = Date.now().toString();
+    db.ref("products/" + id).set({
+      name, desc, price, image: reader.result
+    }).then(() => alert("Product added"));
   };
   reader.readAsDataURL(file);
-});
+}
 
-function loadQRImage() {
-  database.ref("store/qr").once("value", snap => {
-    const img = snap.val();
-    document.getElementById("qrPreview").src = img || "default-qr.png";
+function uploadQR() {
+  const file = document.getElementById("qrImage").files[0];
+  if (!file) return alert("Select file");
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    db.ref("qr").set(reader.result).then(() => alert("QR uploaded"));
+  };
+  reader.readAsDataURL(file);
+}
+
+function loadProducts() {
+  const container = document.getElementById("productList");
+  container.innerHTML = "";
+  db.ref("products").once("value", snapshot => {
+    snapshot.forEach(child => {
+      const p = child.val();
+      container.innerHTML += `
+        <div class="card">
+          <strong>${p.name}</strong><br>
+          <small>${p.desc}</small><br>
+          Price: ₹${p.price}<br>
+          <img src="${p.image}" width="100"/><br>
+        </div>
+      `;
+    });
   });
 }
-loadQRImage();
 
-// Update Store Info
-document.getElementById("updateInfoBtn").addEventListener("click", () => {
+function updateStore() {
   const name = document.getElementById("storeName").value;
   const desc = document.getElementById("storeDesc").value;
-
-  database.ref("store/info").set({
-    name,
-    description: desc
-  }, () => alert("Store Info Updated"));
-});
-
-function loadStoreInfo() {
-  database.ref("store/info").once("value", snap => {
-    const info = snap.val();
-    if (info) {
-      document.getElementById("storeName").value = info.name;
-      document.getElementById("storeDesc").value = info.description;
-    }
-  });
+  db.ref("store").set({ name, desc }).then(() => alert("Store updated"));
 }
-loadStoreInfo();
 
-// Add Notice
-document.getElementById("addNoticeBtn").addEventListener("click", () => {
-  const notice = document.getElementById("noticeText").value;
-  if (!notice) return alert("Enter notice text");
+function updateNotices() {
+  const main = document.getElementById("mainNotice").value;
+  const float = document.getElementById("floatingNotice").value;
+  db.ref("notice").set({ main, float }).then(() => alert("Notices updated"));
+}
 
-  database.ref("store/notice").set(notice, () => {
-    alert("Notice Updated");
-    document.getElementById("noticeText").value = "";
-  });
-});
-
-// Add Floating Notice
-document.getElementById("addFloatingNoticeBtn").addEventListener("click", () => {
-  const floatNotice = document.getElementById("floatingNoticeText").value;
-  if (!floatNotice) return alert("Enter floating notice text");
-
-  database.ref("store/floatingNotice").set(floatNotice, () => {
-    alert("Floating Notice Updated");
-    document.getElementById("floatingNoticeText").value = "";
-  });
+firebase.auth().onAuthStateChanged(user => {
+  if (!user || user.email !== "ashura@gmail.com") {
+    window.location.href = "index.html";
+  } else {
+    loadDashboard();
+    loadProducts();
+  }
 });
