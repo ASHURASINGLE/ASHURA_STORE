@@ -1,72 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ASHURA STORE - ADMIN</title>
-  <link rel="stylesheet" href="admin.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ASHURA STORE Admin Panel</title>
+  <link rel="stylesheet" href="admin.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
 </head>
 <body>
   <header>
-    <h1>ASHURA STORE - ADMIN</h1>
-    <button id="menuToggle">☰</button>
+    <h1>ASHURA STORE Admin</h1>
+    <button id="menuToggle">☰ Menu</button>
   </header>
 
-  <nav id="drawer" class="hidden">
+  <nav id="drawer">
     <ul>
-      <li onclick="showSection('dashboard')">Dashboard</li>
-      <li onclick="showSection('manageUsers')">Manage Users</li>
-      <li onclick="showSection('orders')">Orders</li>
-      <li onclick="showSection('manageProducts')">Manage Products</li>
-      <li onclick="showSection('qrCode')">Manage QR Code</li>
-      <li onclick="showSection('storeInfo')">Store Information</li>
-      <li onclick="logout()">Logout</li>
+      <li><a href="#">Dashboard</a></li>
+      <li><a href="#">Manage Products</a></li>
+      <li><a href="#">QR Code</a></li>
+      <li><a href="#">Store Info</a></li>
+      <li><a id="logoutBtn" href="#">Logout</a></li>
     </ul>
   </nav>
 
   <main>
-    <section id="dashboard" class="section">
+    <!-- Dashboard Section -->
+    <section>
       <h2>Dashboard</h2>
-      <p>Total Users: <span id="totalUsers">0</span></p>
-      <p>Total Orders: <span id="totalOrders">0</span></p>
+      <p id="totalUsers">Total Users: Loading...</p>
+      <p id="totalOrders">Total Orders: Loading...</p>
     </section>
 
-    <section id="manageUsers" class="section hidden">
-      <h2>Manage Users</h2>
-      <div id="userList"></div>
+    <!-- Product Management Section -->
+    <section>
+      <h2>Add Product</h2>
+      <input type="text" id="productName" placeholder="Product Name" />
+      <textarea id="productDesc" placeholder="Product Description"></textarea>
+      <input type="file" id="productImage" accept="image/*" />
+      <button id="addProductBtn">Add Product</button>
     </section>
 
-    <section id="orders" class="section hidden">
-      <h2>Orders</h2>
-      <div id="orderList"></div>
+    <!-- QR Code Upload Section -->
+    <section>
+      <h2>Upload QR Code</h2>
+      <input type="file" id="qrImage" accept="image/*" />
+      <button id="uploadQRBtn">Upload QR</button>
+      <br />
+      <img id="qrPreview" src="default-qr.png" alt="QR Code Preview" />
     </section>
 
-    <section id="manageProducts" class="section hidden">
-      <h2>Manage Products</h2>
-      <input type="text" id="productName" placeholder="Product Name"><br>
-      <textarea id="productDesc" placeholder="Product Description"></textarea><br>
-      <input type="text" id="productImageUrl" placeholder="Image URL"><br>
-      <button onclick="addProduct()">Add Product</button>
-    </section>
-
-    <section id="qrCode" class="section hidden">
-      <h2>Manage QR Code</h2>
-      <img id="qrPreview" src="" alt="QR Code" style="width:200px;"><br>
-      <input type="text" id="qrUrl" placeholder="Enter QR Image URL"><br>
-      <button onclick="updateQR()">Upload New QR</button>
-    </section>
-
-    <section id="storeInfo" class="section hidden">
-      <h2>Store Information</h2>
-      <input type="text" id="storeName" placeholder="Store Name"><br>
-      <textarea id="storeDesc" placeholder="Store Description"></textarea><br>
-      <button onclick="updateStoreInfo()">Update Info</button>
+    <!-- Store Info Section -->
+    <section>
+      <h2>Update Store Info</h2>
+      <input type="text" id="storeName" placeholder="Store Name" />
+      <textarea id="storeDesc" placeholder="Store Description"></textarea>
+      <button id="updateInfoBtn">Update Info</button>
     </section>
   </main>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>
