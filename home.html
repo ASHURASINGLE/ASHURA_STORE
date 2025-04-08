@@ -2,31 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ASHURA STORE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ASHURA STORE - Home</title>
   <link rel="stylesheet" href="home.css" />
-  <script type="module" src="home.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 </head>
 <body>
-  <div class="navbar">
-    <button onclick="showSection('home')">Home</button>
-    <button onclick="showSection('orders')">Orders</button>
-    <button onclick="showSection('profile')">Profile</button>
+  <div class="header">
+    <h1>ASHURA STORE</h1>
+    <p>Welcome to our hacker-themed store</p>
   </div>
 
-  <section id="home" class="section">
-    <h1 class="section-title">Welcome to ASHURA STORE</h1>
-    <div id="productList" class="product-list"></div>
-  </section>
+  <div id="content-home" class="tab-content active">
+    <div class="product-list" id="productList"></div>
+  </div>
 
-  <section id="orders" class="section hidden">
-    <h1 class="section-title">Your Orders</h1>
-    <div id="orderHistory" class="order-list"></div>
-  </section>
+  <div id="content-orders" class="tab-content">
+    <p style="text-align:center; color:white;">Order history will appear here.</p>
+  </div>
 
-  <section id="profile" class="section hidden">
-    <h1 class="section-title">Your Profile</h1>
-    <div id="profileInfo" class="profile-details"></div>
-  </section>
+  <div id="content-profile" class="tab-content">
+    <p style="text-align:center; color:white;">Profile info will appear here.</p>
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-btn active" onclick="switchTab('home')">Home</button>
+    <button class="nav-btn" onclick="switchTab('orders')">Orders</button>
+    <button class="nav-btn" onclick="switchTab('profile')">Profile</button>
+  </div>
+
+  <script src="home.js"></script>
 </body>
 </html>
