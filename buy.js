@@ -12,66 +12,59 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const auth = firebase.auth();
 
-const urlParams = new URLSearchParams(window.location.search);
-const productId = urlParams.get('id');
-let productData = {};
+// Get product ID from URL
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
 
-if (!productId) {
-  alert("No product selected");
-  window.location.href = "home.html";
-}
+const step1 = document.getElementById("step1");
+const step2 = document.getElementById("step2");
+const productNameEl = document.getElementById("product-name");
+const productDescEl = document.getElementById("product-desc");
+const productImgEl = document.getElementById("product-img");
+const qrImg = document.getElementById("qr-img");
+const confirmBtn = document.getElementById("confirm-btn");
 
-// Load product
-db.ref("products/" + productId).once("value", snap => {
-  productData = snap.val();
-  document.getElementById("product-name").innerText = productData.name;
-  document.getElementById("product-description").innerText = productData.description;
-  document.getElementById("product-image").src = productData.image || "default-product.png";
-});
+let productName = "";
 
-// Load QR code from DB or default
-db.ref("store/qr").once("value", snap => {
-  if (snap.exists()) {
-    document.getElementById("qr-code").src = snap.val();
-  }
-});
+auth.onAuthStateChanged(user => {
+  if (!user) return window.location.href = "index.html";
 
-function nextStep() {
-  document.getElementById("step1").classList.remove("active");
-  document.getElementById("step2").classList.add("active");
-}
+  db.ref("products/" + productId).once("value").then(snapshot => {
+    const data = snapshot.val();
+    if (!data) return alert("Product not found");
+    productName = data.name;
+    productNameEl.textContent = data.name;
+    productDescEl.textContent = data.description;
+    productImgEl.src = data.imageURL || "https://via.placeholder.com/500x300?text=No+Image";
+  });
 
-function submitOrder() {
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const utr = document.getElementById("utr").value.trim();
+  db.ref("qr").once("value").then(snap => {
+    qrImg.src = snap.val()?.url || "https://ashurasingle.github.io/assets/default-qr.jpg";
+  });
 
-  if (!name || !email || !utr) {
-    alert("Please fill all fields");
-    return;
-  }
+  confirmBtn.addEventListener("click", () => {
+    const name = document.getElementById("name").value.trim();
+    const utr = document.getElementById("utr").value.trim();
 
-  auth.onAuthStateChanged(user => {
-    if (!user) {
-      alert("Please login first");
-      window.location.href = "index.html";
-      return;
-    }
+    if (!name || !utr) return alert("Fill all fields");
 
-    const orderData = {
-      name,
-      email,
-      utr,
+    db.ref("orders").push({
       uid: user.uid,
+      email: user.email,
+      name,
+      utr,
+      productName,
       productId,
-      productName: productData.name,
       status: "Pending",
       timestamp: Date.now()
-    };
-
-    db.ref("orders").push(orderData).then(() => {
-      alert("Order placed! Admin will verify your payment.");
+    }).then(() => {
+      alert("Order placed. You'll receive a confirmation soon.");
       window.location.href = "home.html";
     });
   });
+});
+
+function continueToStep2() {
+  step1.style.display = "none";
+  step2.style.display = "block";
 }
