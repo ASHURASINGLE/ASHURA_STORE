@@ -1,14 +1,9 @@
-/* General Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* Base styling */
 body {
-  background-color: #0a0a0a;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #0d0d0d;
   color: #e0e0e0;
-  font-family: 'Courier New', Courier, monospace;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -16,111 +11,129 @@ body {
 
 header {
   background-color: #111;
-  padding: 20px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  border-bottom: 2px solid #222;
-  color: #ff1e56;
+  color: #fff;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #333;
 }
 
-/* Drawer */
-.drawer-toggle {
-  background: #222;
-  color: #fff;
-  padding: 10px;
-  cursor: pointer;
+header h1 {
+  font-size: 1.5rem;
+}
+
+#drawerBtn {
+  background: none;
+  color: #0f0;
+  font-size: 1.5rem;
   border: none;
-  text-align: left;
-  width: 100%;
+  cursor: pointer;
 }
 
 .drawer {
-  width: 250px;
-  background: #121212;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: -250px;
-  overflow-y: auto;
-  transition: 0.3s;
-  z-index: 10;
-  padding-top: 60px;
-}
-
-.drawer.active {
-  left: 0;
+  background-color: #111;
+  padding: 1rem;
+  display: none;
+  flex-direction: column;
+  border-right: 1px solid #222;
 }
 
 .drawer a {
-  display: block;
-  color: #fff;
-  padding: 12px 20px;
+  color: #0f0;
   text-decoration: none;
-  border-bottom: 1px solid #1a1a1a;
+  margin: 0.5rem 0;
+  transition: 0.2s ease;
 }
 
 .drawer a:hover {
-  background: #1f1f1f;
+  color: #ff0;
 }
 
-/* Main content */
-.main {
-  margin-left: 0;
-  padding: 20px;
-  transition: margin-left 0.3s;
+main {
+  padding: 1rem;
+  flex: 1;
 }
 
-.drawer.active ~ .main {
-  margin-left: 250px;
-}
-
-/* Admin Section Styles */
 section {
   display: none;
+  margin-top: 1rem;
 }
 
 section.active {
   display: block;
 }
 
-/* Form and input styling */
-input, textarea, select {
-  background: #111;
-  color: #fff;
-  border: 1px solid #444;
-  padding: 8px;
-  margin: 8px 0;
+form {
+  margin-top: 1rem;
+}
+
+input, textarea, button {
   width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+input, textarea {
+  background-color: #1a1a1a;
+  color: #eee;
 }
 
 button {
-  background: #ff1e56;
-  border: none;
-  color: white;
-  padding: 10px 16px;
-  cursor: pointer;
+  background-color: #0f0;
+  color: #000;
   font-weight: bold;
-  margin-top: 10px;
-  width: 100%;
-  transition: 0.3s;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
 button:hover {
-  background: #e01345;
+  background-color: #00cc00;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.product-card {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  padding: 0.75rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.product-card img {
+  max-width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.product-card button {
+  background-color: #f00;
+  color: white;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 1.2rem;
+  }
+
   .drawer {
-    width: 200px;
+    padding: 0.5rem;
   }
 
-  .drawer.active ~ .main {
-    margin-left: 200px;
-  }
-
-  header {
-    font-size: 18px;
+  .drawer a {
+    margin: 0.3rem 0;
+    font-size: 0.9rem;
   }
 }
