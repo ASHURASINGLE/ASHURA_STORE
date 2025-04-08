@@ -2,33 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin Panel - ASHURA STORE</title>
+  <title>Admin Dashboard | ASHURA STORE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="admin.css" />
   <script type="module" src="admin.js" defer></script>
 </head>
 <body>
   <div class="admin-container">
-    <h1>Admin Panel - ASHURA STORE</h1>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2 class="logo">ASHURA ADMIN</h2>
+      <nav class="menu">
+        <button data-section="dashboard" class="active">Dashboard</button>
+        <button data-section="users">Manage Users</button>
+        <button data-section="qr">Manage QR</button>
+        <button data-section="orders">View Orders</button>
+        <button onclick="logout()">Logout</button>
+      </nav>
+    </aside>
 
-    <section>
-      <h2>Change Store Title</h2>
-      <input type="text" id="storeTitleInput" placeholder="New Store Title" />
-      <button onclick="updateStoreTitle()">Update Title</button>
-    </section>
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Dashboard -->
+      <section id="dashboard" class="section active">
+        <h2>Dashboard</h2>
+        <div class="stats">
+          <div class="stat-card">
+            <h3>Total Users</h3>
+            <p id="totalUsers">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Total Orders</h3>
+            <p id="totalOrders">0</p>
+          </div>
+        </div>
+      </section>
 
-    <section>
-      <h2>Send Notification</h2>
-      <input type="text" id="noticeInput" placeholder="Write a notice..." />
-      <button onclick="sendNotice()">Send Notice</button>
-    </section>
+      <!-- Manage Users -->
+      <section id="users" class="section">
+        <h2>Manage Users</h2>
+        <div id="usersList"></div>
+      </section>
 
-    <section>
-      <h2>Add Product (via Image URL)</h2>
-      <input type="text" id="productName" placeholder="Product Name" />
-      <input type="text" id="productPrice" placeholder="Price" />
-      <input type="text" id="productImageURL" placeholder="Image URL" />
-      <button onclick="uploadProduct()">Add Product</button>
-    </section>
+      <!-- Manage QR -->
+      <section id="qr" class="section">
+        <h2>Manage QR Code</h2>
+        <img id="qrImage" src="" alt="QR Code" style="max-width: 200px;" />
+        <input type="file" id="qrUpload" />
+        <button onclick="uploadQR()">Upload New QR</button>
+      </section>
+
+      <!-- View Orders -->
+      <section id="orders" class="section">
+        <h2>All Orders</h2>
+        <div id="orderList"></div>
+      </section>
+    </main>
   </div>
 </body>
 </html>
