@@ -5,26 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Buy Product - ASHURA STORE</title>
   <link rel="stylesheet" href="buy.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 </head>
 <body>
   <div class="container">
     <h1 class="title">Product Details</h1>
-    <div class="product">
-      <img id="productImage" src="" alt="Product Image" class="product-img"/>
-      <h2 id="productName"></h2>
-      <p id="productDesc"></p>
-      <button id="continueBtn">Continue to Payment</button>
-    </div>
+    <img id="productImage" class="product-image" src="" alt="Product Image"/>
+    <p id="productName" class="product-name"></p>
+    <p id="productDescription" class="product-description"></p>
+    <button id="continueBtn" class="continue-btn">Continue to Payment</button>
 
-    <div id="paymentSection" class="hidden">
-      <h2>Scan QR to Pay</h2>
-      <img id="qrCodeImage" src="" alt="QR Code" class="qr-img"/>
-      <input type="text" id="buyerName" placeholder="Enter Your Name" />
-      <input type="text" id="utrNumber" placeholder="Enter UTR Number" />
-      <button id="confirmBtn">Confirm</button>
+    <div id="paymentSection" class="payment-section hidden">
+      <h2 class="subtitle">Scan QR to Pay</h2>
+      <img id="qrImage" class="qr-image" src="default_qr.png" alt="QR Code"/>
+      <input type="text" id="buyerName" placeholder="Enter Your Name"/>
+      <input type="text" id="utrNumber" placeholder="Enter UTR Number"/>
+      <button id="confirmBtn" class="confirm-btn">Confirm</button>
     </div>
   </div>
 
