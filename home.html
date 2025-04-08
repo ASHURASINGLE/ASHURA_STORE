@@ -1,28 +1,22 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html lang="en">
 <head>
-  <title>ASHURA STORE - Home</title>
-  <link rel="stylesheet" href="home.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASHURA STORE</title>
+  <link rel="stylesheet" href="home.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 </head>
 <body>
   <header>
     <h1 id="store-name">ASHURA STORE</h1>
-    <p id="store-description">Welcome to our dark web-themed digital store.</p>
-  </header>
-
-  <div class="tabs">
+    <p id="store-description">Welcome to your ultimate digital product store.</p>
+  </header>  <div class="tabs">
     <button class="active">Home</button>
     <button>Orders</button>
     <button>Profile</button>
-  </div>
-
-  <div class="section active" id="product-section"></div>
+  </div>  <div class="section active" id="product-section"></div>
   <div class="section" id="order-section"></div>
-  <div class="section" id="profile-section"></div>
-
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="home.js"></script>
-</body>
+  <div class="section" id="profile-section"></div>  <script src="home.js"></script></body>
 </html>
