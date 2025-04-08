@@ -1,3 +1,4 @@
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
   authDomain: "ashura-6cb98.firebaseapp.com",
@@ -9,44 +10,31 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 const db = firebase.database();
 
-function showSection(id) {
-  document.querySelectorAll('.admin-section').forEach(sec => sec.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
-}
+// Drawer toggle
+document.getElementById("drawerToggle").addEventListener("click", () => {
+  const drawer = document.getElementById("drawer");
+  drawer.classList.toggle("open");
+});
 
-function updateQRCode() {
-  const link = document.getElementById("qrLink").value;
-  db.ref("store/qr").set(link).then(() => {
-    alert("QR code updated!");
-    document.getElementById("qrPreview").innerHTML = `<img src="${link}" style="max-width:200px;">`;
+// Auth check
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    window.location.href = "index.html";
+  } else {
+    checkIfAdmin(user.uid);
+  }
+});
+
+// Check admin
+function checkIfAdmin(uid) {
+  db.ref("users/" + uid).once("value").then(snapshot => {
+    const data = snapshot.val();
+    if (!data || data.role !== "admin") {
+      alert("Access denied.");
+      auth.signOut();
+    }
   });
 }
-
-function updateStoreInfo() {
-  const name = document.getElementById("storeName").value;
-  const desc = document.getElementById("storeDesc").value;
-  db.ref("store/info").set({ name, desc }).then(() => {
-    alert("Store info updated!");
-  });
-}
-
-function loadDashboard() {
-  db.ref("users").once("value", usersSnap => {
-    db.ref("orders").once("value", ordersSnap => {
-      const usersCount = usersSnap.numChildren();
-      const ordersCount = ordersSnap.numChildren();
-      document.getElementById("dashboard").innerHTML = `
-        <h2>Dashboard</h2>
-        <p>Total Users: ${usersCount}</p>
-        <p>Total Orders: ${ordersCount}</p>
-      `;
-    });
-  });
-}
-
-window.onload = () => {
-  showSection("dashboard");
-  loadDashboard();
-};
