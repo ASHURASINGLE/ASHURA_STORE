@@ -3,47 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ASHURA STORE - Home</title>
+  <title>ASHURA STORE</title>
   <link rel="stylesheet" href="home.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
 </head>
 <body>
   <header>
-    <h1 id="storeName">ASHURA STORE</h1>
-    <p id="storeDescription">Welcome to the Hacker Interface</p>
+    <h1>ASHURA STORE</h1>
+    <p>Welcome to the Hacker Interface</p>
   </header>
 
-  <nav class="tabs">
-    <button id="homeTab" class="active">Home</button>
-    <button id="ordersTab">Order History</button>
-    <button id="profileTab">Profile</button>
-  </nav>
+  <div class="tabs">
+    <button class="active">Home</button>
+    <button>Order History</button>
+    <button>Profile</button>
+  </div>
 
-  <!-- HOME SECTION -->
-  <section id="homeSection" class="section active">
-    <div id="productList"></div>
+  <section class="section active" id="product-section">
+    <!-- Products will load here -->
   </section>
 
-  <!-- ORDERS SECTION -->
-  <section id="ordersSection" class="section">
-    <div id="ordersList"></div>
+  <section class="section" id="order-section">
+    <!-- Orders will load here -->
   </section>
 
-  <!-- PROFILE SECTION -->
-  <section id="profileSection" class="section">
-    <div class="profile-info" id="profileInfo"></div>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-
-    <div id="adminPanel" style="display: none; margin-top: 30px;">
-      <h3>Admin: Update Store Info</h3>
-      <input type="text" id="newStoreName" placeholder="New Store Name" />
-      <input type="text" id="newStoreDescription" placeholder="New Store Description" />
-      <button onclick="updateStoreInfo()">Update Store Info</button>
-    </div>
+  <section class="section" id="profile-section">
+    <!-- Profile will load here -->
   </section>
 
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
   <script src="home.js"></script>
 </body>
 </html>
