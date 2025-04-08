@@ -1,25 +1,38 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Buy Product</title>
   <link rel="stylesheet" href="buy.css">
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 </head>
 <body>
+
   <div class="container">
-    <div class="product-details">
-      <img id="productImage" src="" alt="Product Image">
-      <h2 id="productName">Product Name</h2>
-      <p id="productDescription">Product Description</p>
-      <button id="continueBtn">Continue to Payment</button>
-    </div><div class="payment-section" style="display:none;">
-  <h3>Scan QR to Pay</h3>
-  <img id="qrImage" src="default-qr.png" alt="QR Code" class="qr-img">
+    <!-- Step 1: Product Info -->
+    <div id="step1">
+      <h2>Product Details</h2>
+      <img id="product-img" class="product-img" src="" alt="Product Image">
+      <div class="product-info">
+        <h3 id="product-name"></h3>
+        <p id="product-desc"></p>
+      </div>
+      <button onclick="continueToStep2()">Continue to Payment</button>
+    </div>
 
-  <input type="text" id="utr" placeholder="Enter UTR Number">
-  <input type="email" id="email" placeholder="Enter Your Email">
-  <button id="confirmBtn">Confirm</button>
-</div>
+    <!-- Step 2: Payment -->
+    <div id="step2" style="display: none;">
+      <h2>Scan & Pay</h2>
+      <img id="qr-img" class="qr-img" src="" alt="QR Code">
+      <input type="text" id="name" placeholder="Enter Your Name">
+      <input type="text" id="utr" placeholder="Enter UTR Number">
+      <button id="confirm-btn">Confirm Payment</button>
+    </div>
+  </div>
 
-  </div>  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>  <script src="firebase-config.js"></script>  <script src="buy.js"></script></body>
+  <script src="buy.js"></script>
+</body>
 </html>
