@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ASHURA STORE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="home.css">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
 </head>
 <body>
   <header>
@@ -13,38 +15,37 @@
     <p>Welcome to our hacker-themed store</p>
   </header>
 
-  <div class="section active" id="homeSection">
-    <!-- Products will be loaded dynamically -->
-    <div id="productList">Loading products...</div>
+  <div class="tabs">
+    <button id="homeTab" class="active">Home</button>
+    <button id="ordersTab">Orders</button>
+    <button id="profileTab">Profile</button>
   </div>
 
-  <div class="section" id="ordersSection">
-    <div id="orderList">Your orders will appear here.</div>
+  <div id="homeSection" class="section active">
+    <div id="productList"></div>
   </div>
 
-  <div class="section" id="profileSection">
-    <div class="profile-info" id="userEmail">Email: loading...</div>
-    <div class="profile-info" id="userPhone">Phone: loading...</div>
-    <div class="profile-info" id="userUID">UID: loading...</div>
-    <div class="profile-info" id="lastLogin">Last Login: loading...</div>
+  <div id="ordersSection" class="section">
+    <div id="orderList">Order history will appear here.</div>
+  </div>
+
+  <div id="profileSection" class="section">
+    <div id="profileInfo">Profile info will appear here.</div>
     <button class="logout-btn" onclick="logout()">Logout</button>
   </div>
 
-  <div class="tabs">
-    <button onclick="switchTab('home')" id="homeTab" class="active">
-      <i class="fas fa-home"></i>
-      <span>Home</span>
-    </button>
-    <button onclick="switchTab('orders')" id="ordersTab">
-      <i class="fas fa-box"></i>
-      <span>Orders</span>
-    </button>
-    <button onclick="switchTab('profile')" id="profileTab">
-      <i class="fas fa-user"></i>
-      <span>Profile</span>
-    </button>
-  </div>
-
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
+      authDomain: "ashura-6cb98.firebaseapp.com",
+      databaseURL: "https://ashura-6cb98-default-rtdb.firebaseio.com",
+      projectId: "ashura-6cb98",
+      storageBucket: "ashura-6cb98.appspot.com",
+      messagingSenderId: "990827476073",
+      appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
   <script src="home.js"></script>
 </body>
 </html>
