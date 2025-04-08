@@ -1,128 +1,80 @@
 body {
+  background-color: #000;
+  color: white;
+  font-family: monospace;
   margin: 0;
-  font-family: 'Courier New', monospace;
-  background-color: #0e0e0e;
-  color: #00ffcc;
+  padding: 0;
 }
 
 header {
-  background-color: #1a1a1a;
-  padding: 10px;
+  background-color: #111;
+  padding: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.top-bar h1 {
-  font-size: 20px;
-  margin: 0;
+header h1 {
+  font-size: 18px;
 }
 
-#drawerToggle {
-  background: none;
+#menuToggle {
+  background-color: red;
+  color: white;
   border: none;
-  color: #00ffcc;
-  font-size: 22px;
+  padding: 10px;
   cursor: pointer;
+  font-size: 18px;
 }
 
-.drawer {
-  position: fixed;
-  top: 0;
-  left: -250px;
-  width: 250px;
-  height: 100%;
-  background-color: #121212;
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.5);
-  transition: 0.3s;
-  z-index: 10;
+#drawer {
+  background-color: #111;
+  padding: 10px;
+  display: none;
 }
 
-.drawer.open {
-  left: 0;
-}
-
-.drawer-close {
-  background: none;
-  border: none;
-  color: #ff4444;
-  font-size: 20px;
-  float: right;
-  cursor: pointer;
-}
-
-.drawer ul {
-  list-style: none;
+#drawer ul {
+  list-style-type: none;
   padding: 0;
-  margin-top: 40px;
 }
 
-.drawer li {
-  padding: 10px 0;
-  cursor: pointer;
+#drawer li {
+  padding: 10px;
   border-bottom: 1px solid #333;
+  cursor: pointer;
 }
 
-.drawer li:hover {
-  color: #ffffff;
+#drawer li:hover {
+  background-color: #222;
 }
 
 main {
   padding: 20px;
-  margin-left: 0;
 }
 
-.admin-section {
+.section {
   display: none;
 }
 
-.admin-section.active {
+.section.active {
   display: block;
 }
 
 input, textarea {
-  background: #1f1f1f;
-  border: 1px solid #444;
-  color: #00ffcc;
+  width: 90%;
   padding: 10px;
-  margin: 10px 0;
-  width: 100%;
-  max-width: 500px;
-  display: block;
-  border-radius: 5px;
+  margin-top: 10px;
+  font-family: monospace;
+  font-size: 16px;
 }
 
 button {
-  background-color: #00ffcc;
-  color: #000;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  font-family: monospace;
+  background-color: white;
+  color: black;
   border: none;
-  padding: 10px 15px;
   cursor: pointer;
-  margin-top: 10px;
-  border-radius: 4px;
-  font-weight: bold;
-}
-
-button:hover {
-  background-color: #00bfa6;
-}
-
-img {
-  max-width: 200px;
-  margin-top: 10px;
-  border: 2px solid #00ffcc;
-  border-radius: 6px;
-}
-
-#productList, #userList, #orderList {
-  margin-top: 20px;
-}
-
-.product-item, .user-item, .order-item {
-  border: 1px solid #333;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  background-color: #1a1a1a;
 }
