@@ -1,57 +1,46 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard - ASHURA STORE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel - ASHURA STORE</title>
   <link rel="stylesheet" href="admin.css" />
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body>
   <div class="admin-container">
-    <aside class="drawer">
+    <div class="drawer" id="drawer">
       <h2>ADMIN</h2>
-      <a id="dashboard-link">Dashboard</a>
-      <a id="users-link">Users</a>
-      <a id="orders-link">Orders</a>
-      <a id="qr-link">QR Code</a>
-      <a id="store-link">Store Info</a>
-    </aside><main class="main-content">
-  <section id="dashboard" class="section">
-    <h2>Dashboard</h2>
-    <p>Total Users: <span id="total-users">0</span></p>
-    <p>Total Orders: <span id="total-orders">0</span></p>
-  </section>
+      <ul>
+        <li onclick="showSection('dashboard')">Dashboard</li>
+        <li onclick="showSection('users')">Users</li>
+        <li onclick="showSection('orders')">Orders</li>
+        <li onclick="showSection('qr')">QR Code</li>
+        <li onclick="showSection('store')">Store Info</li>
+      </ul>
+    </div>
 
-  <section id="users" class="section">
-    <h2>Users</h2>
-    <div id="users-container"></div>
-  </section>
+    <div class="content">
+      <section id="dashboard" class="admin-section">Loading dashboard...</section>
+      <section id="users" class="admin-section" style="display:none;">User management here</section>
+      <section id="orders" class="admin-section" style="display:none;">Order management here</section>
+      <section id="qr" class="admin-section" style="display:none;">
+        <h3>Update QR Code</h3>
+        <input type="text" id="qrLink" placeholder="Enter QR Image URL">
+        <button onclick="updateQRCode()">Update</button>
+        <div id="qrPreview"></div>
+      </section>
+      <section id="store" class="admin-section" style="display:none;">
+        <h3>Store Information</h3>
+        <input type="text" id="storeName" placeholder="Store Name">
+        <input type="text" id="storeDesc" placeholder="Store Description">
+        <button onclick="updateStoreInfo()">Save</button>
+      </section>
+    </div>
+  </div>
 
-  <section id="orders" class="section">
-    <h2>Orders</h2>
-    <div id="orders-container"></div>
-  </section>
-
-  <section id="qr" class="section">
-    <h2>QR Code</h2>
-    <form id="qr-form">
-      <input type="url" id="qr-url" placeholder="Enter QR Image URL" required />
-      <button type="submit">Update</button>
-    </form>
-    <div id="qr-container"></div>
-  </section>
-
-  <section id="store" class="section">
-    <h2>Store Info</h2>
-    <form id="store-form">
-      <input type="text" id="store-name" placeholder="Store Name" required />
-      <textarea id="store-desc" placeholder="Store Description"></textarea>
-      <button type="submit">Update</button>
-    </form>
-  </section>
-</main>
-
-  </div>  <script src="admin.js"></script></body>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="admin.js"></script>
+</body>
 </html>
