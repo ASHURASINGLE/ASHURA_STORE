@@ -3,36 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ASHURA STORE - Home</title>
-  <link rel="stylesheet" href="home.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <title>ASHURA STORE</title>
+  <link rel="stylesheet" href="home.css"/>
 </head>
 <body>
   <header>
     <h1 id="storeTitle">ASHURA STORE</h1>
-    <p id="storeDesc">Welcome to the official hacker-style store</p>
+    <div id="notice"></div>
   </header>
 
+  <div class="floating-notice" id="floatingNotice"></div>
+
   <main>
-    <!-- Products Tab -->
-    <section id="products" class="active"></section>
-
-    <!-- Orders Tab -->
-    <section id="orders" class="hidden"></section>
-
-    <!-- Profile Tab -->
-    <section id="profile" class="hidden"></section>
+    <section id="productsTab" class="tab active">
+      <div id="productsContainer" class="product-grid"></div>
+    </section>
+    
+    <section id="ordersTab" class="tab">
+      <h2>Your Orders</h2>
+      <div id="ordersContainer"></div>
+    </section>
+    
+    <section id="profileTab" class="tab">
+      <h2>Your Profile</h2>
+      <p>Email: <span id="userEmail"></span></p>
+      <p>Phone: <span id="userPhone"></span></p>
+      <p>UID: <span id="userUID"></span></p>
+      <p>Last Login: <span id="userLastLogin"></span></p>
+      <button id="logoutBtn" class="red-button">Logout</button>
+    </section>
   </main>
 
-  <!-- Bottom Navigation -->
-  <div class="bottom-nav">
-    <button data-target="products">Home</button>
-    <button data-target="orders">Orders</button>
-    <button data-target="profile">Profile</button>
-  </div>
+  <nav class="bottom-nav">
+    <button onclick="switchTab('productsTab')">Products</button>
+    <button onclick="switchTab('ordersTab')">Orders</button>
+    <button onclick="switchTab('profileTab')">Profile</button>
+  </nav>
 
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
   <script src="home.js"></script>
 </body>
 </html>
