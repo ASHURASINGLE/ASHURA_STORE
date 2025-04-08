@@ -3,36 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ASHURA STORE</title>
+  <title>ASHURA STORE - Home</title>
   <link rel="stylesheet" href="home.css" />
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script defer src="home.js"></script>
 </head>
 <body>
   <header>
     <h1>ASHURA STORE</h1>
-    <p>Welcome to the Hacker Interface</p>
+    <p>Welcome to the Hacker Zone</p>
   </header>
 
   <div class="tabs">
-    <button class="active">Home</button>
-    <button>Order History</button>
-    <button>Profile</button>
+    <button class="active">
+      <span>Home</span>
+    </button>
+    <button>
+      <span>Order History</span>
+    </button>
+    <button>
+      <span>Profile</span>
+    </button>
   </div>
 
-  <section class="section active" id="product-section">
-    <!-- Products will load here -->
-  </section>
+  <div class="section active" id="product-section">
+    <p>Loading products...</p>
+  </div>
 
-  <section class="section" id="order-section">
-    <!-- Orders will load here -->
-  </section>
+  <div class="section" id="order-section">
+    <p>Loading order history...</p>
+  </div>
 
-  <section class="section" id="profile-section">
-    <!-- Profile will load here -->
-  </section>
-
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="home.js"></script>
+  <div class="section" id="profile-section">
+    <p>Loading profile...</p>
+  </div>
 </body>
 </html>
