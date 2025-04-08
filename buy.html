@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buy Product - ASHURA STORE</title>
+  <link rel="stylesheet" href="buy.css" />
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+  <div class="buy-container">
+    <div id="step1" class="step active">
+      <h2 id="product-name"></h2>
+      <img id="product-image" class="product-img" />
+      <p id="product-description"></p>
+      <button onclick="nextStep()">Continue to Payment</button>
+    </div>
+
+    <div id="step2" class="step">
+      <h3>Pay to the QR below</h3>
+      <img id="qr-code" class="qr-img" src="default-qr.png" alt="QR Code" />
+      <div class="form">
+        <input type="text" id="name" placeholder="Your Name" required />
+        <input type="email" id="email" placeholder="Email Address" required />
+        <input type="text" id="utr" placeholder="Enter UTR Number" required />
+        <button onclick="submitOrder()">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="buy.js"></script>
+</body>
+</html>
