@@ -1,84 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- index.html --><!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ASHURA Admin Panel</title>
-  <link rel="stylesheet" href="admin.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASHURA STORE - Login</title>
+  <link rel="stylesheet" href="index.css" />
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 </head>
 <body>
-  <div class="admin-header">
-    <h1>ASHURA STORE - ADMIN PANEL</h1>
-    <button id="toggleDrawer">☰</button>
-  </div>
+  <div class="login-box">
+    <h1>ASHURA STORE</h1>
+    <input type="email" id="loginEmail" placeholder="Email" />
+    <input type="password" id="loginPassword" placeholder="Password" />
+    <button id="loginBtn">Login</button>
+    <p id="errorMessage" style="color:red;"></p>
+  </div>  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
+      authDomain: "ashura-6cb98.firebaseapp.com",
+      databaseURL: "https://ashura-6cb98-default-rtdb.firebaseio.com",
+      projectId: "ashura-6cb98",
+      storageBucket: "ashura-6cb98.appspot.com",
+      messagingSenderId: "990827476073",
+      appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
+    };
+    firebase.initializeApp(firebaseConfig);
 
-  <div class="drawer" id="drawer">
-    <ul>
-      <li onclick="navigate('dashboard')">Dashboard</li>
-      <li onclick="navigate('store')">Store Info</li>
-      <li onclick="navigate('products')">Manage Products</li>
-      <li onclick="navigate('qr')">QR Code</li>
-      <li onclick="navigate('notices')">Notices</li>
-      <li onclick="navigate('users')">Users</li>
-      <li onclick="navigate('orders')">Orders</li>
-      <li onclick="logout()">Logout</li>
-    </ul>
-  </div>
+    const adminEmail = "ASHURA@gmail.com";
 
-  <div class="content">
-    <div id="dashboard" class="section active">
-      <h2>Dashboard</h2>
-      <p>Total Users: <span id="userCount">0</span></p>
-      <p>Total Orders: <span id="orderCount">0</span></p>
-    </div>
+    document.getElementById("loginBtn").addEventListener("click", function () {
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
 
-    <div id="store" class="section">
-      <h2>Store Info</h2>
-      <input id="storeName" placeholder="Store Name" />
-      <textarea id="storeDesc" placeholder="Store Description"></textarea>
-      <button onclick="updateStoreInfo()">Update</button>
-    </div>
-
-    <div id="products" class="section">
-      <h2>Manage Products</h2>
-      <input id="productName" placeholder="Product Name" />
-      <input id="productPrice" placeholder="Price" />
-      <textarea id="productDesc" placeholder="Description"></textarea>
-      <input type="file" id="productImage" />
-      <button onclick="addProduct()">Add Product</button>
-      <div id="productList"></div>
-    </div>
-
-    <div id="qr" class="section">
-      <h2>Manage QR Code</h2>
-      <img id="qrPreview" src="default-qr.png" alt="QR Code" />
-      <input type="file" id="qrInput" />
-      <button onclick="uploadQR()">Upload New QR</button>
-    </div>
-
-    <div id="notices" class="section">
-      <h2>Send Notices</h2>
-      <input id="maintenanceNotice" placeholder="Maintenance Notice" />
-      <button onclick="sendMaintenance()">Send Maintenance</button>
-      <input id="floatingNotice" placeholder="Floating Notice" />
-      <button onclick="sendFloating()">Send Floating</button>
-    </div>
-
-    <div id="users" class="section">
-      <h2>All Users</h2>
-      <div id="userList"></div>
-    </div>
-
-    <div id="orders" class="section">
-      <h2>All Orders</h2>
-      <div id="orderList"></div>
-    </div>
-  </div>
-
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
-  <script src="admin.js"></script>
-</body>
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => {
+          firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+              const userEmail = user.email;
+              if (userEmail.toLowerCase() === adminEmail.toLowerCase()) {
+                window.location.href = "admin.html";
+              } else {
+                window.location.href = "home.html";
+              }
+            }
+          });
+        })
+        .catch((error) => {
+          document.getElementById("errorMessage").innerText = "Login failed: " + error.message;
+        });
+    });
+  </script></body>
 </html>
