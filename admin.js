@@ -1,85 +1,141 @@
-// Firebase initialization (assumes you already initialized Firebase elsewhere)
+// Firebase initialization
+const firebaseConfig = {
+  apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
+  authDomain: "ashura-6cb98.firebaseapp.com",
+  databaseURL: "https://ashura-6cb98-default-rtdb.firebaseio.com",
+  projectId: "ashura-6cb98",
+  storageBucket: "ashura-6cb98.appspot.com",
+  messagingSenderId: "990827476073",
+  appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
+};
 
-const user = firebase.auth().currentUser;
+firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
+const storage = firebase.storage();
 
-// Show current tab
-function showTab(tabName) {
-  document.getElementById("homeTab").classList.add("hidden");
-  document.getElementById("ordersTab").classList.add("hidden");
-  document.getElementById("profileTab").classList.add("hidden");
+// Tab switching
+const menuButtons = document.querySelectorAll('.menu button');
+const sections = document.querySelectorAll('.section');
 
-  document.getElementById(tabName).classList.remove("hidden");
+menuButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    menuButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
 
-  document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
-  document.getElementById(tabName + "Btn").classList.add("active");
+    const target = btn.getAttribute('data-target');
+    sections.forEach(sec => {
+      sec.classList.remove('active');
+      if (sec.id === target) sec.classList.add('active');
+    });
+  });
+});
+
+// Dashboard stats
+function updateDashboardStats() {
+  database.ref('users').once('value', snapshot => {
+    const users = snapshot.val() || {};
+    const totalUsers = Object.keys(users).length;
+    document.getElementById('totalUsers').textContent = totalUsers;
+
+    let registeredUsers = 0;
+    Object.values(users).forEach(u => {
+      if (u.email && u.phone) registeredUsers++;
+    });
+
+    document.getElementById('registeredUsers').textContent = registeredUsers;
+  });
+
+  database.ref('orders').once('value', snapshot => {
+    const orders = snapshot.val() || {};
+    const totalOrders = Object.keys(orders).length;
+    document.getElementById('totalOrders').textContent = totalOrders;
+  });
 }
+updateDashboardStats();
 
-// Load products
-function loadProducts() {
-  const productList = document.getElementById("productList");
-  database.ref("products").once("value", snapshot => {
-    productList.innerHTML = "";
-    snapshot.forEach(child => {
-      const data = child.val();
-      const card = document.createElement("div");
-      card.className = "product-card";
+// Load all users
+function loadAllUsers() {
+  const usersList = document.getElementById('usersList');
+  usersList.innerHTML = '';
+
+  database.ref('users').once('value', snapshot => {
+    const users = snapshot.val();
+    if (!users) return;
+
+    Object.entries(users).forEach(([uid, user]) => {
+      const card = document.createElement('div');
+      card.classList.add('user-card');
       card.innerHTML = `
-        <h3>${data.name}</h3>
-        <p>${data.description}</p>
-        <button onclick="buyProduct('${child.key}')">Buy</button>
+        <p><strong>UID:</strong> ${uid}</p>
+        <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
+        <p><strong>Phone:</strong> ${user.phone || 'N/A'}</p>
+        <button onclick="deleteUser('${uid}')">Delete</button>
+        <button onclick="blockUser('${uid}')">Block</button>
       `;
-      productList.appendChild(card);
+      usersList.appendChild(card);
     });
   });
 }
 
-// Buy action
-function buyProduct(productId) {
-  window.location.href = `buy.html?product=${productId}`;
+// Delete user
+function deleteUser(uid) {
+  if (confirm("Are you sure you want to delete this user?")) {
+    database.ref(`users/${uid}`).remove().then(() => {
+      alert("User deleted.");
+      loadAllUsers();
+    });
+  }
 }
 
-// Show user profile
-function loadUserProfile() {
-  if (user) {
-    database.ref("users/" + user.uid).once("value", snapshot => {
-      const userData = snapshot.val();
-      document.getElementById("profileTab").innerHTML = `
-        <div class="profile-info">
-          <h3>Email:</h3><p>${userData.email}</p>
-          <h3>Phone:</h3><p>${userData.phone}</p>
-        </div>
+// Block user
+function blockUser(uid) {
+  database.ref(`users/${uid}/blocked`).set(true).then(() => {
+    alert("User blocked.");
+    loadAllUsers();
+  });
+}
+
+// Load orders
+function loadOrders() {
+  const orderList = document.getElementById('orderList');
+  orderList.innerHTML = '';
+
+  database.ref('orders').once('value', snapshot => {
+    const orders = snapshot.val();
+    if (!orders) return;
+
+    Object.entries(orders).forEach(([key, order]) => {
+      const card = document.createElement('div');
+      card.classList.add('order-card');
+      card.innerHTML = `
+        <p><strong>Order ID:</strong> ${key}</p>
+        <p><strong>User Name:</strong> ${order.name}</p>
+        <p><strong>UTR:</strong> ${order.utr}</p>
+        <p><strong>Status:</strong> ${order.status || 'Pending'}</p>
+        <button onclick="updateOrderStatus('${key}', 'Confirmed')">Mark Confirmed</button>
+        <button onclick="updateOrderStatus('${key}', 'Rejected')">Mark Rejected</button>
       `;
+      orderList.appendChild(card);
     });
-  }
+  });
 }
 
-// Show user orders
-function loadUserOrders() {
-  if (user) {
-    database.ref("orders/" + user.uid).once("value", snapshot => {
-      const orderHistory = document.getElementById("ordersTab");
-      orderHistory.innerHTML = "<h3>Order History</h3>";
-      snapshot.forEach(child => {
-        const order = child.val();
-        orderHistory.innerHTML += `
-          <div class="order-history">
-            <p><strong>Product:</strong> ${order.productName}</p>
-            <p><strong>Status:</strong> ${order.status}</p>
-          </div>
-        `;
-      });
-    });
-  }
+function updateOrderStatus(orderId, status) {
+  database.ref(`orders/${orderId}/status`).set(status).then(() => {
+    alert(`Order status updated to ${status}.`);
+    loadOrders();
+  });
 }
 
-// Auth listener
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    loadProducts();
-    loadUserProfile();
-    loadUserOrders();
-  } else {
-    window.location.href = "index.html";
-  }
+// Upload QR code
+document.getElementById('qrUpload').addEventListener('change', function () {
+  const file = this.files[0];
+  const storageRef = storage.ref(`paymentQR/qr.png`);
+  storageRef.put(file).then(() => {
+    alert("QR code uploaded successfully.");
+  });
 });
+
+// Initialize
+loadAllUsers();
+loadOrders();
