@@ -2,60 +2,49 @@
 
 body {
   margin: 0;
-  padding: 0;
   font-family: 'Share Tech Mono', monospace;
   background-color: #000;
   color: #0f0;
   display: flex;
   height: 100vh;
+  overflow: hidden;
 }
 
-.admin-container {
-  display: flex;
-  width: 100%;
-}
-
-/* Sidebar */
-.sidebar {
+.drawer {
   width: 250px;
   background-color: #111;
   border-right: 2px solid #0f0;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
+  padding-top: 20px;
+  position: fixed;
+  height: 100%;
+  overflow-y: auto;
 }
 
-.logo {
-  font-size: 20px;
-  color: #0f0;
+.drawer h2 {
   text-align: center;
+  color: #0f0;
   margin-bottom: 30px;
-  border-bottom: 1px solid #0f0;
-  padding-bottom: 10px;
+  font-size: 20px;
 }
 
-.menu button {
-  background: none;
-  border: none;
+.drawer a {
+  display: block;
+  padding: 15px 20px;
   color: #aaa;
-  padding: 10px;
-  margin-bottom: 10px;
-  text-align: left;
-  font-size: 16px;
-  cursor: pointer;
+  text-decoration: none;
   transition: 0.3s;
 }
 
-.menu button:hover,
-.menu button.active {
+.drawer a:hover,
+.drawer a.active {
   background-color: #0f0;
   color: #000;
 }
 
-/* Main content */
 .main-content {
-  flex: 1;
+  margin-left: 250px;
   padding: 20px;
+  width: calc(100% - 250px);
   overflow-y: auto;
 }
 
@@ -67,25 +56,12 @@ body {
   display: block;
 }
 
-/* Dashboard stats */
-.stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.stat-card {
+.card {
   background-color: #111;
   border: 1px solid #0f0;
-  padding: 20px;
-  border-radius: 8px;
-  width: 200px;
-  text-align: center;
-}
-
-/* QR section */
-#qrUpload {
-  margin-top: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
 }
 
 button {
@@ -94,53 +70,21 @@ button {
   border: none;
   padding: 10px 15px;
   font-weight: bold;
-  margin-top: 10px;
-  border-radius: 5px;
   cursor: pointer;
+  border-radius: 3px;
+  transition: background-color 0.3s;
 }
 
 button:hover {
   background-color: #0c0;
 }
 
-/* User list and orders */
-#usersList,
-#orderList {
-  margin-top: 20px;
-}
-
-.user-card,
-.order-card {
-  background-color: #111;
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px;
+  background-color: #000;
+  color: #0f0;
   border: 1px solid #0f0;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-}
-
-.user-card button,
-.order-card button {
-  margin-top: 10px;
-  margin-right: 10px;
-}
-
-/* Responsive for mobile */
-@media (max-width: 768px) {
-  .sidebar {
-    width: 100px;
-    padding: 10px;
-  }
-
-  .logo {
-    font-size: 14px;
-  }
-
-  .menu button {
-    font-size: 12px;
-    padding: 8px;
-  }
-
-  .stat-card {
-    width: 100%;
-  }
+  border-radius: 4px;
 }
