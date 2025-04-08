@@ -42,21 +42,12 @@ header p {
   border: none;
   color: #aaa;
   font-size: 14px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   cursor: pointer;
-  transition: 0.3s ease;
+  padding: 10px;
 }
 
-.tabs button:hover,
 .tabs button.active {
   color: #0f0;
-}
-
-.tabs button i {
-  font-size: 20px;
-  margin-bottom: 5px;
 }
 
 .section {
@@ -69,38 +60,23 @@ header p {
   display: block;
 }
 
-.product-card {
+.product-card, .order-item, .profile-info {
   background-color: #111;
   border: 1px solid #0f0;
-  border-radius: 8px;
   padding: 15px;
-  margin: 10px 0;
-  color: #0f0;
-}
-
-.profile-info,
-.order-item {
-  background-color: #111;
-  border: 1px solid #0f0;
-  padding: 10px;
   margin-bottom: 10px;
-  border-radius: 5px;
-  color: #0f0;
-  font-size: 14px;
+  border-radius: 8px;
 }
 
-button.logout-btn {
+.logout-btn {
   background-color: #0f0;
   color: #000;
   border: none;
   padding: 10px 20px;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 20px;
   border-radius: 4px;
-  transition: 0.2s ease;
 }
-
-button.logout-btn:hover {
+.logout-btn:hover {
   background-color: #0c0;
 }
