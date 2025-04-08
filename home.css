@@ -1,14 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
-body {
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
   font-family: 'Share Tech Mono', monospace;
   background-color: #000;
   color: #0f0;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 
 header {
@@ -18,40 +22,41 @@ header {
 }
 
 header h1 {
-  font-size: 28px;
+  font-size: 24px;
   color: #0f0;
-  margin: 0;
 }
 
 header p {
   font-size: 14px;
   color: #0f0;
+  margin-top: 5px;
 }
 
 .tabs {
   display: flex;
   justify-content: space-around;
-  background-color: #111;
-  padding: 10px 0;
+  background: #111;
   border-top: 1px solid #0f0;
   border-bottom: 1px solid #0f0;
 }
 
 .tabs button {
+  flex: 1;
+  padding: 10px;
   background: none;
   border: none;
   color: #aaa;
   font-size: 14px;
   cursor: pointer;
-  padding: 10px;
+  transition: 0.2s;
 }
 
 .tabs button.active {
   color: #0f0;
+  border-bottom: 2px solid #0f0;
 }
 
 .section {
-  flex: 1;
   padding: 20px;
   display: none;
 }
@@ -60,23 +65,73 @@ header p {
   display: block;
 }
 
-.product-card, .order-item, .profile-info {
+.product-card {
   background-color: #111;
   border: 1px solid #0f0;
-  padding: 15px;
-  margin-bottom: 10px;
   border-radius: 8px;
+  padding: 15px;
+  margin: 10px 0;
+}
+
+.product-card h3 {
+  margin-bottom: 8px;
+  color: #0f0;
+}
+
+.product-card p {
+  margin: 4px 0;
+  font-size: 13px;
+}
+
+.product-card button {
+  margin-top: 10px;
+  background-color: #0f0;
+  color: #000;
+  border: none;
+  padding: 8px 12px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.product-card button:hover {
+  background-color: #0c0;
+}
+
+.profile-info,
+.order-item {
+  background-color: #111;
+  border: 1px solid #0f0;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
 }
 
 .logout-btn {
   background-color: #0f0;
   color: #000;
-  border: none;
   padding: 10px 20px;
+  border: none;
+  margin-top: 20px;
+  border-radius: 4px;
   font-weight: bold;
   cursor: pointer;
-  border-radius: 4px;
 }
+
 .logout-btn:hover {
   background-color: #0c0;
+}
+
+input[type="text"] {
+  width: 100%;
+  margin: 5px 0;
+  padding: 8px;
+  border: 1px solid #0f0;
+  background: #000;
+  color: #0f0;
+  border-radius: 4px;
+}
+
+button {
+  transition: all 0.2s ease;
 }
