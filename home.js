@@ -114,21 +114,3 @@ function loadOrders(uid) {
     }
   });
 }
-
-
-✅ home.js has been fully updated with:
-
-Hacker-style tab navigation: Home, Orders, Profile.
-
-Profile section showing email, phone, UID, last login.
-
-Orders section displaying order history.
-
-Proper logout function with redirect.
-
-Firebase integration for products and user data.
-
-
-Now, would you like me to update home.css with matching hacker-style UI too?
-
-  
