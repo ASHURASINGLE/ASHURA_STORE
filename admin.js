@@ -14,95 +14,149 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const database = firebase.database();
 
-// Allow only admin access
-auth.onAuthStateChanged(user => {
-  if (!user || user.email !== "ASHURA@gmail.com") {
-    alert("Access Denied. Admins only.");
-    window.location.href = "index.html";
-  }
+const drawer = document.querySelector('.drawer');
+const drawerToggle = document.getElementById('drawerToggle');
+const logoutBtn = document.getElementById('logoutBtn');
+
+drawerToggle.addEventListener('click', () => {
+  drawer.classList.toggle('open');
 });
 
-// Toggle drawer
-document.getElementById('toggleDrawer').addEventListener('click', () => {
-  document.getElementById('drawer').classList.toggle('open');
-});
-
-// Section switching
-document.querySelectorAll('.drawer li').forEach(item => {
-  item.addEventListener('click', () => {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    const target = item.getAttribute('data-target');
-    if (target) document.getElementById(target).classList.add('active');
-  });
-});
-
-// Update store info
-document.getElementById('updateStoreBtn').addEventListener('click', () => {
-  const name = document.getElementById('storeName').value.trim();
-  const desc = document.getElementById('storeDesc').value.trim();
-
-  if (name && desc) {
-    database.ref('store').set({ name, description: desc })
-      .then(() => alert('Store info updated.'))
-      .catch(err => alert(err.message));
-  } else {
-    alert('Please enter both name and description.');
-  }
-});
-
-// Upload QR code
-document.getElementById('uploadQR').addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function () {
-    const base64 = reader.result;
-    database.ref("qr").set({ image: base64 });
-    document.getElementById('qrImage').src = base64;
-  };
-  reader.readAsDataURL(file);
-});
-
-// Upload Product
-document.getElementById('addProductBtn').addEventListener('click', () => {
-  const name = document.getElementById('productName').value.trim();
-  const desc = document.getElementById('productDesc').value.trim();
-  const file = document.getElementById('productImage').files[0];
-
-  if (!name || !desc || !file) return alert("Fill all fields and select image.");
-
-  const reader = new FileReader();
-  reader.onload = function () {
-    const image = reader.result;
-    const id = Date.now();
-    database.ref("products/" + id).set({ id, name, description: desc, image });
-    alert("Product added!");
-    document.getElementById('productName').value = '';
-    document.getElementById('productDesc').value = '';
-    document.getElementById('productImage').value = '';
-  };
-  reader.readAsDataURL(file);
-});
-
-// Send Notices
-document.getElementById('updateNoticeBtn').addEventListener('click', () => {
-  const notice = document.getElementById('noticeText').value.trim();
-  if (!notice) return alert("Enter notice");
-  database.ref("notice").set({ text: notice });
-  alert("Floating notice updated");
-});
-
-document.getElementById('maintenanceBtn').addEventListener('click', () => {
-  const text = document.getElementById('maintenanceText').value.trim();
-  if (!text) return alert("Enter maintenance message");
-  database.ref("maintenance").set({ text });
-  alert("Maintenance notice updated");
-});
-
-// Logout
-document.getElementById('logoutBtn').addEventListener('click', () => {
+logoutBtn.addEventListener('click', () => {
   auth.signOut().then(() => {
+    localStorage.removeItem('ashura_uid');
     window.location.href = "index.html";
   });
 });
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    if (user.email.toLowerCase() !== "ashura@gmail.com") {
+      alert("Access denied. Admin only.");
+      window.location.href = "home.html";
+    } else {
+      localStorage.setItem('ashura_uid', user.uid);
+      loadAdminFeatures();
+    }
+  } else {
+    alert("Not logged in.");
+    window.location.href = "index.html";
+  }
+});
+
+function loadAdminFeatures() {
+  // Load store info
+  const storeRef = database.ref("store/info");
+  storeRef.once("value", (snapshot) => {
+    const data = snapshot.val();
+    document.getElementById("storeName").value = data?.name || "";
+    document.getElementById("storeDescription").value = data?.description || "";
+  });
+
+  // Update store info
+  document.getElementById("updateStoreBtn").addEventListener("click", () => {
+    const name = document.getElementById("storeName").value.trim();
+    const desc = document.getElementById("storeDescription").value.trim();
+    storeRef.set({ name, description: desc });
+    alert("Store info updated!");
+  });
+
+  // Load and update QR code
+  const qrInput = document.getElementById("qrInput");
+  const qrPreview = document.getElementById("qrPreview");
+  const qrRef = database.ref("store/qr");
+
+  qrRef.once("value", snap => {
+    if (snap.exists()) {
+      qrPreview.src = snap.val();
+    }
+  });
+
+  qrInput.addEventListener("change", e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = reader.result;
+      qrPreview.src = base64;
+      qrRef.set(base64);
+      alert("QR code updated!");
+    };
+    if (file) reader.readAsDataURL(file);
+  });
+
+  // Load products
+  const productList = document.getElementById("productList");
+  const productsRef = database.ref("store/products");
+
+  function refreshProducts() {
+    productList.innerHTML = "";
+    productsRef.once("value", snapshot => {
+      snapshot.forEach(child => {
+        const data = child.val();
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <strong>${data.name}</strong><br>
+          ${data.description}<br>
+          <img src="${data.image}" style="max-width:100px;"><br>
+          <button onclick="deleteProduct('${child.key}')">Delete</button>
+        `;
+        productList.appendChild(li);
+      });
+    });
+  }
+
+  refreshProducts();
+
+  window.deleteProduct = function (key) {
+    productsRef.child(key).remove().then(() => {
+      alert("Product deleted");
+      refreshProducts();
+    });
+  };
+
+  // Add product
+  document.getElementById("addProductBtn").addEventListener("click", () => {
+    const pname = document.getElementById("productName").value.trim();
+    const pdesc = document.getElementById("productDesc").value.trim();
+    const pimg = document.getElementById("productImgInput").files[0];
+
+    if (!pname || !pdesc || !pimg) {
+      alert("Fill all fields");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = reader.result;
+      const key = productsRef.push().key;
+      productsRef.child(key).set({
+        name: pname,
+        description: pdesc,
+        image: base64
+      }).then(() => {
+        alert("Product added");
+        refreshProducts();
+        document.getElementById("productName").value = "";
+        document.getElementById("productDesc").value = "";
+        document.getElementById("productImgInput").value = "";
+      });
+    };
+    reader.readAsDataURL(pimg);
+  });
+
+  // Maintenance & Floating Notice
+  const maintenanceRef = database.ref("store/maintenance");
+  const floatingRef = database.ref("store/notice");
+
+  document.getElementById("maintenanceBtn").addEventListener("click", () => {
+    const msg = document.getElementById("maintenanceInput").value.trim();
+    maintenanceRef.set(msg);
+    alert("Maintenance notice sent");
+  });
+
+  document.getElementById("floatingBtn").addEventListener("click", () => {
+    const msg = document.getElementById("floatingInput").value.trim();
+    floatingRef.set(msg);
+    alert("Floating notice sent");
+  });
+}
