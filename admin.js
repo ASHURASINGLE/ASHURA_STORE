@@ -9,11 +9,10 @@ const firebaseConfig = {
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-// Drawer toggle
+// Toggle drawer
 document.getElementById("menuToggle").addEventListener("click", () => {
   const drawer = document.getElementById("drawer");
   drawer.style.display = drawer.style.display === "block" ? "none" : "block";
@@ -44,15 +43,17 @@ updateDashboard();
 document.getElementById("addProductBtn").addEventListener("click", () => {
   const name = document.getElementById("productName").value;
   const desc = document.getElementById("productDesc").value;
+  const price = document.getElementById("productPrice").value;
   const imgFile = document.getElementById("productImage").files[0];
 
-  if (!name || !desc || !imgFile) return alert("Fill all fields");
+  if (!name || !desc || !price || !imgFile) return alert("Fill all fields");
 
   const reader = new FileReader();
   reader.onload = function (e) {
     const productData = {
       name: name,
       description: desc,
+      price: parseFloat(price),
       imageUrl: e.target.result
     };
     const key = database.ref("products").push().key;
@@ -60,6 +61,7 @@ document.getElementById("addProductBtn").addEventListener("click", () => {
       alert("Product Added!");
       document.getElementById("productName").value = "";
       document.getElementById("productDesc").value = "";
+      document.getElementById("productPrice").value = "";
       document.getElementById("productImage").value = "";
     });
   };
@@ -101,7 +103,6 @@ document.getElementById("updateInfoBtn").addEventListener("click", () => {
   }, () => alert("Store Info Updated"));
 });
 
-// Load existing info
 function loadStoreInfo() {
   database.ref("store/info").once("value", snap => {
     const info = snap.val();
