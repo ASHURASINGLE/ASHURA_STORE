@@ -8,117 +8,139 @@ const firebaseConfig = {
   messagingSenderId: "990827476073",
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
-
 firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
+const db = firebase.database();
 const auth = firebase.auth();
 
-// Auth protection
+let currentUser = null;
+
+// Auth state
 auth.onAuthStateChanged(user => {
-  if (!user) {
-    window.location.href = "index.html";
-  } else {
-    loadUserData(user);
+  if (user) {
+    currentUser = user;
     loadProducts();
-    loadOrders(user.uid);
+    loadOrders();
+    loadProfile();
     loadNotices();
+  } else {
+    window.location.href = "index.html";
   }
 });
 
-// Tab switching
-const tabs = document.querySelectorAll(".tab");
-const sections = document.querySelectorAll(".section");
-
-tabs.forEach(tab => {
-  tab.addEventListener("click", () => {
-    tabs.forEach(t => t.classList.remove("active"));
-    sections.forEach(s => s.classList.remove("active"));
-    tab.classList.add("active");
-    document.getElementById(tab.dataset.target).classList.add("active");
+// Tab navigation
+document.querySelectorAll(".bottom-nav button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const target = btn.getAttribute("data-target");
+    document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+    document.getElementById(target).classList.add("active");
   });
 });
 
 // Load products
 function loadProducts() {
-  database.ref("products").once("value", snap => {
-    const container = document.getElementById("products");
-    container.innerHTML = "";
-    snap.forEach(child => {
+  const container = document.getElementById("products");
+  container.innerHTML = "";
+  db.ref("products").once("value", snapshot => {
+    snapshot.forEach(child => {
       const data = child.val();
-      const key = child.key;
       const card = document.createElement("div");
       card.className = "product-card";
       card.innerHTML = `
-        <img src="${data.imageUrl}" alt="Product">
+        <img src="${data.imageUrl}" alt="Product" />
         <h3>${data.name}</h3>
         <p>${data.description}</p>
-        <p class="price">₹${data.price || "N/A"}</p>
-        <button onclick="buyProduct('${key}')">Buy</button>
+        <p><b>Price:</b> ₹${data.price || 'N/A'}</p>
+        <button onclick="buyProduct('${child.key}')">Buy</button>
       `;
       container.appendChild(card);
     });
   });
 }
 
-// Buy button click
+// Buy redirect
 function buyProduct(productId) {
   window.location.href = `buy.html?id=${productId}`;
 }
 
-// Load user orders
-function loadOrders(uid) {
-  database.ref("orders").orderByChild("userId").equalTo(uid).once("value", snap => {
-    const container = document.getElementById("orders");
-    container.innerHTML = "";
-    if (!snap.exists()) {
-      container.innerHTML = "<p>No orders found.</p>";
+// Load orders
+function loadOrders() {
+  const ordersContainer = document.getElementById("orders");
+  ordersContainer.innerHTML = "";
+  db.ref("orders").orderByChild("uid").equalTo(currentUser.uid).once("value", snapshot => {
+    if (!snapshot.exists()) {
+      ordersContainer.innerHTML = "<p>No orders found.</p>";
       return;
     }
-    snap.forEach(child => {
-      const data = child.val();
-      const div = document.createElement("div");
-      div.className = "order-card";
-      div.innerHTML = `
-        <h4>${data.productName}</h4>
+    snapshot.forEach(order => {
+      const data = order.val();
+      const card = document.createElement("div");
+      card.className = "product-card";
+      card.innerHTML = `
+        <h3>${data.productName}</h3>
         <p>UTR: ${data.utr}</p>
-        <p>Status: ${data.status || "Pending"}</p>
+        <p>Status: ${data.status || 'Pending'}</p>
       `;
-      container.appendChild(div);
+      ordersContainer.appendChild(card);
     });
   });
 }
 
 // Load profile
-function loadUserData(user) {
-  document.getElementById("userEmail").innerText = user.email;
-  document.getElementById("userUID").innerText = user.uid;
-  document.getElementById("userPhone").innerText = user.phoneNumber || "N/A";
-  document.getElementById("lastLogin").innerText = new Date(user.metadata.lastSignInTime).toLocaleString();
+function loadProfile() {
+  const profile = document.getElementById("profile");
+  const user = auth.currentUser;
+  profile.innerHTML = `
+    <p>Email: ${user.email}</p>
+    <p>Phone: ${user.phoneNumber || 'N/A'}</p>
+    <p>UID: ${user.uid}</p>
+    <p>Last Login: ${new Date(user.metadata.lastSignInTime).toLocaleString()}</p>
+    <button onclick="logout()">Logout</button>
+  `;
 }
 
 // Logout
-document.getElementById("logoutBtn").addEventListener("click", () => {
+function logout() {
   auth.signOut().then(() => {
     window.location.href = "index.html";
   });
-});
+}
 
-// Load store notice and floating notice
+// Notices
 function loadNotices() {
-  database.ref("store/info").once("value", snap => {
-    const data = snap.val();
-    if (data) {
-      document.getElementById("storeTitle").innerText = data.name || "ASHURA STORE";
-      document.getElementById("notice").innerText = data.description || "";
+  const header = document.querySelector("header");
+  db.ref("store/info").once("value", snap => {
+    const info = snap.val();
+    if (info) {
+      if (info.name) document.getElementById("storeTitle").textContent = info.name;
+      if (info.description) document.getElementById("storeDesc").textContent = info.description;
     }
   });
 
-  database.ref("store/floatingNotice").once("value", snap => {
-    const data = snap.val();
-    if (data) {
-      const floatNotice = document.getElementById("floatingNotice");
-      floatNotice.innerText = data;
-      floatNotice.style.display = "block";
+  db.ref("store/notice").once("value", snap => {
+    const msg = snap.val();
+    if (msg) {
+      const notice = document.createElement("div");
+      notice.className = "notice-box";
+      notice.innerText = msg;
+      header.appendChild(notice);
+    }
+  });
+
+  db.ref("store/float").once("value", snap => {
+    const float = snap.val();
+    if (float) {
+      const floatBox = document.createElement("div");
+      floatBox.style.position = "fixed";
+      floatBox.style.bottom = "60px";
+      floatBox.style.right = "10px";
+      floatBox.style.background = "#1a1a1a";
+      floatBox.style.color = "red";
+      floatBox.style.padding = "10px";
+      floatBox.style.border = "1px solid red";
+      floatBox.style.borderRadius = "10px";
+      floatBox.style.boxShadow = "0 0 10px red";
+      floatBox.innerText = float;
+      document.body.appendChild(floatBox);
     }
   });
 }
