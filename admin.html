@@ -1,82 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ASHURA ADMIN PANEL</title>
-  <link rel="stylesheet" href="admin.css">
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ASHURA Admin Panel</title>
+  <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
-  <header>
-    <h1>ASHURA STORE ADMIN</h1>
-    <button id="drawerBtn">☰ Menu</button>
-  </header>
-
-  <div id="drawer" class="drawer">
-    <a href="#" data-section="dashboard">Dashboard</a>
-    <a href="#" data-section="store">Store Info</a>
-    <a href="#" data-section="products">Products</a>
-    <a href="#" data-section="qr">QR Code</a>
-    <a href="#" data-section="notices">Notices</a>
-    <a href="#" id="logoutBtn">Logout</a>
+  <div class="admin-header">
+    <h1>ASHURA STORE - ADMIN PANEL</h1>
+    <button id="toggleDrawer">☰</button>
   </div>
 
-  <main>
-    <section id="dashboard" class="active">
+  <div class="drawer" id="drawer">
+    <ul>
+      <li onclick="navigate('dashboard')">Dashboard</li>
+      <li onclick="navigate('store')">Store Info</li>
+      <li onclick="navigate('products')">Manage Products</li>
+      <li onclick="navigate('qr')">QR Code</li>
+      <li onclick="navigate('notices')">Notices</li>
+      <li onclick="navigate('users')">Users</li>
+      <li onclick="navigate('orders')">Orders</li>
+      <li onclick="logout()">Logout</li>
+    </ul>
+  </div>
+
+  <div class="content">
+    <div id="dashboard" class="section active">
       <h2>Dashboard</h2>
-      <p>Total Users: <span id="total-users">0</span></p>
-      <p>Total Orders: <span id="total-orders">0</span></p>
-    </section>
+      <p>Total Users: <span id="userCount">0</span></p>
+      <p>Total Orders: <span id="orderCount">0</span></p>
+    </div>
 
-    <section id="store">
-      <h2>Update Store Info</h2>
-      <form id="storeForm">
-        <input type="text" id="storeName" placeholder="Store Name" required><br>
-        <textarea id="storeDesc" placeholder="Store Description" required></textarea><br>
-        <button type="submit">Update</button>
-      </form>
-    </section>
+    <div id="store" class="section">
+      <h2>Store Info</h2>
+      <input id="storeName" placeholder="Store Name" />
+      <textarea id="storeDesc" placeholder="Store Description"></textarea>
+      <button onclick="updateStoreInfo()">Update</button>
+    </div>
 
-    <section id="products">
-      <h2>Add Product</h2>
-      <form id="productForm">
-        <input type="text" id="pname" placeholder="Product Name" required><br>
-        <input type="number" id="pprice" placeholder="Price" required><br>
-        <textarea id="pdesc" placeholder="Description" required></textarea><br>
-        <input type="file" id="pimg" accept="image/*" required><br>
-        <button type="submit">Add Product</button>
-      </form>
+    <div id="products" class="section">
+      <h2>Manage Products</h2>
+      <input id="productName" placeholder="Product Name" />
+      <input id="productPrice" placeholder="Price" />
+      <textarea id="productDesc" placeholder="Description"></textarea>
+      <input type="file" id="productImage" />
+      <button onclick="addProduct()">Add Product</button>
+      <div id="productList"></div>
+    </div>
 
-      <div id="productList" class="product-list"></div>
-    </section>
+    <div id="qr" class="section">
+      <h2>Manage QR Code</h2>
+      <img id="qrPreview" src="default-qr.png" alt="QR Code" />
+      <input type="file" id="qrInput" />
+      <button onclick="uploadQR()">Upload New QR</button>
+    </div>
 
-    <section id="qr">
-      <h2>Upload QR Code</h2>
-      <form id="qrForm">
-        <input type="file" id="qrimg" accept="image/*" required><br>
-        <button type="submit">Upload</button>
-      </form>
-    </section>
+    <div id="notices" class="section">
+      <h2>Send Notices</h2>
+      <input id="maintenanceNotice" placeholder="Maintenance Notice" />
+      <button onclick="sendMaintenance()">Send Maintenance</button>
+      <input id="floatingNotice" placeholder="Floating Notice" />
+      <button onclick="sendFloating()">Send Floating</button>
+    </div>
 
-    <section id="notices">
-      <h2>Send Maintenance Notice</h2>
-      <form id="noticeForm">
-        <textarea id="notice" placeholder="Maintenance Notice..." required></textarea><br>
-        <button type="submit">Send</button>
-      </form>
+    <div id="users" class="section">
+      <h2>All Users</h2>
+      <div id="userList"></div>
+    </div>
 
-      <h2>Send Floating Notice</h2>
-      <form id="floatNoticeForm">
-        <textarea id="floatNotice" placeholder="Floating Notice..." required></textarea><br>
-        <button type="submit">Send</button>
-      </form>
-    </section>
-  </main>
+    <div id="orders" class="section">
+      <h2>All Orders</h2>
+      <div id="orderList"></div>
+    </div>
+  </div>
 
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>
