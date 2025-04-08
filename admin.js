@@ -1,3 +1,4 @@
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
   authDomain: "ashura-6cb98.firebaseapp.com",
@@ -8,165 +9,99 @@ const firebaseConfig = {
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-const db = firebase.database();
-const storage = firebase.storage();
+const database = firebase.database();
 
-const ADMIN_EMAIL = "ASHURA@gmail.com";
-
-// Auth check
+// Allow only admin access
 auth.onAuthStateChanged(user => {
-  if (!user || user.email !== ADMIN_EMAIL) {
-    alert("Access denied.");
+  if (!user || user.email !== "ASHURA@gmail.com") {
+    alert("Access Denied. Admins only.");
     window.location.href = "index.html";
-  } else {
-    loadDashboard();
-    loadStoreInfo();
-    loadProducts();
   }
 });
 
-// Drawer toggle
-document.getElementById("drawerBtn").addEventListener("click", () => {
-  document.getElementById("drawer").classList.toggle("active");
+// Toggle drawer
+document.getElementById('toggleDrawer').addEventListener('click', () => {
+  document.getElementById('drawer').classList.toggle('open');
 });
 
-// Switch between admin sections
-document.querySelectorAll(".drawer a").forEach(link => {
-  link.addEventListener("click", e => {
-    e.preventDefault();
-    const sectionId = e.target.getAttribute("data-section");
-    document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
-    document.getElementById(sectionId).classList.add("active");
-    document.getElementById("drawer").classList.remove("active");
-  });
-});
-
-// Load Dashboard Stats
-function loadDashboard() {
-  db.ref("users").once("value", snap => {
-    document.getElementById("total-users").textContent = snap.numChildren();
-  });
-
-  db.ref("orders").once("value", snap => {
-    document.getElementById("total-orders").textContent = snap.numChildren();
-  });
-}
-
-// Update Store Name & Description
-document.getElementById("storeForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const name = document.getElementById("storeName").value;
-  const desc = document.getElementById("storeDesc").value;
-  db.ref("store").set({ name, description: desc }).then(() => {
-    alert("Store info updated.");
+// Section switching
+document.querySelectorAll('.drawer li').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    const target = item.getAttribute('data-target');
+    if (target) document.getElementById(target).classList.add('active');
   });
 });
 
-function loadStoreInfo() {
-  db.ref("store").once("value", snap => {
-    const store = snap.val();
-    if (store) {
-      document.getElementById("storeName").value = store.name;
-      document.getElementById("storeDesc").value = store.description;
-    }
-  });
-}
+// Update store info
+document.getElementById('updateStoreBtn').addEventListener('click', () => {
+  const name = document.getElementById('storeName').value.trim();
+  const desc = document.getElementById('storeDesc').value.trim();
 
-// Product Management
-document.getElementById("productForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const name = document.getElementById("pname").value;
-  const price = document.getElementById("pprice").value;
-  const desc = document.getElementById("pdesc").value;
-  const image = document.getElementById("pimg").files[0];
-
-  const productRef = db.ref("products").push();
-  const key = productRef.key;
-
-  if (image) {
-    const imgRef = storage.ref("products/" + key);
-    imgRef.put(image).then(snapshot => {
-      snapshot.ref.getDownloadURL().then(url => {
-        productRef.set({ name, price, description: desc, image: url });
-        alert("Product added!");
-        loadProducts();
-        e.target.reset();
-      });
-    });
+  if (name && desc) {
+    database.ref('store').set({ name, description: desc })
+      .then(() => alert('Store info updated.'))
+      .catch(err => alert(err.message));
   } else {
-    productRef.set({ name, price, description: desc, image: "" });
+    alert('Please enter both name and description.');
+  }
+});
+
+// Upload QR code
+document.getElementById('uploadQR').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function () {
+    const base64 = reader.result;
+    database.ref("qr").set({ image: base64 });
+    document.getElementById('qrImage').src = base64;
+  };
+  reader.readAsDataURL(file);
+});
+
+// Upload Product
+document.getElementById('addProductBtn').addEventListener('click', () => {
+  const name = document.getElementById('productName').value.trim();
+  const desc = document.getElementById('productDesc').value.trim();
+  const file = document.getElementById('productImage').files[0];
+
+  if (!name || !desc || !file) return alert("Fill all fields and select image.");
+
+  const reader = new FileReader();
+  reader.onload = function () {
+    const image = reader.result;
+    const id = Date.now();
+    database.ref("products/" + id).set({ id, name, description: desc, image });
     alert("Product added!");
-    loadProducts();
-    e.target.reset();
-  }
+    document.getElementById('productName').value = '';
+    document.getElementById('productDesc').value = '';
+    document.getElementById('productImage').value = '';
+  };
+  reader.readAsDataURL(file);
 });
 
-function loadProducts() {
-  const list = document.getElementById("productList");
-  list.innerHTML = "";
-  db.ref("products").once("value", snap => {
-    snap.forEach(child => {
-      const p = child.val();
-      const div = document.createElement("div");
-      div.innerHTML = `
-        <h4>${p.name}</h4>
-        <p>₹${p.price}</p>
-        <img src="${p.image}" width="100"><br>
-        <p>${p.description}</p>
-        <button onclick="deleteProduct('${child.key}')">Delete</button>
-      `;
-      div.classList.add("product-item");
-      list.appendChild(div);
-    });
-  });
-}
-
-function deleteProduct(key) {
-  if (confirm("Delete this product?")) {
-    db.ref("products/" + key).remove().then(() => {
-      alert("Deleted!");
-      loadProducts();
-    });
-  }
-}
-
-// Upload QR Code
-document.getElementById("qrForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const file = document.getElementById("qrimg").files[0];
-  if (!file) return alert("Select an image");
-
-  const qrRef = storage.ref("qr.png");
-  qrRef.put(file).then(snapshot => {
-    snapshot.ref.getDownloadURL().then(url => {
-      db.ref("qr").set({ url }).then(() => {
-        alert("QR updated!");
-      });
-    });
-  });
+// Send Notices
+document.getElementById('updateNoticeBtn').addEventListener('click', () => {
+  const notice = document.getElementById('noticeText').value.trim();
+  if (!notice) return alert("Enter notice");
+  database.ref("notice").set({ text: notice });
+  alert("Floating notice updated");
 });
 
-// Notices
-document.getElementById("noticeForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const notice = document.getElementById("notice").value;
-  db.ref("notice").set({ text: notice }).then(() => {
-    alert("Notice sent.");
-  });
-});
-
-document.getElementById("floatNoticeForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const floatText = document.getElementById("floatNotice").value;
-  db.ref("floating").set({ text: floatText }).then(() => {
-    alert("Floating notice sent.");
-  });
+document.getElementById('maintenanceBtn').addEventListener('click', () => {
+  const text = document.getElementById('maintenanceText').value.trim();
+  if (!text) return alert("Enter maintenance message");
+  database.ref("maintenance").set({ text });
+  alert("Maintenance notice updated");
 });
 
 // Logout
-document.getElementById("logoutBtn").addEventListener("click", () => {
+document.getElementById('logoutBtn').addEventListener('click', () => {
   auth.signOut().then(() => {
     window.location.href = "index.html";
   });
