@@ -10,117 +10,115 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 const auth = firebase.auth();
-const db = firebase.database();
 
-// Tabs switch
-const tabs = document.querySelectorAll(".tabs button");
+// Auth protection
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    window.location.href = "index.html";
+  } else {
+    loadUserData(user);
+    loadProducts();
+    loadOrders(user.uid);
+    loadNotices();
+  }
+});
+
+// Tab switching
+const tabs = document.querySelectorAll(".tab");
 const sections = document.querySelectorAll(".section");
 
-tabs.forEach((tab, index) => {
+tabs.forEach(tab => {
   tab.addEventListener("click", () => {
     tabs.forEach(t => t.classList.remove("active"));
     sections.forEach(s => s.classList.remove("active"));
     tab.classList.add("active");
-    sections[index].classList.add("active");
+    document.getElementById(tab.dataset.target).classList.add("active");
   });
-});
-
-// Check login
-auth.onAuthStateChanged(user => {
-  if (user) {
-    loadProducts();
-    loadProfile(user);
-    loadOrders(user.uid);
-    loadStoreInfo();
-  } else {
-    window.location.href = "index.html";
-  }
 });
 
 // Load products
 function loadProducts() {
-  const container = document.getElementById("product-section");
-  db.ref("products").once("value", snapshot => {
+  database.ref("products").once("value", snap => {
+    const container = document.getElementById("products");
     container.innerHTML = "";
-    if (!snapshot.exists()) {
-      container.innerHTML = "<p>No products available.</p>";
+    snap.forEach(child => {
+      const data = child.val();
+      const key = child.key;
+      const card = document.createElement("div");
+      card.className = "product-card";
+      card.innerHTML = `
+        <img src="${data.imageUrl}" alt="Product">
+        <h3>${data.name}</h3>
+        <p>${data.description}</p>
+        <p class="price">₹${data.price || "N/A"}</p>
+        <button onclick="buyProduct('${key}')">Buy</button>
+      `;
+      container.appendChild(card);
+    });
+  });
+}
+
+// Buy button click
+function buyProduct(productId) {
+  window.location.href = `buy.html?id=${productId}`;
+}
+
+// Load user orders
+function loadOrders(uid) {
+  database.ref("orders").orderByChild("userId").equalTo(uid).once("value", snap => {
+    const container = document.getElementById("orders");
+    container.innerHTML = "";
+    if (!snap.exists()) {
+      container.innerHTML = "<p>No orders found.</p>";
       return;
     }
-    snapshot.forEach(child => {
-      const product = child.val();
+    snap.forEach(child => {
+      const data = child.val();
       const div = document.createElement("div");
-      div.className = "product-card";
+      div.className = "order-card";
       div.innerHTML = `
-        <h3>${product.name}</h3>
-        <p><b>Price:</b> ₹${product.price}</p>
-        <p>${product.description}</p>
-        <button onclick="buyProduct('${child.key}')">Buy</button>
+        <h4>${data.productName}</h4>
+        <p>UTR: ${data.utr}</p>
+        <p>Status: ${data.status || "Pending"}</p>
       `;
       container.appendChild(div);
     });
   });
 }
 
-// Redirect to buy page
-function buyProduct(productId) {
-  window.location.href = `buy.html?id=${productId}`;
+// Load profile
+function loadUserData(user) {
+  document.getElementById("userEmail").innerText = user.email;
+  document.getElementById("userUID").innerText = user.uid;
+  document.getElementById("userPhone").innerText = user.phoneNumber || "N/A";
+  document.getElementById("lastLogin").innerText = new Date(user.metadata.lastSignInTime).toLocaleString();
 }
 
-// Load profile section
-function loadProfile(user) {
-  const profileSection = document.getElementById("profile-section");
-  db.ref("users/" + user.uid).once("value", snapshot => {
-    const userData = snapshot.val() || {};
-    profileSection.innerHTML = `
-      <div class="profile-info">Email: ${user.email}</div>
-      <div class="profile-info">Phone: ${userData.phone || 'Not Provided'}</div>
-      <div class="profile-info">UID: ${user.uid}</div>
-      <div class="profile-info">Last Login: ${new Date(user.metadata.lastSignInTime).toLocaleString()}</div>
-      <button class="logout-btn" onclick="logout()">Logout</button>
-    `;
-  });
-}
-
-// Load user orders
-function loadOrders(uid) {
-  const orderSection = document.getElementById("order-section");
-  db.ref("orders").orderByChild("uid").equalTo(uid).once("value", snapshot => {
-    orderSection.innerHTML = "";
-    if (!snapshot.exists()) {
-      orderSection.innerHTML = "<p>No orders found.</p>";
-      return;
-    }
-    snapshot.forEach(orderSnap => {
-      const order = orderSnap.val();
-      const div = document.createElement("div");
-      div.className = "order-item";
-      div.innerHTML = `
-        <p><b>Product:</b> ${order.productName}</p>
-        <p><b>Name:</b> ${order.name}</p>
-        <p><b>UTR:</b> ${order.utr}</p>
-        <p><b>Status:</b> ${order.status}</p>
-      `;
-      orderSection.appendChild(div);
-    });
-  });
-}
-
-// Load and display store name and description
-function loadStoreInfo() {
-  const storeNameEl = document.getElementById("store-name");
-  const storeDescEl = document.getElementById("store-desc");
-
-  db.ref("storeInfo").once("value", snapshot => {
-    const info = snapshot.val();
-    storeNameEl.textContent = info?.name || "ASHURA STORE";
-    storeDescEl.textContent = info?.description || "Welcome to our dark store.";
-  });
-}
-
-// Logout function
-function logout() {
+// Logout
+document.getElementById("logoutBtn").addEventListener("click", () => {
   auth.signOut().then(() => {
     window.location.href = "index.html";
+  });
+});
+
+// Load store notice and floating notice
+function loadNotices() {
+  database.ref("store/info").once("value", snap => {
+    const data = snap.val();
+    if (data) {
+      document.getElementById("storeTitle").innerText = data.name || "ASHURA STORE";
+      document.getElementById("notice").innerText = data.description || "";
+    }
+  });
+
+  database.ref("store/floatingNotice").once("value", snap => {
+    const data = snap.val();
+    if (data) {
+      const floatNotice = document.getElementById("floatingNotice");
+      floatNotice.innerText = data;
+      floatNotice.style.display = "block";
+    }
   });
 }
