@@ -1,90 +1,74 @@
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-
 body {
   margin: 0;
-  font-family: 'Share Tech Mono', monospace;
-  background-color: #000;
-  color: #0f0;
+  font-family: monospace;
+  background: black;
+  color: lime;
+}
+
+.admin-container {
   display: flex;
   height: 100vh;
-  overflow: hidden;
 }
 
 .drawer {
-  width: 250px;
-  background-color: #111;
-  border-right: 2px solid #0f0;
-  padding-top: 20px;
-  position: fixed;
-  height: 100%;
-  overflow-y: auto;
+  background: #111;
+  padding: 20px;
+  width: 200px;
+  flex-shrink: 0;
 }
 
 .drawer h2 {
-  text-align: center;
-  color: #0f0;
-  margin-bottom: 30px;
-  font-size: 20px;
+  color: lime;
+  margin-bottom: 20px;
 }
 
-.drawer a {
-  display: block;
-  padding: 15px 20px;
-  color: #aaa;
-  text-decoration: none;
-  transition: 0.3s;
+.drawer ul {
+  list-style: none;
+  padding: 0;
 }
 
-.drawer a:hover,
-.drawer a.active {
-  background-color: #0f0;
-  color: #000;
+.drawer li {
+  padding: 10px;
+  cursor: pointer;
 }
 
-.main-content {
-  margin-left: 250px;
+.drawer li:hover {
+  background: lime;
+  color: black;
+}
+
+.content {
+  flex-grow: 1;
   padding: 20px;
-  width: calc(100% - 250px);
   overflow-y: auto;
 }
 
-.section {
+.admin-section {
   display: none;
 }
 
-.section.active {
+.admin-section.active {
   display: block;
 }
 
-.card {
-  background-color: #111;
-  border: 1px solid #0f0;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 5px;
+input {
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+  width: 100%;
+  max-width: 400px;
+  font-family: monospace;
 }
 
 button {
-  background-color: #0f0;
-  color: #000;
+  padding: 10px 20px;
+  background: lime;
+  color: black;
   border: none;
-  padding: 10px 15px;
   font-weight: bold;
   cursor: pointer;
-  border-radius: 3px;
-  transition: background-color 0.3s;
 }
 
 button:hover {
-  background-color: #0c0;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0 15px;
-  background-color: #000;
-  color: #0f0;
-  border: 1px solid #0f0;
-  border-radius: 4px;
+  background: white;
 }
