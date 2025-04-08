@@ -1,36 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ASHURA STORE - Home</title>
-  <link rel="stylesheet" href="home.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASHURA STORE</title>
+  <link rel="stylesheet" href="home.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div class="header">
+  <header>
     <h1>ASHURA STORE</h1>
     <p>Welcome to our hacker-themed store</p>
+  </header>
+
+  <div class="section active" id="homeSection">
+    <!-- Products will be loaded dynamically -->
+    <div id="productList">Loading products...</div>
   </div>
 
-  <div id="content-home" class="tab-content active">
-    <div class="product-list" id="productList"></div>
+  <div class="section" id="ordersSection">
+    <div id="orderList">Your orders will appear here.</div>
   </div>
 
-  <div id="content-orders" class="tab-content">
-    <p style="text-align:center; color:white;">Order history will appear here.</p>
+  <div class="section" id="profileSection">
+    <div class="profile-info" id="userEmail">Email: loading...</div>
+    <div class="profile-info" id="userPhone">Phone: loading...</div>
+    <div class="profile-info" id="userUID">UID: loading...</div>
+    <div class="profile-info" id="lastLogin">Last Login: loading...</div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
   </div>
 
-  <div id="content-profile" class="tab-content">
-    <p style="text-align:center; color:white;">Profile info will appear here.</p>
-  </div>
-
-  <div class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('home')">Home</button>
-    <button class="nav-btn" onclick="switchTab('orders')">Orders</button>
-    <button class="nav-btn" onclick="switchTab('profile')">Profile</button>
+  <div class="tabs">
+    <button onclick="switchTab('home')" id="homeTab" class="active">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </button>
+    <button onclick="switchTab('orders')" id="ordersTab">
+      <i class="fas fa-box"></i>
+      <span>Orders</span>
+    </button>
+    <button onclick="switchTab('profile')" id="profileTab">
+      <i class="fas fa-user"></i>
+      <span>Profile</span>
+    </button>
   </div>
 
   <script src="home.js"></script>
