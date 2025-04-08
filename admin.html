@@ -1,37 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Admin Dashboard - ASHURA STORE</title>
-  <link rel="stylesheet" href="admin.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="admin.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
   <header>
-    <h1>ASHURA STORE - Admin Dashboard</h1>
-    <button id="drawerToggle">☰ Menu</button>
+    <button id="drawerToggle">☰</button>
+    <h1>ASHURA ADMIN DASHBOARD</h1>
+    <button onclick="logout()">Logout</button>
   </header>
 
-  <nav id="drawer" class="drawer">
+  <aside id="drawer">
     <ul>
       <li><a href="dashboard.html">Dashboard</a></li>
-      <li><a href="manage-users.html">Manage Users</a></li>
-      <li><a href="manage-products.html">Manage Products</a></li>
-      <li><a href="manage-orders.html">Manage Orders</a></li>
-      <li><a href="manage-qr.html">Manage QR</a></li>
-      <li><a href="update-store.html">Update Store</a></li>
-      <li><a href="notices.html">Send Notices</a></li>
-      <li><a href="#" onclick="logout()">Logout</a></li>
+      <li><a href="users.html">Manage Users</a></li>
+      <li><a href="qr.html">Manage QR Code</a></li>
+      <li><a href="orders.html">View Orders</a></li>
+      <li><a href="products.html">Manage Products</a></li>
+      <li><a href="store.html">Store Settings</a></li>
+      <li><a href="notices.html">Send Maintenance Notice</a></li>
+      <li><a href="floating.html">Send Floating Update</a></li>
     </ul>
-  </nav>
+  </aside>
 
   <main>
-    <p>Welcome, Admin. Use the drawer to navigate through admin features.</p>
+    <h2>Welcome, Admin</h2>
+    <p>Use the drawer to manage your store.</p>
   </main>
 
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>
