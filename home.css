@@ -26,7 +26,6 @@ header h1 {
 header p {
   font-size: 14px;
   color: #0f0;
-  margin: 5px 0 0;
 }
 
 .tabs {
@@ -55,6 +54,11 @@ header p {
   color: #0f0;
 }
 
+.tabs button i {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
 .section {
   flex: 1;
   padding: 20px;
@@ -81,8 +85,8 @@ header p {
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
+  color: #0f0;
   font-size: 14px;
-  word-break: break-word;
 }
 
 button.logout-btn {
@@ -99,21 +103,4 @@ button.logout-btn {
 
 button.logout-btn:hover {
   background-color: #0c0;
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .tabs button {
-    font-size: 12px;
-  }
-
-  header h1 {
-    font-size: 24px;
-  }
-
-  .product-card,
-  .profile-info,
-  .order-item {
-    padding: 10px;
-  }
 }
