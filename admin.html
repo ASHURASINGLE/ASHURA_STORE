@@ -1,38 +1,82 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Panel - ASHURA STORE</title>
-  <link rel="stylesheet" href="admin.css" />
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ASHURA ADMIN PANEL</title>
+  <link rel="stylesheet" href="admin.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 </head>
 <body>
-  <div id="admin-content" style="display: none;">
-    <header>
-      <h1>Admin Panel</h1>
-      <button id="toggleDrawer">Menu</button>
-    </header><nav id="drawer" class="drawer">
-  <ul>
-    <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
-    <li><a href="#" onclick="showSection('users')">Users</a></li>
-    <li><a href="#" onclick="showSection('products')">Products</a></li>
-    <li><a href="#" onclick="showSection('orders')">Orders</a></li>
-    <li><a href="#" onclick="showSection('storeInfo')">Store Info</a></li>
-    <li><a href="#" onclick="showSection('notices')">Notices</a></li>
-    <li><a href="#" onclick="logout()">Logout</a></li>
-  </ul>
-</nav>
+  <header>
+    <h1>ASHURA STORE ADMIN</h1>
+    <button id="drawerBtn">☰ Menu</button>
+  </header>
 
-<main>
-  <section id="dashboard" class="section">Dashboard Content</section>
-  <section id="users" class="section" style="display:none">Users Management</section>
-  <section id="products" class="section" style="display:none">Product Management</section>
-  <section id="orders" class="section" style="display:none">Orders Management</section>
-  <section id="storeInfo" class="section" style="display:none">Store Info Settings</section>
-  <section id="notices" class="section" style="display:none">Maintenance / Floating Notices</section>
-</main>
+  <div id="drawer" class="drawer">
+    <a href="#" data-section="dashboard">Dashboard</a>
+    <a href="#" data-section="store">Store Info</a>
+    <a href="#" data-section="products">Products</a>
+    <a href="#" data-section="qr">QR Code</a>
+    <a href="#" data-section="notices">Notices</a>
+    <a href="#" id="logoutBtn">Logout</a>
+  </div>
 
-  </div>  <script src="admin.js"></script></body>
+  <main>
+    <section id="dashboard" class="active">
+      <h2>Dashboard</h2>
+      <p>Total Users: <span id="total-users">0</span></p>
+      <p>Total Orders: <span id="total-orders">0</span></p>
+    </section>
+
+    <section id="store">
+      <h2>Update Store Info</h2>
+      <form id="storeForm">
+        <input type="text" id="storeName" placeholder="Store Name" required><br>
+        <textarea id="storeDesc" placeholder="Store Description" required></textarea><br>
+        <button type="submit">Update</button>
+      </form>
+    </section>
+
+    <section id="products">
+      <h2>Add Product</h2>
+      <form id="productForm">
+        <input type="text" id="pname" placeholder="Product Name" required><br>
+        <input type="number" id="pprice" placeholder="Price" required><br>
+        <textarea id="pdesc" placeholder="Description" required></textarea><br>
+        <input type="file" id="pimg" accept="image/*" required><br>
+        <button type="submit">Add Product</button>
+      </form>
+
+      <div id="productList" class="product-list"></div>
+    </section>
+
+    <section id="qr">
+      <h2>Upload QR Code</h2>
+      <form id="qrForm">
+        <input type="file" id="qrimg" accept="image/*" required><br>
+        <button type="submit">Upload</button>
+      </form>
+    </section>
+
+    <section id="notices">
+      <h2>Send Maintenance Notice</h2>
+      <form id="noticeForm">
+        <textarea id="notice" placeholder="Maintenance Notice..." required></textarea><br>
+        <button type="submit">Send</button>
+      </form>
+
+      <h2>Send Floating Notice</h2>
+      <form id="floatNoticeForm">
+        <textarea id="floatNotice" placeholder="Floating Notice..." required></textarea><br>
+        <button type="submit">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
 </html>
