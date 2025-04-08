@@ -1,56 +1,110 @@
-// Extract product data from URL
-const urlParams = new URLSearchParams(window.location.search);
-const name = urlParams.get("name");
-const desc = urlParams.get("desc");
-const image = urlParams.get("image");
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
+  authDomain: "ashura-6cb98.firebaseapp.com",
+  databaseURL: "https://ashura-6cb98-default-rtdb.firebaseio.com",
+  projectId: "ashura-6cb98",
+  storageBucket: "ashura-6cb98.appspot.com",
+  messagingSenderId: "990827476073",
+  appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
 
-// Inject product details
-document.getElementById("productName").textContent = name || "No Name";
-document.getElementById("productDescription").textContent = desc || "No Description";
-document.getElementById("productImage").src = image || "https://via.placeholder.com/300";
+const step1 = document.getElementById("step1");
+const step2 = document.getElementById("step2");
+const productNameEl = document.getElementById("product-name");
+const productDescEl = document.getElementById("product-desc");
+const productImgEl = document.getElementById("product-img");
+const qrImgEl = document.getElementById("qr-img");
 
-// Set QR code image (admin can update this path from Firebase later)
-document.getElementById("qrImage").src = localStorage.getItem("qrImageURL") || "https://ashurasingle.github.io/assets/ashuraqr.jpg";
+const userNameInput = document.getElementById("user-name");
+const userUTRInput = document.getElementById("user-utr");
 
-// Hide payment section initially
-document.getElementById("paymentSection").classList.add("hidden");
+const confirmBtn = document.getElementById("confirm-btn");
 
-// Handle Continue to Payment
-document.getElementById("continueBtn").addEventListener("click", () => {
-  document.getElementById("paymentSection").classList.remove("hidden");
-  document.getElementById("continueBtn").classList.add("hidden");
-});
+let productId = null;
+let productName = "";
 
-// Handle Confirm button
-document.getElementById("confirmBtn").addEventListener("click", () => {
-  const buyerName = document.getElementById("buyerName").value.trim();
-  const utr = document.getElementById("utrNumber").value.trim();
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
 
-  if (buyerName === "" || utr === "") {
-    alert("Please fill out both fields.");
+productId = getQueryParam("id");
+
+// Load product
+function loadProduct() {
+  if (!productId) return;
+  db.ref("products/" + productId).once("value", snapshot => {
+    if (!snapshot.exists()) return;
+    const product = snapshot.val();
+    productName = product.name;
+    productNameEl.innerText = product.name;
+    productDescEl.innerText = product.description || "No description";
+    productImgEl.src = product.image || "https://ashurasingle.github.io/ashura_qr.png";
+  });
+
+  // Load QR image (owner uploaded or default)
+  db.ref("qr").once("value", snapshot => {
+    if (snapshot.exists()) {
+      qrImgEl.src = snapshot.val().url;
+    } else {
+      qrImgEl.src = "https://ashurasingle.github.io/ashura_qr.png";
+    }
+  });
+}
+
+// Show step 2 after user clicks continue
+function goToStep2() {
+  step1.classList.add("hidden");
+  step2.classList.remove("hidden");
+}
+
+function submitOrder() {
+  const name = userNameInput.value.trim();
+  const utr = userUTRInput.value.trim();
+  if (!name || !utr) {
+    alert("Please enter all details");
     return;
   }
 
-  const uid = localStorage.getItem("uid") || "guest";
-  const productID = Date.now();
+  const user = auth.currentUser;
+  if (!user) {
+    alert("User not logged in.");
+    return;
+  }
 
   const orderData = {
-    name: buyerName,
-    utr: utr,
-    productName: name,
-    productImage: image,
-    productDesc: desc,
-    time: new Date().toLocaleString()
+    uid: user.uid,
+    name,
+    utr,
+    productId,
+    productName,
+    status: "Pending",
+    email: user.email
   };
 
-  // Upload to Firebase Realtime Database
-  firebase.database().ref("orders/" + uid + "/" + productID).set(orderData)
-    .then(() => {
-      alert("Order submitted successfully!");
+  const newOrderRef = db.ref("orders").push();
+  newOrderRef.set(orderData, err => {
+    if (err) {
+      alert("Order failed. Try again.");
+    } else {
+      alert("Order submitted successfully.");
       window.location.href = "home.html";
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      alert("Failed to submit order.");
-    });
+    }
+  });
+}
+
+document.getElementById("continue-btn").addEventListener("click", goToStep2);
+confirmBtn.addEventListener("click", submitOrder);
+
+// Init
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    window.location.href = "index.html";
+  } else {
+    loadProduct();
+  }
 });
