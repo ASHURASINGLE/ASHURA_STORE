@@ -1,22 +1,60 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ASHURA STORE</title>
-  <link rel="stylesheet" href="home.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <link rel="stylesheet" href="home.css">
 </head>
 <body>
+
+  <!-- Store Notice -->
+  <div id="notice" class="notice"></div>
+
+  <!-- Floating Notice -->
+  <div id="floatingNotice" class="floating-notice"></div>
+
+  <!-- Store Header -->
   <header>
-    <h1 id="store-name">ASHURA STORE</h1>
-    <p id="store-description">Welcome to your ultimate digital product store.</p>
-  </header>  <div class="tabs">
-    <button class="active">Home</button>
-    <button>Orders</button>
-    <button>Profile</button>
-  </div>  <div class="section active" id="product-section"></div>
-  <div class="section" id="order-section"></div>
-  <div class="section" id="profile-section"></div>  <script src="home.js"></script></body>
+    <h1 id="storeTitle">ASHURA STORE</h1>
+    <p id="storeDescription">Welcome to Ashura Store!</p>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="tabs">
+    <button id="homeTab">Home</button>
+    <button id="ordersTab">Orders</button>
+    <button id="profileTab">Profile</button>
+  </nav>
+
+  <!-- Home: Product List -->
+  <section id="homeSection">
+    <div id="productList" class="product-list"></div>
+  </section>
+
+  <!-- Orders Section -->
+  <section id="ordersSection" style="display:none;">
+    <h2>Your Orders</h2>
+    <ul id="ordersList"></ul>
+  </section>
+
+  <!-- Profile Section -->
+  <section id="profileSection" style="display:none;">
+    <h2>Your Profile</h2>
+    <p><strong>Email:</strong> <span id="userEmail"></span></p>
+    <p><strong>Phone:</strong> <span id="userPhone"></span></p>
+    <p><strong>UID:</strong> <span id="userUID"></span></p>
+    <p><strong>Last Login:</strong> <span id="lastLogin"></span></p>
+    <button id="logoutBtn">Logout</button>
+  </section>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+  <!-- Script -->
+  <script src="home.js"></script>
+
+</body>
 </html>
