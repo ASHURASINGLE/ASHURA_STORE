@@ -1,4 +1,4 @@
-// Firebase config
+// home.js
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
   authDomain: "ashura-6cb98.firebaseapp.com",
@@ -13,7 +13,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-// Tabs switch
 const tabs = document.querySelectorAll(".tabs button");
 const sections = document.querySelectorAll(".section");
 
@@ -26,7 +25,6 @@ tabs.forEach((tab, index) => {
   });
 });
 
-// Check login
 auth.onAuthStateChanged(user => {
   if (user) {
     loadProducts();
@@ -37,11 +35,14 @@ auth.onAuthStateChanged(user => {
   }
 });
 
-// Load products
 function loadProducts() {
   const container = document.getElementById("product-section");
   db.ref("products").once("value", snapshot => {
     container.innerHTML = "";
+    if (!snapshot.exists()) {
+      container.innerHTML = "<p>No products available.</p>";
+      return;
+    }
     snapshot.forEach(child => {
       const product = child.val();
       const div = document.createElement("div");
@@ -57,16 +58,14 @@ function loadProducts() {
   });
 }
 
-// Buy product
 function buyProduct(productId) {
   window.location.href = `buy.html?id=${productId}`;
 }
 
-// Load profile
 function loadProfile(user) {
   const profileSection = document.getElementById("profile-section");
   db.ref("users/" + user.uid).once("value", snapshot => {
-    const userData = snapshot.val();
+    const userData = snapshot.val() || {};
     profileSection.innerHTML = `
       <div class="profile-info">Email: ${user.email}</div>
       <div class="profile-info">Phone: ${userData.phone || 'Not Provided'}</div>
@@ -77,7 +76,6 @@ function loadProfile(user) {
   });
 }
 
-// Load order history
 function loadOrders(uid) {
   const orderSection = document.getElementById("order-section");
   db.ref("orders").orderByChild("uid").equalTo(uid).once("value", snapshot => {
@@ -101,7 +99,6 @@ function loadOrders(uid) {
   });
 }
 
-// Logout
 function logout() {
   auth.signOut().then(() => {
     window.location.href = "index.html";
