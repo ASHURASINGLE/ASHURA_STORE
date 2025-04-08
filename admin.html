@@ -1,39 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Dashboard - ASHURA STORE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="admin.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - ASHURA STORE</title>
+  <link rel="stylesheet" href="admin.css" />
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
-  <header>
-    <button id="drawerToggle">☰</button>
-    <h1>ASHURA ADMIN DASHBOARD</h1>
-    <button onclick="logout()">Logout</button>
-  </header>
+  <div id="admin-content" style="display: none;">
+    <header>
+      <h1>Admin Panel</h1>
+      <button id="toggleDrawer">Menu</button>
+    </header><nav id="drawer" class="drawer">
+  <ul>
+    <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
+    <li><a href="#" onclick="showSection('users')">Users</a></li>
+    <li><a href="#" onclick="showSection('products')">Products</a></li>
+    <li><a href="#" onclick="showSection('orders')">Orders</a></li>
+    <li><a href="#" onclick="showSection('storeInfo')">Store Info</a></li>
+    <li><a href="#" onclick="showSection('notices')">Notices</a></li>
+    <li><a href="#" onclick="logout()">Logout</a></li>
+  </ul>
+</nav>
 
-  <aside id="drawer">
-    <ul>
-      <li><a href="dashboard.html">Dashboard</a></li>
-      <li><a href="users.html">Manage Users</a></li>
-      <li><a href="qr.html">Manage QR Code</a></li>
-      <li><a href="orders.html">View Orders</a></li>
-      <li><a href="products.html">Manage Products</a></li>
-      <li><a href="store.html">Store Settings</a></li>
-      <li><a href="notices.html">Send Maintenance Notice</a></li>
-      <li><a href="floating.html">Send Floating Update</a></li>
-    </ul>
-  </aside>
+<main>
+  <section id="dashboard" class="section">Dashboard Content</section>
+  <section id="users" class="section" style="display:none">Users Management</section>
+  <section id="products" class="section" style="display:none">Product Management</section>
+  <section id="orders" class="section" style="display:none">Orders Management</section>
+  <section id="storeInfo" class="section" style="display:none">Store Info Settings</section>
+  <section id="notices" class="section" style="display:none">Maintenance / Floating Notices</section>
+</main>
 
-  <main>
-    <h2>Welcome, Admin</h2>
-    <p>Use the drawer to manage your store.</p>
-  </main>
-
-  <script src="admin.js"></script>
-</body>
+  </div>  <script src="admin.js"></script></body>
 </html>
