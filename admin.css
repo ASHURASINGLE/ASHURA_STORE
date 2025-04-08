@@ -1,120 +1,83 @@
 body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #0a0a0a;
+  background: #000;
   color: #fff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 header {
-  background-color: #111;
-  padding: 15px 20px;
   text-align: center;
-  font-size: 24px;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 28px;
   font-weight: bold;
-  border-bottom: 2px solid red;
 }
 
-.dashboard {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.top-buttons {
+  margin-top: 10px;
 }
 
-.card {
-  background-color: #1a1a1a;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px red;
-  text-align: center;
-}
-
-.card h2 {
-  margin: 0;
-  font-size: 22px;
-  color: #ff3333;
-}
-
-.drawer-btn {
-  position: absolute;
-  top: 20px;
-  left: 20px;
+button {
   background: red;
   color: white;
-  padding: 8px 12px;
+  padding: 10px 15px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  margin: 5px;
+  font-weight: bold;
   cursor: pointer;
 }
 
 .drawer {
+  background: #111;
+  padding: 10px;
+  border-top: 2px solid red;
+}
+
+.drawer ul {
+  list-style: none;
+  padding: 0;
+}
+
+.drawer ul li {
+  padding: 10px;
+  border-bottom: 1px solid #222;
+  cursor: pointer;
+}
+
+.drawer ul li:hover {
+  background: red;
+}
+
+.hidden {
   display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: #121212;
-  height: 100%;
-  width: 250px;
+}
+
+.admin-section {
   padding: 20px;
-  box-shadow: 2px 0 10px red;
-  z-index: 999;
-  overflow-y: auto;
 }
 
-.drawer a, .drawer button {
+input[type="text"], input[type="file"] {
   display: block;
-  background: #1a1a1a;
-  color: #ff3333;
+  width: 90%;
   padding: 10px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 6px;
-  text-align: left;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.drawer a:hover, .drawer button:hover {
-  background-color: #222;
-  color: #fff;
-}
-
-.logout-btn {
-  background-color: #ff0000;
+  margin: 10px auto;
+  background: #111;
+  border: 1px solid red;
   color: white;
-  padding: 10px;
-  margin-top: 30px;
-  width: 100%;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  border-radius: 8px;
 }
 
-input, textarea, select {
-  width: 100%;
-  padding: 10px;
-  background: #1a1a1a;
-  border: 1px solid #ff3333;
-  color: white;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
-
-button {
-  background-color: red;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: darkred;
-}
-
-img {
-  max-width: 100%;
+.card {
+  background: #111;
+  margin: 10px;
+  padding: 15px;
+  border: 1px solid red;
   border-radius: 10px;
-  margin-top: 10px;
+  text-align: center;
+  font-size: 18px;
+  box-shadow: 0 0 15px red;
 }
