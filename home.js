@@ -8,139 +8,123 @@ const firebaseConfig = {
   messagingSenderId: "990827476073",
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
+
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+const database = firebase.database();
 const auth = firebase.auth();
 
-let currentUser = null;
-
-// Auth state
+// Auth check
 auth.onAuthStateChanged(user => {
-  if (user) {
-    currentUser = user;
-    loadProducts();
-    loadOrders();
-    loadProfile();
-    loadNotices();
-  } else {
+  if (!user) {
     window.location.href = "index.html";
+  } else {
+    loadProfile(user);
+    loadProducts();
+    loadOrders(user.uid);
+    loadNotices();
   }
-});
-
-// Tab navigation
-document.querySelectorAll(".bottom-nav button").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const target = btn.getAttribute("data-target");
-    document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
-    document.getElementById(target).classList.add("active");
-  });
 });
 
 // Load products
 function loadProducts() {
-  const container = document.getElementById("products");
-  container.innerHTML = "";
-  db.ref("products").once("value", snapshot => {
-    snapshot.forEach(child => {
-      const data = child.val();
-      const card = document.createElement("div");
-      card.className = "product-card";
-      card.innerHTML = `
-        <img src="${data.imageUrl}" alt="Product" />
-        <h3>${data.name}</h3>
-        <p>${data.description}</p>
-        <p><b>Price:</b> ₹${data.price || 'N/A'}</p>
-        <button onclick="buyProduct('${child.key}')">Buy</button>
+  const productList = document.getElementById("productList");
+  productList.innerHTML = "";
+
+  database.ref("products").once("value", snap => {
+    snap.forEach(child => {
+      const p = child.val();
+      const div = document.createElement("div");
+      div.className = "product-card";
+      div.innerHTML = `
+        <img src="${p.imageUrl}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p>${p.description}</p>
+        <p class="price">₹${p.price || "0"}</p>
+        <button onclick="buyProduct('${child.key}', '${p.name}', '${p.description}', '${p.imageUrl}', '${p.price || "0"}')">Buy</button>
       `;
-      container.appendChild(card);
+      productList.appendChild(div);
     });
   });
 }
 
 // Buy redirect
-function buyProduct(productId) {
-  window.location.href = `buy.html?id=${productId}`;
+function buyProduct(key, name, desc, image, price) {
+  localStorage.setItem("buyProduct", JSON.stringify({ key, name, desc, image, price }));
+  window.location.href = "buy.html";
+}
+
+// Load profile
+function loadProfile(user) {
+  document.getElementById("profileInfo").innerHTML = `
+    <p><strong>Email:</strong> ${user.email}</p>
+    <p><strong>UID:</strong> ${user.uid}</p>
+    <p><strong>Last Login:</strong> ${new Date(user.metadata.lastSignInTime).toLocaleString()}</p>
+  `;
+
+  database.ref("users/" + user.uid).once("value", snap => {
+    const userData = snap.val();
+    if (userData && userData.phone) {
+      const phoneP = document.createElement("p");
+      phoneP.innerHTML = `<strong>Phone:</strong> ${userData.phone}`;
+      document.getElementById("profileInfo").appendChild(phoneP);
+    }
+  });
 }
 
 // Load orders
-function loadOrders() {
-  const ordersContainer = document.getElementById("orders");
-  ordersContainer.innerHTML = "";
-  db.ref("orders").orderByChild("uid").equalTo(currentUser.uid).once("value", snapshot => {
-    if (!snapshot.exists()) {
-      ordersContainer.innerHTML = "<p>No orders found.</p>";
-      return;
-    }
-    snapshot.forEach(order => {
-      const data = order.val();
-      const card = document.createElement("div");
-      card.className = "product-card";
-      card.innerHTML = `
-        <h3>${data.productName}</h3>
-        <p>UTR: ${data.utr}</p>
-        <p>Status: ${data.status || 'Pending'}</p>
+function loadOrders(uid) {
+  const orderList = document.getElementById("orderList");
+  orderList.innerHTML = "";
+
+  database.ref("orders").orderByChild("uid").equalTo(uid).once("value", snap => {
+    snap.forEach(child => {
+      const order = child.val();
+      const div = document.createElement("div");
+      div.className = "notice";
+      div.innerHTML = `
+        <p><strong>Product:</strong> ${order.product}</p>
+        <p><strong>Name:</strong> ${order.name}</p>
+        <p><strong>UTR:</strong> ${order.utr}</p>
+        <p><strong>Status:</strong> ${order.status || "Pending"}</p>
       `;
-      ordersContainer.appendChild(card);
+      orderList.appendChild(div);
     });
   });
 }
 
-// Load profile
-function loadProfile() {
-  const profile = document.getElementById("profile");
-  const user = auth.currentUser;
-  profile.innerHTML = `
-    <p>Email: ${user.email}</p>
-    <p>Phone: ${user.phoneNumber || 'N/A'}</p>
-    <p>UID: ${user.uid}</p>
-    <p>Last Login: ${new Date(user.metadata.lastSignInTime).toLocaleString()}</p>
-    <button onclick="logout()">Logout</button>
-  `;
+// Load notices
+function loadNotices() {
+  database.ref("store/notices/normal").once("value", snap => {
+    const val = snap.val();
+    if (val) {
+      const notice = document.createElement("div");
+      notice.className = "notice";
+      notice.innerText = val;
+      document.querySelector("main").prepend(notice);
+    }
+  });
+
+  database.ref("store/notices/floating").once("value", snap => {
+    const val = snap.val();
+    if (val) {
+      const float = document.createElement("div");
+      float.className = "floating-notice";
+      float.innerText = val;
+      document.body.appendChild(float);
+    }
+  });
+}
+
+// Navigation
+function showTab(tabId) {
+  document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+  document.getElementById(tabId).classList.add("active");
 }
 
 // Logout
 function logout() {
-  auth.signOut().then(() => {
+  firebase.auth().signOut().then(() => {
     window.location.href = "index.html";
-  });
-}
-
-// Notices
-function loadNotices() {
-  const header = document.querySelector("header");
-  db.ref("store/info").once("value", snap => {
-    const info = snap.val();
-    if (info) {
-      if (info.name) document.getElementById("storeTitle").textContent = info.name;
-      if (info.description) document.getElementById("storeDesc").textContent = info.description;
-    }
-  });
-
-  db.ref("store/notice").once("value", snap => {
-    const msg = snap.val();
-    if (msg) {
-      const notice = document.createElement("div");
-      notice.className = "notice-box";
-      notice.innerText = msg;
-      header.appendChild(notice);
-    }
-  });
-
-  db.ref("store/float").once("value", snap => {
-    const float = snap.val();
-    if (float) {
-      const floatBox = document.createElement("div");
-      floatBox.style.position = "fixed";
-      floatBox.style.bottom = "60px";
-      floatBox.style.right = "10px";
-      floatBox.style.background = "#1a1a1a";
-      floatBox.style.color = "red";
-      floatBox.style.padding = "10px";
-      floatBox.style.border = "1px solid red";
-      floatBox.style.borderRadius = "10px";
-      floatBox.style.boxShadow = "0 0 10px red";
-      floatBox.innerText = float;
-      document.body.appendChild(floatBox);
-    }
   });
 }
