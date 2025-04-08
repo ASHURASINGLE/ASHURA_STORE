@@ -1,17 +1,4 @@
-// home.js
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import {
-  getAuth,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import {
-  getDatabase,
-  ref,
-  onValue
-} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-
+// Firebase init
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
   authDomain: "ashura-6cb98.firebaseapp.com",
@@ -22,95 +9,82 @@ const firebaseConfig = {
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const db = getDatabase(app);
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
 
-const homeSection = document.getElementById("homeSection");
-const ordersSection = document.getElementById("ordersSection");
-const profileSection = document.getElementById("profileSection");
-const productList = document.getElementById("productList");
-const orderList = document.getElementById("orderList");
-const profileBox = document.getElementById("profileBox");
-const logoutBtn = document.getElementById("logoutBtn");
+// Tabs
+function switchTab(tab) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
 
-function showSection(section) {
-  homeSection.classList.add("hidden");
-  ordersSection.classList.add("hidden");
-  profileSection.classList.add("hidden");
-  section.classList.remove("hidden");
+  document.getElementById(`${tab}Section`).classList.add('active');
+  document.getElementById(`${tab}Tab`).classList.add('active');
 }
 
-document.getElementById("tabHome").addEventListener("click", () => showSection(homeSection));
-document.getElementById("tabOrders").addEventListener("click", () => showSection(ordersSection));
-document.getElementById("tabProfile").addEventListener("click", () => showSection(profileSection));
-
-logoutBtn.addEventListener("click", () => {
-  signOut(auth).then(() => {
+// Logout
+function logout() {
+  auth.signOut().then(() => {
     window.location.href = "index.html";
   });
-});
+}
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
+// Auth state check
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    window.location.href = "index.html";
+  } else {
+    // Load user info
     const uid = user.uid;
-    const userRef = ref(db, `users/${uid}`);
-
-    onValue(userRef, (snapshot) => {
-      const userData = snapshot.val();
-      profileBox.innerHTML = `
-        <p><strong>Email:</strong> ${user.email}</p>
-        <p><strong>Phone:</strong> ${userData?.phone || "-"}</p>
-        <p><strong>UID:</strong> ${user.uid}</p>
-        <p><strong>Last Login:</strong> ${user.metadata.lastSignInTime}</p>
-      `;
+    db.ref("users/" + uid).once("value").then(snapshot => {
+      const data = snapshot.val();
+      document.getElementById("userEmail").textContent = "Email: " + (user.email || "N/A");
+      document.getElementById("userPhone").textContent = "Phone: " + (data?.phone || "N/A");
+      document.getElementById("userUID").textContent = "UID: " + uid;
+      document.getElementById("lastLogin").textContent = "Last Login: " + (user.metadata.lastSignInTime || "N/A");
     });
 
-    loadProducts();
-    loadOrders(uid);
-  } else {
-    window.location.href = "index.html";
+    // Load products
+    db.ref("products").once("value").then(snapshot => {
+      const list = document.getElementById("productList");
+      list.innerHTML = "";
+      snapshot.forEach(child => {
+        const product = child.val();
+        const div = document.createElement("div");
+        div.className = "product-card";
+        div.innerHTML = `
+          <h3>${product.name}</h3>
+          <p>Price: ₹${product.price}</p>
+          <button onclick="buyProduct('${child.key}')">Buy</button>
+        `;
+        list.appendChild(div);
+      });
+    });
+
+    // Load orders
+    db.ref("orders/" + uid).once("value").then(snapshot => {
+      const orderList = document.getElementById("orderList");
+      orderList.innerHTML = "";
+      if (!snapshot.exists()) {
+        orderList.innerHTML = "<p>No orders yet.</p>";
+        return;
+      }
+      snapshot.forEach(child => {
+        const order = child.val();
+        const div = document.createElement("div");
+        div.className = "order-item";
+        div.innerHTML = `
+          <p><strong>Product:</strong> ${order.productName}</p>
+          <p><strong>UTR:</strong> ${order.utr}</p>
+          <p><strong>Status:</strong> ${order.status}</p>
+        `;
+        orderList.appendChild(div);
+      });
+    });
   }
 });
 
-function loadProducts() {
-  const productsRef = ref(db, "products");
-  onValue(productsRef, (snapshot) => {
-    const data = snapshot.val();
-    productList.innerHTML = "";
-    for (const id in data) {
-      const p = data[id];
-      const card = document.createElement("div");
-      card.className = "product-card";
-      card.innerHTML = `
-        <img src="${p.image}" alt="${p.name}" />
-        <h3>${p.name}</h3>
-        <p>${p.price}</p>
-        <button onclick="location.href='buy.html?id=${id}'">Buy</button>
-      `;
-      productList.appendChild(card);
-    }
-  });
-}
-
-function loadOrders(uid) {
-  const ordersRef = ref(db, `orders/${uid}`);
-  onValue(ordersRef, (snapshot) => {
-    const data = snapshot.val();
-    orderList.innerHTML = "";
-    if (data) {
-      for (const id in data) {
-        const o = data[id];
-        const item = document.createElement("div");
-        item.className = "order-item";
-        item.innerHTML = `
-          <p><strong>Product:</strong> ${o.product}</p>
-          <p><strong>Status:</strong> ${o.status}</p>
-        `;
-        orderList.appendChild(item);
-      }
-    } else {
-      orderList.innerHTML = "<p>No orders found.</p>";
-    }
-  });
+// Buy button redirect
+function buyProduct(productId) {
+  window.location.href = `buy.html?product=${productId}`;
 }
