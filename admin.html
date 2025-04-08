@@ -1,64 +1,48 @@
+<!-- admin.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ASHURA STORE Admin Panel</title>
+  <title>Admin Panel</title>
   <link rel="stylesheet" href="admin.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
-  <header>
-    <h1>ASHURA STORE Admin</h1>
-    <button id="menuToggle">☰ Menu</button>
-  </header>
+  <div class="admin-header">
+    <button id="menuToggle">☰</button>
+    <h1>Admin Panel</h1>
+    <button id="logoutBtn">Logout</button>
+  </div>
 
-  <nav id="drawer">
-    <ul>
-      <li><a href="#">Dashboard</a></li>
-      <li><a href="#">Manage Products</a></li>
-      <li><a href="#">QR Code</a></li>
-      <li><a href="#">Store Info</a></li>
-      <li><a id="logoutBtn" href="#">Logout</a></li>
-    </ul>
-  </nav>
+  <div id="drawer" class="admin-drawer">
+    <button onclick="location.reload()">Dashboard</button>
+  </div>
 
-  <main>
-    <!-- Dashboard Section -->
-    <section>
-      <h2>Dashboard</h2>
-      <p id="totalUsers">Total Users: Loading...</p>
-      <p id="totalOrders">Total Orders: Loading...</p>
-    </section>
+  <div class="admin-content">
+    <h2>Dashboard</h2>
+    <p id="totalUsers">Total Users: </p>
+    <p id="totalOrders">Total Orders: </p>
 
-    <!-- Product Management Section -->
-    <section>
-      <h2>Add Product</h2>
-      <input type="text" id="productName" placeholder="Product Name" />
-      <textarea id="productDesc" placeholder="Product Description"></textarea>
-      <input type="file" id="productImage" accept="image/*" />
-      <button id="addProductBtn">Add Product</button>
-    </section>
+    <h2>Add Product</h2>
+    <input type="text" id="productName" placeholder="Product Name" />
+    <input type="text" id="productDesc" placeholder="Product Description" />
+    <input type="number" id="productPrice" placeholder="Product Price" />
+    <input type="file" id="productImage" accept="image/*" />
+    <button id="addProductBtn">Add Product</button>
 
-    <!-- QR Code Upload Section -->
-    <section>
-      <h2>Upload QR Code</h2>
-      <input type="file" id="qrImage" accept="image/*" />
-      <button id="uploadQRBtn">Upload QR</button>
-      <br />
-      <img id="qrPreview" src="default-qr.png" alt="QR Code Preview" />
-    </section>
+    <h2>Upload QR Code</h2>
+    <input type="file" id="qrImage" accept="image/*" />
+    <button id="uploadQRBtn">Upload QR</button>
+    <img id="qrPreview" src="" alt="QR Preview" width="100"/>
 
-    <!-- Store Info Section -->
-    <section>
-      <h2>Update Store Info</h2>
-      <input type="text" id="storeName" placeholder="Store Name" />
-      <textarea id="storeDesc" placeholder="Store Description"></textarea>
-      <button id="updateInfoBtn">Update Info</button>
-    </section>
-  </main>
+    <h2>Update Store Info</h2>
+    <input type="text" id="storeName" placeholder="Store Name" />
+    <input type="text" id="storeDesc" placeholder="Store Description" />
+    <button id="updateInfoBtn">Update</button>
+  </div>
 
   <script src="admin.js"></script>
 </body>
