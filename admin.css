@@ -1,51 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
 body {
-  font-family: Arial, sans-serif;
-  background-color: #0a0a0a;
-  color: #f2f2f2;
-  padding: 20px;
+  margin: 0;
+  padding: 0;
+  font-family: 'Share Tech Mono', monospace;
+  background-color: #000;
+  color: #0f0;
+  display: flex;
+  height: 100vh;
 }
 
 .admin-container {
-  max-width: 600px;
-  margin: auto;
-  background: #111;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px #00ffcc;
-}
-
-h1 {
-  text-align: center;
-  color: #00ffcc;
-}
-
-section {
-  margin-bottom: 30px;
-}
-
-input[type="text"],
-input[type="number"],
-input[type="file"] {
-  display: block;
+  display: flex;
   width: 100%;
-  margin: 8px 0 10px;
-  padding: 8px;
-  background: #222;
-  border: 1px solid #333;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: #111;
+  border-right: 2px solid #0f0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  font-size: 20px;
   color: #0f0;
-  border-radius: 4px;
+  text-align: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #0f0;
+  padding-bottom: 10px;
+}
+
+.menu button {
+  background: none;
+  border: none;
+  color: #aaa;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-align: left;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.menu button:hover,
+.menu button.active {
+  background-color: #0f0;
+  color: #000;
+}
+
+/* Main content */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+/* Dashboard stats */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.stat-card {
+  background-color: #111;
+  border: 1px solid #0f0;
+  padding: 20px;
+  border-radius: 8px;
+  width: 200px;
+  text-align: center;
+}
+
+/* QR section */
+#qrUpload {
+  margin-top: 10px;
 }
 
 button {
-  padding: 10px 20px;
-  background: #00ffcc;
-  border: none;
-  border-radius: 5px;
+  background-color: #0f0;
   color: #000;
-  cursor: pointer;
+  border: none;
+  padding: 10px 15px;
   font-weight: bold;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 button:hover {
-  background: #00ffaa;
+  background-color: #0c0;
+}
+
+/* User list and orders */
+#usersList,
+#orderList {
+  margin-top: 20px;
+}
+
+.user-card,
+.order-card {
+  background-color: #111;
+  border: 1px solid #0f0;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.user-card button,
+.order-card button {
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100px;
+    padding: 10px;
+  }
+
+  .logo {
+    font-size: 14px;
+  }
+
+  .menu button {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .stat-card {
+    width: 100%;
+  }
 }
