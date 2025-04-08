@@ -9,24 +9,24 @@ const firebaseConfig = {
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
+const auth = firebase.auth();
 
 // Drawer toggle
 document.getElementById("menuToggle").addEventListener("click", () => {
   const drawer = document.getElementById("drawer");
-  drawer.classList.toggle("open");
+  drawer.style.display = drawer.style.display === "block" ? "none" : "block";
 });
 
 // Logout
 document.getElementById("logoutBtn").addEventListener("click", () => {
-  firebase.auth().signOut().then(() => {
+  auth.signOut().then(() => {
     window.location.href = "index.html";
   });
 });
 
-// Dashboard: Show total users and orders
+// Dashboard
 function updateDashboard() {
   database.ref("users").once("value", snapshot => {
     const users = snapshot.numChildren();
@@ -40,7 +40,7 @@ function updateDashboard() {
 }
 updateDashboard();
 
-// Add Product (with price)
+// Add Product
 document.getElementById("addProductBtn").addEventListener("click", () => {
   const name = document.getElementById("productName").value;
   const desc = document.getElementById("productDesc").value;
@@ -93,7 +93,7 @@ function loadQRImage() {
 }
 loadQRImage();
 
-// Store Info Update
+// Update Store Info
 document.getElementById("updateInfoBtn").addEventListener("click", () => {
   const name = document.getElementById("storeName").value;
   const desc = document.getElementById("storeDesc").value;
@@ -114,3 +114,25 @@ function loadStoreInfo() {
   });
 }
 loadStoreInfo();
+
+// Add Notice
+document.getElementById("addNoticeBtn").addEventListener("click", () => {
+  const notice = document.getElementById("noticeText").value;
+  if (!notice) return alert("Enter notice text");
+
+  database.ref("store/notice").set(notice, () => {
+    alert("Notice Updated");
+    document.getElementById("noticeText").value = "";
+  });
+});
+
+// Add Floating Notice
+document.getElementById("addFloatingNoticeBtn").addEventListener("click", () => {
+  const floatNotice = document.getElementById("floatingNoticeText").value;
+  if (!floatNotice) return alert("Enter floating notice text");
+
+  database.ref("store/floatingNotice").set(floatNotice, () => {
+    alert("Floating Notice Updated");
+    document.getElementById("floatingNoticeText").value = "";
+  });
+});
