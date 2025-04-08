@@ -1,26 +1,76 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ASHURA ADMIN</title>
   <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
-  <header class="header">
-    <h1>ASHURA ADMIN PANEL</h1>
-    <button id="menuToggle">MENU</button>
-    <button id="logoutBtn">LOGOUT</button>
-  </header>  <div id="drawer" class="drawer">
+  <header>
+    <h1>ASHURA<br>ADMIN PANEL</h1>
+    <div class="top-buttons">
+      <button onclick="toggleDrawer()">MENU</button>
+      <button onclick="logout()">LOGOUT</button>
+    </div>
+  </header>
+
+  <div id="drawer" class="drawer hidden">
     <ul>
-      <li><a href="users.html">Manage Users</a></li>
-      <li><a href="products.html">Manage Products</a></li>
-      <li><a href="orders.html">View Orders</a></li>
-      <li><a href="qr.html">QR Code</a></li>
-      <li><a href="store.html">Store Info</a></li>
-      <li><a href="notice.html">Notices</a></li>
+      <li onclick="showSection('dashboard')">Dashboard</li>
+      <li onclick="showSection('addProduct')">Add Product</li>
+      <li onclick="showSection('uploadQR')">Upload QR Code</li>
+      <li onclick="showSection('manageProducts')">Manage Products</li>
+      <li onclick="showSection('updateStore')">Update Store Info</li>
+      <li onclick="showSection('notices')">Manage Notices</li>
     </ul>
-  </div>  <main class="dashboard">
-    <div class="card" id="totalUsers">Total Users: 0</div>
-    <div class="card" id="totalOrders">Total Orders: 0</div>
-  </main>  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>  <script src="admin.js"></script></body>
+  </div>
+
+  <main>
+    <!-- Dashboard -->
+    <section id="dashboard" class="admin-section">
+      <div class="card">Total Users: <span id="totalUsers">0</span></div>
+      <div class="card">Total Orders: <span id="totalOrders">0</span></div>
+    </section>
+
+    <!-- Add Product -->
+    <section id="addProduct" class="admin-section hidden">
+      <input type="text" id="productName" placeholder="Product Name" />
+      <input type="text" id="productDescription" placeholder="Description" />
+      <input type="text" id="productPrice" placeholder="Price" />
+      <input type="file" id="productImage" />
+      <button onclick="addProduct()">Add Product</button>
+    </section>
+
+    <!-- Upload QR Code -->
+    <section id="uploadQR" class="admin-section hidden">
+      <input type="file" id="qrImage" />
+      <button onclick="uploadQR()">Upload QR</button>
+    </section>
+
+    <!-- Manage Products -->
+    <section id="manageProducts" class="admin-section hidden">
+      <div id="productList"></div>
+    </section>
+
+    <!-- Update Store Info -->
+    <section id="updateStore" class="admin-section hidden">
+      <input type="text" id="storeName" placeholder="Store Name" />
+      <input type="text" id="storeDesc" placeholder="Store Description" />
+      <button onclick="updateStore()">Update Store</button>
+    </section>
+
+    <!-- Manage Notices -->
+    <section id="notices" class="admin-section hidden">
+      <input type="text" id="mainNotice" placeholder="Main Notice" />
+      <input type="text" id="floatingNotice" placeholder="Floating Notice" />
+      <button onclick="updateNotices()">Update Notices</button>
+    </section>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script src="admin.js"></script>
+</body>
 </html>
