@@ -9,151 +9,106 @@ const firebaseConfig = {
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
-const storage = firebase.storage();
+const database = firebase.database();
 
-const drawer = document.getElementById("drawer");
-const drawerToggle = document.getElementById("drawerToggle");
-const drawerClose = document.getElementById("drawerClose");
-
-drawerToggle.onclick = () => drawer.classList.add("open");
-drawerClose.onclick = () => drawer.classList.remove("open");
-
-// Access Control (check if user is ASHURA@gmail.com)
-auth.onAuthStateChanged(user => {
-  if (user && user.email === "ASHURA@gmail.com") {
-    loadAdminData();
-  } else {
-    window.location.href = "index.html";
-  }
+// Drawer toggle
+document.getElementById("menuToggle").addEventListener("click", () => {
+  const drawer = document.getElementById("drawer");
+  drawer.style.display = drawer.style.display === "block" ? "none" : "block";
 });
 
-function loadAdminData() {
-  // Load store info
-  db.ref("store").once("value", snap => {
-    const data = snap.val();
-    document.getElementById("storeName").value = data?.name || "";
-    document.getElementById("storeDescription").value = data?.description || "";
-  });
-
-  // Load QR image
-  db.ref("qr").once("value", snap => {
-    document.getElementById("qrPreview").src = snap.val() || "default-qr.png";
-  });
-
-  // Load floating/maintenance notice
-  db.ref("notice").once("value", snap => {
-    document.getElementById("floatingNotice").value = snap.val()?.floating || "";
-    document.getElementById("maintenanceNotice").value = snap.val()?.maintenance || "";
-  });
-
-  // Load product list
-  db.ref("products").on("value", snap => {
-    const list = document.getElementById("productList");
-    list.innerHTML = "";
-    snap.forEach(child => {
-      const p = child.val();
-      list.innerHTML += `
-        <div class="product-item">
-          <h3>${p.name}</h3>
-          <p>${p.description}</p>
-          <img src="${p.image}" alt="${p.name}" />
-          <button onclick="deleteProduct('${child.key}')">Delete</button>
-        </div>
-      `;
-    });
-  });
-
-  // Load user list
-  db.ref("users").on("value", snap => {
-    const list = document.getElementById("userList");
-    list.innerHTML = "";
-    snap.forEach(child => {
-      const u = child.val();
-      list.innerHTML += `
-        <div class="user-item">
-          <p><strong>Email:</strong> ${u.email}</p>
-          <p><strong>Phone:</strong> ${u.phone}</p>
-          <p><strong>UID:</strong> ${child.key}</p>
-          <button onclick="deleteUser('${child.key}')">Delete</button>
-        </div>
-      `;
-    });
-  });
-
-  // Load orders
-  db.ref("orders").on("value", snap => {
-    const list = document.getElementById("orderList");
-    list.innerHTML = "";
-    snap.forEach(child => {
-      const o = child.val();
-      list.innerHTML += `
-        <div class="order-item">
-          <p><strong>Product:</strong> ${o.productName}</p>
-          <p><strong>Email:</strong> ${o.email}</p>
-          <p><strong>UTR:</strong> ${o.utr}</p>
-        </div>
-      `;
-    });
-  });
-}
-
-// Update store info
-document.getElementById("updateStore").onclick = () => {
-  const name = document.getElementById("storeName").value;
-  const description = document.getElementById("storeDescription").value;
-  db.ref("store").set({ name, description });
-  alert("Store updated");
-};
-
-// Update QR
-document.getElementById("uploadQR").onchange = e => {
-  const file = e.target.files[0];
-  const ref = storage.ref("qr.png");
-  ref.put(file).then(() => {
-    ref.getDownloadURL().then(url => {
-      db.ref("qr").set(url);
-      document.getElementById("qrPreview").src = url;
-    });
-  });
-};
-
-// Add product
-document.getElementById("addProduct").onclick = () => {
-  const name = document.getElementById("productName").value;
-  const desc = document.getElementById("productDesc").value;
-  const file = document.getElementById("productImage").files[0];
-  const ref = storage.ref("products/" + Date.now());
-  ref.put(file).then(() => {
-    ref.getDownloadURL().then(url => {
-      db.ref("products").push({ name, description: desc, image: url });
-    });
-  });
-};
-
-// Delete product
-function deleteProduct(key) {
-  db.ref("products/" + key).remove();
-}
-
-// Delete user
-function deleteUser(uid) {
-  db.ref("users/" + uid).remove();
-}
-
-// Update notices
-document.getElementById("updateNotices").onclick = () => {
-  const floating = document.getElementById("floatingNotice").value;
-  const maintenance = document.getElementById("maintenanceNotice").value;
-  db.ref("notice").set({ floating, maintenance });
-  alert("Notices updated");
-};
-
 // Logout
-document.getElementById("logout").onclick = () => {
-  auth.signOut().then(() => {
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  firebase.auth().signOut().then(() => {
     window.location.href = "index.html";
   });
-};
+});
+
+// Dashboard data
+function updateDashboard() {
+  database.ref("users").once("value", snapshot => {
+    const users = snapshot.numChildren();
+    document.getElementById("totalUsers").innerText = `Total Users: ${users}`;
+  });
+
+  database.ref("orders").once("value", snapshot => {
+    const orders = snapshot.numChildren();
+    document.getElementById("totalOrders").innerText = `Total Orders: ${orders}`;
+  });
+}
+updateDashboard();
+
+// Add product
+document.getElementById("addProductBtn").addEventListener("click", () => {
+  const name = document.getElementById("productName").value;
+  const desc = document.getElementById("productDesc").value;
+  const imgFile = document.getElementById("productImage").files[0];
+
+  if (!name || !desc || !imgFile) return alert("Fill all fields");
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const productData = {
+      name: name,
+      description: desc,
+      imageUrl: e.target.result
+    };
+    const key = database.ref("products").push().key;
+    database.ref("products/" + key).set(productData, () => {
+      alert("Product Added!");
+      document.getElementById("productName").value = "";
+      document.getElementById("productDesc").value = "";
+      document.getElementById("productImage").value = "";
+    });
+  };
+  reader.readAsDataURL(imgFile);
+});
+
+// Upload QR code
+document.getElementById("uploadQRBtn").addEventListener("click", () => {
+  const file = document.getElementById("qrImage").files[0];
+  if (!file) return alert("Select a QR image");
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    database.ref("store/qr").set(e.target.result, () => {
+      alert("QR Code Updated");
+      document.getElementById("qrImage").value = "";
+      loadQRImage();
+    });
+  };
+  reader.readAsDataURL(file);
+});
+
+function loadQRImage() {
+  database.ref("store/qr").once("value", snap => {
+    const img = snap.val();
+    document.getElementById("qrPreview").src = img || "default-qr.png";
+  });
+}
+loadQRImage();
+
+// Update store info
+document.getElementById("updateInfoBtn").addEventListener("click", () => {
+  const name = document.getElementById("storeName").value;
+  const desc = document.getElementById("storeDesc").value;
+
+  database.ref("store/info").set({
+    name,
+    description: desc
+  }, () => alert("Store Info Updated"));
+});
+
+// Load existing info
+function loadStoreInfo() {
+  database.ref("store/info").once("value", snap => {
+    const info = snap.val();
+    if (info) {
+      document.getElementById("storeName").value = info.name;
+      document.getElementById("storeDesc").value = info.description;
+    }
+  });
+}
+loadStoreInfo();
