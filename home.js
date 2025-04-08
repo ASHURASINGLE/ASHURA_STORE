@@ -4,32 +4,35 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase
 
 const firebaseConfig = { apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY", authDomain: "ashura-6cb98.firebaseapp.com", databaseURL: "https://ashura-6cb98-default-rtdb.firebaseio.com", projectId: "ashura-6cb98", storageBucket: "ashura-6cb98.appspot.com", messagingSenderId: "990827476073", appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8" };
 
-const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getDatabase(app);
+const app = initializeApp(firebaseConfig); const auth = getAuth(); const db = getDatabase(app);
 
-const homeTab = document.getElementById("homeTab"); const ordersTab = document.getElementById("ordersTab"); const profileTab = document.getElementById("profileTab");
+const homeSection = document.getElementById("homeSection"); const ordersSection = document.getElementById("ordersSection"); const profileSection = document.getElementById("profileSection"); const productList = document.getElementById("productList"); const orderList = document.getElementById("orderList"); const profileBox = document.getElementById("profileBox"); const logoutBtn = document.getElementById("logoutBtn");
 
-const homeContent = document.getElementById("homeContent"); const ordersContent = document.getElementById("ordersContent"); const profileContent = document.getElementById("profileContent");
+function showSection(section) { homeSection.classList.add("hidden"); ordersSection.classList.add("hidden"); profileSection.classList.add("hidden"); section.classList.remove("hidden"); }
 
-function switchTab(tabName) { homeContent.classList.add("hidden"); ordersContent.classList.add("hidden"); profileContent.classList.add("hidden");
+document.getElementById("tabHome").addEventListener("click", () => showSection(homeSection)); document.getElementById("tabOrders").addEventListener("click", () => showSection(ordersSection)); document.getElementById("tabProfile").addEventListener("click", () => showSection(profileSection));
 
-if (tabName === "home") { homeContent.classList.remove("hidden"); } else if (tabName === "orders") { ordersContent.classList.remove("hidden"); loadOrderHistory(); } else if (tabName === "profile") { profileContent.classList.remove("hidden"); loadUserProfile(); } }
+logoutBtn.addEventListener("click", () => { signOut(auth).then(() => { window.location.href = "index.html"; }); });
 
-homeTab.addEventListener("click", () => switchTab("home")); ordersTab.addEventListener("click", () => switchTab("orders")); profileTab.addEventListener("click", () => switchTab("profile"));
+onAuthStateChanged(auth, (user) => { if (user) { const uid = user.uid; const userRef = ref(db, users/${uid});
 
-function loadProducts() { const productList = document.getElementById("productList"); const productsRef = ref(db, "products"); onValue(productsRef, (snapshot) => { productList.innerHTML = ""; snapshot.forEach((childSnapshot) => { const product = childSnapshot.val(); const div = document.createElement("div"); div.classList.add("product-item"); div.innerHTML = <img src="${product.image}" alt="${product.name}" /> <h3>${product.name}</h3> <p>${product.description}</p> <button onclick="location.href='buy.html?id=${childSnapshot.key}'">Buy</button>; productList.appendChild(div); }); }); }
+onValue(userRef, (snapshot) => {
+  const userData = snapshot.val();
+  profileBox.innerHTML = `
+    <p><strong>Email:</strong> ${user.email}</p>
+    <p><strong>Phone:</strong> ${userData?.phone || "-"}</p>
+    <p><strong>UID:</strong> ${user.uid}</p>
+    <p><strong>Last Login:</strong> ${user.metadata.lastSignInTime}</p>
+  `;
+});
 
-function loadOrderHistory() { const orderHistory = document.getElementById("orderHistory"); const user = auth.currentUser; if (!user) return; const ordersRef = ref(db, orders/${user.uid}); onValue(ordersRef, (snapshot) => { orderHistory.innerHTML = ""; if (!snapshot.exists()) { orderHistory.innerHTML = "<p>No orders yet.</p>"; return; } snapshot.forEach((childSnapshot) => { const order = childSnapshot.val(); const div = document.createElement("div"); div.classList.add("order-item"); div.innerHTML = <p><strong>Product:</strong> ${order.productName}</p> <p><strong>UTR:</strong> ${order.utr}</p> <p><strong>Status:</strong> ${order.status}</p>; orderHistory.appendChild(div); }); }); }
+loadProducts();
+loadOrders(uid);
 
-function loadUserProfile() { const user = auth.currentUser; if (!user) return;
+} else { window.location.href = "index.html"; } });
 
-const userRef = ref(db, users/${user.uid}); onValue(userRef, (snapshot) => { const data = snapshot.val(); const profileInfo = document.getElementById("profileInfo"); profileInfo.innerHTML = ` <h3>Registration Details:</h3> <p><strong>Email:</strong> ${data?.email || user.email}</p> <p><strong>Phone:</strong> ${data?.phone || "Not available"}</p>
+function loadProducts() { const productsRef = ref(db, "products"); onValue(productsRef, (snapshot) => { const data = snapshot.val(); productList.innerHTML = ""; for (const id in data) { const p = data[id]; const card = document.createElement("div"); card.className = "product-card"; card.innerHTML = <img src="${p.image}" alt="${p.name}" /> <h3>${p.name}</h3> <p>${p.price}</p> <button onclick="location.href='buy.html?id=${id}'">Buy</button>; productList.appendChild(card); } }); }
 
-<h3>Login Details:</h3>
-  <p><strong>UID:</strong> ${user.uid}</p>
-  <p><strong>Last Login:</strong> ${user.metadata.lastSignInTime}</p>
-`;
+function loadOrders(uid) { const ordersRef = ref(db, orders/${uid}); onValue(ordersRef, (snapshot) => { const data = snapshot.val(); orderList.innerHTML = ""; if (data) { for (const id in data) { const o = data[id]; const item = document.createElement("div"); item.className = "order-item"; item.innerHTML = <p><strong>Product:</strong> ${o.product}</p> <p><strong>Status:</strong> ${o.status}</p>; orderList.appendChild(item); } } else { orderList.innerHTML = "<p>No orders found.</p>"; } }); }
 
-}); }
-
-onAuthStateChanged(auth, (user) => { if (!user) { window.location.href = "index.html"; } else { loadProducts(); } });
-
+                                                                                                       
