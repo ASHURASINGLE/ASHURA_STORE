@@ -1,35 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Buy Product</title>
-  <link rel="stylesheet" href="buy.css">
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buy Product - ASHURA STORE</title>
+  <link rel="stylesheet" href="buy.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 </head>
 <body>
-
   <div class="container">
-    <!-- Step 1: Product Info -->
-    <div id="step1">
-      <h2>Product Details</h2>
-      <img id="product-img" class="product-img" src="" alt="Product Image">
-      <div class="product-info">
-        <h3 id="product-name"></h3>
-        <p id="product-desc"></p>
-      </div>
-      <button onclick="continueToStep2()">Continue to Payment</button>
+    <h1 class="title">Product Details</h1>
+    <div class="product">
+      <img id="productImage" src="" alt="Product Image" class="product-img"/>
+      <h2 id="productName"></h2>
+      <p id="productDesc"></p>
+      <button id="continueBtn">Continue to Payment</button>
     </div>
 
-    <!-- Step 2: Payment -->
-    <div id="step2" style="display: none;">
-      <h2>Scan & Pay</h2>
-      <img id="qr-img" class="qr-img" src="" alt="QR Code">
-      <input type="text" id="name" placeholder="Enter Your Name">
-      <input type="text" id="utr" placeholder="Enter UTR Number">
-      <button id="confirm-btn">Confirm Payment</button>
+    <div id="paymentSection" class="hidden">
+      <h2>Scan QR to Pay</h2>
+      <img id="qrCodeImage" src="" alt="QR Code" class="qr-img"/>
+      <input type="text" id="buyerName" placeholder="Enter Your Name" />
+      <input type="text" id="utrNumber" placeholder="Enter UTR Number" />
+      <button id="confirmBtn">Confirm</button>
     </div>
   </div>
 
