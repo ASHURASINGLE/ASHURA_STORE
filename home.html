@@ -3,45 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ASHURA STORE</title>
+  <title>ASHURA STORE - Home</title>
   <link rel="stylesheet" href="home.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 </head>
 <body>
   <header>
-    <h1>ASHURA STORE</h1>
-    <p id="storeName">Welcome to Ashura Store</p>
-    <p id="storeDescription">Best digital products</p>
+    <h1 id="storeTitle">ASHURA STORE</h1>
+    <p id="storeDesc">Welcome to the official hacker-style store</p>
   </header>
 
-  <div id="floatingNotice" class="notice-box"></div>
-
   <main>
-    <section id="products"></section>
+    <!-- Products Tab -->
+    <section id="products" class="active"></section>
 
-    <section id="orders" class="hidden">
-      <h2>Your Orders</h2>
-      <div id="orderList"></div>
-    </section>
+    <!-- Orders Tab -->
+    <section id="orders" class="hidden"></section>
 
-    <section id="profile" class="hidden">
-      <h2>Your Profile</h2>
-      <p><strong>Email:</strong> <span id="userEmail"></span></p>
-      <p><strong>Phone:</strong> <span id="userPhone"></span></p>
-      <p><strong>UID:</strong> <span id="userUID"></span></p>
-      <p><strong>Last Login:</strong> <span id="lastLogin"></span></p>
-      <button onclick="logout()">Logout</button>
-    </section>
+    <!-- Profile Tab -->
+    <section id="profile" class="hidden"></section>
   </main>
 
-  <nav class="bottom-nav">
-    <button onclick="showTab('products')">Home</button>
-    <button onclick="showTab('orders')">Orders</button>
-    <button onclick="showTab('profile')">Profile</button>
-  </nav>
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <button data-target="products">Home</button>
+    <button data-target="orders">Orders</button>
+    <button data-target="profile">Profile</button>
+  </div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <script src="home.js"></script>
 </body>
 </html>
