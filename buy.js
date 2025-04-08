@@ -1,3 +1,4 @@
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
   authDomain: "ashura-6cb98.firebaseapp.com",
@@ -7,64 +8,91 @@ const firebaseConfig = {
   messagingSenderId: "990827476073",
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const auth = firebase.auth();
 
-// Get product ID from URL
-const params = new URLSearchParams(window.location.search);
-const productId = params.get("id");
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get("id");
 
-const step1 = document.getElementById("step1");
-const step2 = document.getElementById("step2");
-const productNameEl = document.getElementById("product-name");
-const productDescEl = document.getElementById("product-desc");
-const productImgEl = document.getElementById("product-img");
-const qrImg = document.getElementById("qr-img");
-const confirmBtn = document.getElementById("confirm-btn");
+const productImage = document.getElementById("productImage");
+const productName = document.getElementById("productName");
+const productDesc = document.getElementById("productDesc");
+const continueBtn = document.getElementById("continueBtn");
+const paymentSection = document.getElementById("paymentSection");
+const qrCodeImage = document.getElementById("qrCodeImage");
+const buyerName = document.getElementById("buyerName");
+const utrNumber = document.getElementById("utrNumber");
+const confirmBtn = document.getElementById("confirmBtn");
 
-let productName = "";
-
-auth.onAuthStateChanged(user => {
-  if (!user) return window.location.href = "index.html";
-
-  db.ref("products/" + productId).once("value").then(snapshot => {
+// Load Product Details
+function loadProductDetails() {
+  db.ref("products/" + productId).once("value").then((snapshot) => {
     const data = snapshot.val();
-    if (!data) return alert("Product not found");
-    productName = data.name;
-    productNameEl.textContent = data.name;
-    productDescEl.textContent = data.description;
-    productImgEl.src = data.imageURL || "https://via.placeholder.com/500x300?text=No+Image";
+    if (data) {
+      productName.innerText = data.name;
+      productDesc.innerText = data.description;
+      productImage.src = data.image;
+    } else {
+      alert("Product not found.");
+    }
   });
+}
 
-  db.ref("qr").once("value").then(snap => {
-    qrImg.src = snap.val()?.url || "https://ashurasingle.github.io/assets/default-qr.jpg";
+// Load QR Code
+function loadQRCode() {
+  db.ref("qr").once("value").then((snapshot) => {
+    if (snapshot.exists()) {
+      qrCodeImage.src = snapshot.val();
+    }
   });
+}
 
-  confirmBtn.addEventListener("click", () => {
-    const name = document.getElementById("name").value.trim();
-    const utr = document.getElementById("utr").value.trim();
+// Event: Continue to Payment
+continueBtn.addEventListener("click", () => {
+  paymentSection.classList.remove("hidden");
+  loadQRCode();
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+});
 
-    if (!name || !utr) return alert("Fill all fields");
+// Event: Confirm Payment
+confirmBtn.addEventListener("click", () => {
+  const name = buyerName.value.trim();
+  const utr = utrNumber.value.trim();
 
-    db.ref("orders").push({
-      uid: user.uid,
-      email: user.email,
-      name,
-      utr,
-      productName,
-      productId,
-      status: "Pending",
-      timestamp: Date.now()
-    }).then(() => {
-      alert("Order placed. You'll receive a confirmation soon.");
-      window.location.href = "home.html";
-    });
+  if (!name || !utr) {
+    alert("Please fill in your name and UTR number.");
+    return;
+  }
+
+  const user = auth.currentUser;
+  if (!user) {
+    alert("You must be logged in to confirm purchase.");
+    return;
+  }
+
+  const orderRef = db.ref("orders").push();
+  orderRef.set({
+    productId,
+    name,
+    utr,
+    uid: user.uid,
+    email: user.email,
+    time: new Date().toISOString(),
+    status: "Pending"
+  }).then(() => {
+    alert("Order placed successfully!");
+    buyerName.value = "";
+    utrNumber.value = "";
+    paymentSection.classList.add("hidden");
   });
 });
 
-function continueToStep2() {
-  step1.style.display = "none";
-  step2.style.display = "block";
-}
+auth.onAuthStateChanged(user => {
+  if (user) {
+    loadProductDetails();
+  } else {
+    alert("Please log in to access this page.");
+    window.location.href = "index.html";
+  }
+});
