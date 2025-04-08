@@ -1,77 +1,126 @@
-body {
+/* General Reset */
+* {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #0e0e0e;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0a0a0a;
   color: #e0e0e0;
+  font-family: 'Courier New', Courier, monospace;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 header {
-  background-color: #1f1f1f;
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #00ff91;
-  border-bottom: 1px solid #333;
-}
-
-h1 {
-  font-size: 20px;
-  margin: 0;
-}
-
-#drawerToggle {
-  background-color: #00ff91;
-  color: black;
-  border: none;
-  padding: 8px 12px;
-  cursor: pointer;
+  background-color: #111;
+  padding: 20px;
+  text-align: center;
+  font-size: 24px;
   font-weight: bold;
-  border-radius: 4px;
+  border-bottom: 2px solid #222;
+  color: #ff1e56;
+}
+
+/* Drawer */
+.drawer-toggle {
+  background: #222;
+  color: #fff;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  text-align: left;
+  width: 100%;
 }
 
 .drawer {
-  position: fixed;
-  left: -250px;
-  top: 0;
-  height: 100%;
   width: 250px;
-  background-color: #161616;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.7);
-  transition: left 0.3s ease;
-  z-index: 1000;
+  background: #121212;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: -250px;
+  overflow-y: auto;
+  transition: 0.3s;
+  z-index: 10;
+  padding-top: 60px;
 }
 
-.drawer.open {
+.drawer.active {
   left: 0;
-}
-
-.drawer ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.drawer li {
-  border-bottom: 1px solid #333;
 }
 
 .drawer a {
   display: block;
-  padding: 14px 20px;
-  color: #00ff91;
+  color: #fff;
+  padding: 12px 20px;
   text-decoration: none;
-  font-weight: bold;
+  border-bottom: 1px solid #1a1a1a;
 }
 
 .drawer a:hover {
-  background-color: #262626;
+  background: #1f1f1f;
 }
 
-main {
-  margin: 20px;
+/* Main content */
+.main {
+  margin-left: 0;
   padding: 20px;
-  background-color: #1c1c1c;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,255,145,0.2);
+  transition: margin-left 0.3s;
+}
+
+.drawer.active ~ .main {
+  margin-left: 250px;
+}
+
+/* Admin Section Styles */
+section {
+  display: none;
+}
+
+section.active {
+  display: block;
+}
+
+/* Form and input styling */
+input, textarea, select {
+  background: #111;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 8px;
+  margin: 8px 0;
+  width: 100%;
+}
+
+button {
+  background: #ff1e56;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+  width: 100%;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #e01345;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .drawer {
+    width: 200px;
+  }
+
+  .drawer.active ~ .main {
+    margin-left: 200px;
+  }
+
+  header {
+    font-size: 18px;
+  }
 }
