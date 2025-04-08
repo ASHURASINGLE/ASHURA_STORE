@@ -1,35 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ASHURA STORE - Login</title>
-  <link rel="stylesheet" href="index.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASHURA STORE</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>ASHURA STORE</h1>
+    <h1 class="title">ASHURA STORE</h1>
     <div class="tabs">
       <button id="loginTab" class="active">Login</button>
       <button id="registerTab">Register</button>
     </div>
 
     <div id="loginForm" class="form">
-      <input type="email" id="loginEmail" placeholder="Email" />
-      <input type="password" id="loginPassword" placeholder="Password" />
-      <button id="loginButton">Login</button>
+      <input type="email" id="loginEmail" placeholder="Email">
+      <input type="password" id="loginPassword" placeholder="Password">
+      <button id="loginBtn">Login</button>
+      <p id="loginError" class="error"></p>
     </div>
 
     <div id="registerForm" class="form hidden">
-      <input type="email" id="registerEmail" placeholder="Email" />
-      <input type="text" id="registerPhone" placeholder="Phone Number" />
-      <input type="password" id="registerPassword" placeholder="Password" />
-      <button id="registerButton">Register</button>
+      <input type="email" id="registerEmail" placeholder="Email">
+      <input type="password" id="registerPassword" placeholder="Password">
+      <input type="text" id="registerPhone" placeholder="Phone">
+      <button id="registerBtn">Register</button>
+      <p id="registerError" class="error"></p>
     </div>
-
-    <p id="message"></p>
   </div>
 
-  <script type="module" src="index.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
+      authDomain: "ashura-6cb98.firebaseapp.com",
+      databaseURL: "https://ashura-6cb98-default-rtdb.firebaseio.com",
+      projectId: "ashura-6cb98",
+      storageBucket: "ashura-6cb98.appspot.com",
+      messagingSenderId: "990827476073",
+      appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    // Tabs
+    const loginTab = document.getElementById('loginTab');
+    const registerTab = document.getElementById('registerTab');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+
+    loginTab.onclick = () => {
+      loginTab.classList.add('active');
+      registerTab.classList.remove('active');
+      loginForm.classList.remove('hidden');
+      registerForm.classList.add('hidden');
+    };
+
+    registerTab.onclick = () => {
+      registerTab.classList.add('active');
+      loginTab.classList.remove('active');
+      registerForm.classList.remove('hidden');
+      loginForm.classList.add('hidden');
+    };
+
+    // Login
+    document.getElementById('loginBtn').onclick = () => {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      const loginError = document.getElementById('loginError');
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          db.ref('users/' + user.uid).update({ lastLogin: new Date().toISOString() });
+
+          // Admin redirection logic
+          if (email.toLowerCase() === 'ashura@gmail.com') {
+            window.location.href = 'admin.html';
+          } else {
+            window.location.href = 'home.html';
+          }
+        })
+        .catch((error) => {
+          loginError.textContent = 'Login failed: ' + error.message;
+        });
+    };
+
+    // Register
+    document.getElementById('registerBtn').onclick = () => {
+      const email = document.getElementById('registerEmail').value.trim();
+      const password = document.getElementById('registerPassword').value.trim();
+      const phone = document.getElementById('registerPhone').value.trim();
+      const registerError = document.getElementById('registerError');
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          db.ref('users/' + user.uid).set({
+            email: email,
+            phone: phone,
+            uid: user.uid,
+            lastLogin: new Date().toISOString()
+          });
+          window.location.href = 'home.html';
+        })
+        .catch((error) => {
+          registerError.textContent = 'Registration failed: ' + error.message;
+        });
+    };
+  </script>
 </body>
 </html>
