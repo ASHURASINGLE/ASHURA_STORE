@@ -1,28 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buy Product - ASHURA STORE</title>
-  <link rel="stylesheet" href="buy.css" />
+  <link rel="stylesheet" href="buy.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
 <body>
   <div class="container">
     <h1 class="title">Product Details</h1>
-    <img id="productImage" class="product-image" src="" alt="Product Image"/>
-    <p id="productName" class="product-name"></p>
-    <p id="productDescription" class="product-description"></p>
-    <button id="continueBtn" class="continue-btn">Continue to Payment</button>
+    <img id="productImage" alt="Product Image" class="product-img">
+    <h2 id="productName"></h2>
+    <p id="productDescription"></p>
 
-    <div id="paymentSection" class="payment-section hidden">
+    <button id="continueBtn" class="btn">Continue to Payment</button>
+
+    <div id="paymentSection" class="hidden">
       <h2 class="subtitle">Scan QR to Pay</h2>
-      <img id="qrImage" class="qr-image" src="default_qr.png" alt="QR Code"/>
-      <input type="text" id="buyerName" placeholder="Enter Your Name"/>
-      <input type="text" id="utrNumber" placeholder="Enter UTR Number"/>
-      <button id="confirmBtn" class="confirm-btn">Confirm</button>
+      <img id="qrImage" alt="QR Code" class="qr-img">
+
+      <input type="text" id="buyerName" placeholder="Enter Your Name">
+      <input type="text" id="utrNumber" placeholder="Enter UTR Number">
+      <button id="confirmBtn" class="btn confirm">Confirm</button>
     </div>
   </div>
 
+  <script src="firebase-config.js"></script>
   <script src="buy.js"></script>
 </body>
 </html>
