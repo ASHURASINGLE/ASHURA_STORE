@@ -9,50 +9,49 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
 <body>
-  <div class="drawer" id="drawer">
-    <h2>Admin Panel</h2>
-    <ul>
-      <li onclick="navigateTo('dashboard')">Dashboard</li>
-      <li onclick="navigateTo('users')">View Users</li>
-      <li onclick="navigateTo('orders')">View Orders</li>
-      <li onclick="navigateTo('qrcode')">Update QR Code</li>
-      <li onclick="navigateTo('store-info')">Store Info</li>
-      <li onclick="logout()">Logout</li>
-    </ul>
-  </div>  <div class="main">
-    <header>
-      <button id="menu-btn">Menu</button>
-      <h1>ASHURA STORE - Admin</h1>
-    </header><section id="dashboard" class="section active">
-  <h2>Dashboard</h2>
-  <div>Total Users: <span id="total-users">0</span></div>
-  <div>Total Orders: <span id="total-orders">0</span></div>
-</section>
+  <div class="admin-container">
+    <aside class="drawer">
+      <h2>ADMIN</h2>
+      <a id="dashboard-link">Dashboard</a>
+      <a id="users-link">Users</a>
+      <a id="orders-link">Orders</a>
+      <a id="qr-link">QR Code</a>
+      <a id="store-link">Store Info</a>
+    </aside><main class="main-content">
+  <section id="dashboard" class="section">
+    <h2>Dashboard</h2>
+    <p>Total Users: <span id="total-users">0</span></p>
+    <p>Total Orders: <span id="total-orders">0</span></p>
+  </section>
 
-<section id="users" class="section">
-  <h2>All Users</h2>
-  <div id="user-list"></div>
-</section>
+  <section id="users" class="section">
+    <h2>Users</h2>
+    <div id="users-container"></div>
+  </section>
 
-<section id="orders" class="section">
-  <h2>Orders</h2>
-  <div id="order-list"></div>
-</section>
+  <section id="orders" class="section">
+    <h2>Orders</h2>
+    <div id="orders-container"></div>
+  </section>
 
-<section id="qrcode" class="section">
-  <h2>Update QR Code</h2>
-  <input type="text" id="qr-url" placeholder="QR Code Image URL" />
-  <button onclick="updateQRCode()">Update</button>
-  <div><img id="qr-preview" src="" alt="QR Code Preview" /></div>
-</section>
+  <section id="qr" class="section">
+    <h2>QR Code</h2>
+    <form id="qr-form">
+      <input type="url" id="qr-url" placeholder="Enter QR Image URL" required />
+      <button type="submit">Update</button>
+    </form>
+    <div id="qr-container"></div>
+  </section>
 
-<section id="store-info" class="section">
-  <h2>Update Store Info</h2>
-  <input type="text" id="store-name" placeholder="Store Name" />
-  <textarea id="store-desc" placeholder="Store Description"></textarea>
-  <button onclick="updateStoreInfo()">Update</button>
-  <div id="store-preview"></div>
-</section>
+  <section id="store" class="section">
+    <h2>Store Info</h2>
+    <form id="store-form">
+      <input type="text" id="store-name" placeholder="Store Name" required />
+      <textarea id="store-desc" placeholder="Store Description"></textarea>
+      <button type="submit">Update</button>
+    </form>
+  </section>
+</main>
 
   </div>  <script src="admin.js"></script></body>
 </html>
