@@ -8,6 +8,7 @@ const firebaseConfig = {
   messagingSenderId: "990827476073",
   appId: "1:990827476073:android:833691f1a9f1d4b7a51ef8"
 };
+
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
@@ -16,6 +17,7 @@ firebase.auth().onAuthStateChanged(user => {
   if (!user) {
     window.location.href = "index.html";
   } else {
+    console.log("User is logged in:", user.uid);
     loadProfile(user);
     loadProducts();
     loadOrders(user.uid);
@@ -35,12 +37,10 @@ function switchTab(tabName) {
 // Load Products
 function loadProducts() {
   const container = document.getElementById("productList");
-  if (!container) {
-    console.error("productList container not found in HTML");
-    return;
-  }
+  if (!container) return console.error("No #productList found in HTML");
   container.innerHTML = "Loading products...";
-  database.ref("products").once("value", snapshot => {
+
+  database.ref("products").once("value").then(snapshot => {
     container.innerHTML = "";
     if (!snapshot.exists()) {
       container.innerHTML = "<p>No products available.</p>";
@@ -49,26 +49,23 @@ function loadProducts() {
 
     snapshot.forEach(child => {
       const product = child.val();
-      console.log("Loaded product:", product);
-
       const card = document.createElement("div");
       card.className = "product";
       card.innerHTML = `
-        <img src="${product.imageUrl || 'default-image.jpg'}" alt="${product.name || 'Product'}" />
-        <h3>${product.name || 'No Name'}</h3>
-        <p>${product.description || 'No Description'}</p>
+        <img src="${product.imageUrl || 'https://via.placeholder.com/150'}" alt="${product.name}" />
+        <h3>${product.name}</h3>
+        <p>${product.description}</p>
         <p><strong>Price:</strong> ₹${product.price || "N/A"}</p>
         <button class="red-button" onclick="buyProduct('${child.key}')">Buy</button>
       `;
       container.appendChild(card);
     });
-  }, error => {
-    container.innerHTML = "<p>Error loading products.</p>";
-    console.error("Error fetching products:", error);
+  }).catch(err => {
+    console.error("Error loading products:", err);
   });
 }
 
-// Buy Function
+// Buy Button
 function buyProduct(productId) {
   window.location.href = `buy.html?id=${productId}`;
 }
@@ -76,15 +73,13 @@ function buyProduct(productId) {
 // Load Orders
 function loadOrders(uid) {
   const container = document.getElementById("orderList");
-  if (!container) {
-    console.error("orderList container not found in HTML");
-    return;
-  }
-  container.innerHTML = "Loading...";
-  database.ref("orders").orderByChild("userId").equalTo(uid).once("value", snapshot => {
+  if (!container) return console.error("No #orderList found in HTML");
+
+  container.innerHTML = "Loading orders...";
+  database.ref("orders").orderByChild("userId").equalTo(uid).once("value").then(snapshot => {
     container.innerHTML = "";
     if (!snapshot.exists()) {
-      container.innerHTML = "<p>No orders yet.</p>";
+      container.innerHTML = "<p>No orders found.</p>";
       return;
     }
 
@@ -99,44 +94,57 @@ function loadOrders(uid) {
       `;
       container.appendChild(div);
     });
+  }).catch(err => {
+    console.error("Error loading orders:", err);
   });
 }
 
 // Load Profile
 function loadProfile(user) {
-  document.getElementById("email").innerText = user.email;
-  document.getElementById("uid").innerText = user.uid;
-  document.getElementById("lastLogin").innerText = user.metadata.lastSignInTime;
+  const email = document.getElementById("email");
+  const uid = document.getElementById("uid");
+  const lastLogin = document.getElementById("lastLogin");
+  const phone = document.getElementById("phone");
 
-  database.ref("users/" + user.uid).once("value", snap => {
+  if (!email || !uid || !lastLogin || !phone) {
+    console.error("Profile section IDs not found in HTML");
+    return;
+  }
+
+  email.innerText = user.email;
+  uid.innerText = user.uid;
+  lastLogin.innerText = user.metadata.lastSignInTime;
+
+  database.ref("users/" + user.uid).once("value").then(snap => {
     const userData = snap.val();
-    document.getElementById("phone").innerText = userData?.phone || "Not available";
-  });
-}
-
-// Logout
-function logout() {
-  firebase.auth().signOut().then(() => {
-    window.location.href = "index.html";
+    phone.innerText = userData?.phone || "Not available";
+  }).catch(err => {
+    console.error("Error loading profile:", err);
   });
 }
 
 // Load Store Info
 function loadStoreInfo() {
-  database.ref("store/info").once("value", snap => {
+  const storeTitle = document.getElementById("storeTitle");
+  const notice = document.getElementById("notice");
+  if (!storeTitle || !notice) return;
+
+  database.ref("store/info").once("value").then(snap => {
     const info = snap.val();
     if (info) {
-      document.getElementById("storeTitle").innerText = info.name;
-      document.getElementById("notice").innerText = info.description;
+      storeTitle.innerText = info.name;
+      notice.innerText = info.description;
     }
   });
 }
 
-// Show floating notice
+// Show Floating Notice
 function showFloatingNotice() {
-  database.ref("store/floating").once("value", snap => {
+  const box = document.getElementById("floatingNotice");
+  if (!box) return;
+
+  database.ref("store/floating").once("value").then(snap => {
     const notice = snap.val();
-    const box = document.getElementById("floatingNotice");
     if (notice) {
       box.innerText = notice;
       box.style.display = "block";
@@ -144,5 +152,12 @@ function showFloatingNotice() {
         box.style.display = "none";
       }, 6000);
     }
+  });
+}
+
+// Logout
+function logout() {
+  firebase.auth().signOut().then(() => {
+    window.location.href = "index.html";
   });
 }
