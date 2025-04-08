@@ -1,4 +1,4 @@
-// Firebase initialization
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAugPdSj7R0AAjBLYu6jt2W1CarzTNISPY",
   authDomain: "ashura-6cb98.firebaseapp.com",
@@ -10,132 +10,139 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-const storage = firebase.storage();
+const auth = firebase.auth();
+const db = firebase.database();
 
-// Tab switching
-const menuButtons = document.querySelectorAll('.menu button');
-const sections = document.querySelectorAll('.section');
+// Drawer Navigation
+const links = document.querySelectorAll(".drawer a");
+const sections = document.querySelectorAll(".section");
 
-menuButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    menuButtons.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+links.forEach((link, index) => {
+  link.addEventListener("click", () => {
+    links.forEach(l => l.classList.remove("active"));
+    sections.forEach(s => s.classList.remove("active"));
+    link.classList.add("active");
+    sections[index].classList.add("active");
 
-    const target = btn.getAttribute('data-target');
-    sections.forEach(sec => {
-      sec.classList.remove('active');
-      if (sec.id === target) sec.classList.add('active');
-    });
+    if (link.id === "dashboard-link") loadDashboard();
+    if (link.id === "users-link") loadUsers();
+    if (link.id === "orders-link") loadOrders();
+    if (link.id === "qr-link") loadQRCode();
+    if (link.id === "store-link") loadStoreDetails();
   });
 });
 
-// Dashboard stats
-function updateDashboardStats() {
-  database.ref('users').once('value', snapshot => {
-    const users = snapshot.val() || {};
-    const totalUsers = Object.keys(users).length;
-    document.getElementById('totalUsers').textContent = totalUsers;
-
-    let registeredUsers = 0;
-    Object.values(users).forEach(u => {
-      if (u.email && u.phone) registeredUsers++;
-    });
-
-    document.getElementById('registeredUsers').textContent = registeredUsers;
-  });
-
-  database.ref('orders').once('value', snapshot => {
-    const orders = snapshot.val() || {};
-    const totalOrders = Object.keys(orders).length;
-    document.getElementById('totalOrders').textContent = totalOrders;
-  });
-}
-updateDashboardStats();
-
-// Load all users
-function loadAllUsers() {
-  const usersList = document.getElementById('usersList');
-  usersList.innerHTML = '';
-
-  database.ref('users').once('value', snapshot => {
-    const users = snapshot.val();
-    if (!users) return;
-
-    Object.entries(users).forEach(([uid, user]) => {
-      const card = document.createElement('div');
-      card.classList.add('user-card');
-      card.innerHTML = `
-        <p><strong>UID:</strong> ${uid}</p>
-        <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
-        <p><strong>Phone:</strong> ${user.phone || 'N/A'}</p>
-        <button onclick="deleteUser('${uid}')">Delete</button>
-        <button onclick="blockUser('${uid}')">Block</button>
-      `;
-      usersList.appendChild(card);
-    });
-  });
-}
-
-// Delete user
-function deleteUser(uid) {
-  if (confirm("Are you sure you want to delete this user?")) {
-    database.ref(`users/${uid}`).remove().then(() => {
-      alert("User deleted.");
-      loadAllUsers();
-    });
+// Auth Check
+auth.onAuthStateChanged(user => {
+  if (user) {
+    loadDashboard();
+    document.getElementById("dashboard").classList.add("active");
+    document.getElementById("dashboard-link").classList.add("active");
+  } else {
+    window.location.href = "index.html";
   }
-}
+});
 
-// Block user
-function blockUser(uid) {
-  database.ref(`users/${uid}/blocked`).set(true).then(() => {
-    alert("User blocked.");
-    loadAllUsers();
+// Dashboard
+function loadDashboard() {
+  db.ref("users").once("value", usersSnap => {
+    db.ref("orders").once("value", ordersSnap => {
+      document.getElementById("total-users").innerText = usersSnap.numChildren();
+      document.getElementById("total-orders").innerText = ordersSnap.numChildren();
+    });
   });
 }
 
-// Load orders
-function loadOrders() {
-  const orderList = document.getElementById('orderList');
-  orderList.innerHTML = '';
-
-  database.ref('orders').once('value', snapshot => {
-    const orders = snapshot.val();
-    if (!orders) return;
-
-    Object.entries(orders).forEach(([key, order]) => {
-      const card = document.createElement('div');
-      card.classList.add('order-card');
-      card.innerHTML = `
-        <p><strong>Order ID:</strong> ${key}</p>
-        <p><strong>User Name:</strong> ${order.name}</p>
-        <p><strong>UTR:</strong> ${order.utr}</p>
-        <p><strong>Status:</strong> ${order.status || 'Pending'}</p>
-        <button onclick="updateOrderStatus('${key}', 'Confirmed')">Mark Confirmed</button>
-        <button onclick="updateOrderStatus('${key}', 'Rejected')">Mark Rejected</button>
+// Load Users
+function loadUsers() {
+  const container = document.getElementById("users-container");
+  container.innerHTML = "";
+  db.ref("users").once("value", snap => {
+    snap.forEach(child => {
+      const user = child.val();
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `
+        <p><b>Email:</b> ${user.email}</p>
+        <p><b>Phone:</b> ${user.phone || "Not Provided"}</p>
+        <p><b>Status:</b> ${user.blocked ? "Blocked" : "Active"}</p>
+        <button onclick="toggleBlock('${child.key}', ${!!user.blocked})">${user.blocked ? "Unblock" : "Block"}</button>
+        <button onclick="deleteUser('${child.key}')">Delete</button>
       `;
-      orderList.appendChild(card);
+      container.appendChild(div);
+    });
+  });
+}
+
+function toggleBlock(uid, status) {
+  db.ref("users/" + uid).update({ blocked: !status });
+  loadUsers();
+}
+
+function deleteUser(uid) {
+  db.ref("users/" + uid).remove();
+  loadUsers();
+}
+
+// Load Orders
+function loadOrders() {
+  const container = document.getElementById("orders-container");
+  container.innerHTML = "";
+  db.ref("orders").once("value", snap => {
+    snap.forEach(child => {
+      const order = child.val();
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `
+        <p><b>Product:</b> ${order.productName}</p>
+        <p><b>Name:</b> ${order.name}</p>
+        <p><b>UTR:</b> ${order.utr}</p>
+        <p><b>Status:</b> ${order.status}</p>
+        <button onclick="updateOrderStatus('${child.key}', 'Completed')">Mark Completed</button>
+      `;
+      container.appendChild(div);
     });
   });
 }
 
 function updateOrderStatus(orderId, status) {
-  database.ref(`orders/${orderId}/status`).set(status).then(() => {
-    alert(`Order status updated to ${status}.`);
-    loadOrders();
+  db.ref("orders/" + orderId).update({ status });
+  loadOrders();
+}
+
+// Load QR Code
+function loadQRCode() {
+  const container = document.getElementById("qr-container");
+  container.innerHTML = "";
+  db.ref("qr").once("value", snap => {
+    const qr = snap.val();
+    const img = document.createElement("img");
+    img.src = qr?.url || "";
+    img.style.maxWidth = "200px";
+    container.appendChild(img);
   });
 }
 
-// Upload QR code
-document.getElementById('qrUpload').addEventListener('change', function () {
-  const file = this.files[0];
-  const storageRef = storage.ref(`paymentQR/qr.png`);
-  storageRef.put(file).then(() => {
-    alert("QR code uploaded successfully.");
-  });
+document.getElementById("qr-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const url = document.getElementById("qr-url").value;
+  db.ref("qr").set({ url });
+  loadQRCode();
 });
 
-// Initialize
-loadAllUsers();
-loadOrders();
+// Load Store Info
+function loadStoreDetails() {
+  db.ref("store").once("value", snap => {
+    const store = snap.val() || {};
+    document.getElementById("store-name").value = store.name || "";
+    document.getElementById("store-desc").value = store.description || "";
+  });
+}
+
+document.getElementById("store-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const name = document.getElementById("store-name").value;
+  const description = document.getElementById("store-desc").value;
+  db.ref("store").set({ name, description });
+  alert("Store info updated.");
+});
