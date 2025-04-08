@@ -1,80 +1,123 @@
+/* Base styles */
 body {
-  background-color: #000;
-  color: white;
-  font-family: monospace;
   margin: 0;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #111;
+  color: #00ffcc;
   padding: 0;
 }
 
+/* Header */
 header {
-  background-color: #111;
-  padding: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #000;
+  padding: 16px;
+  border-bottom: 2px solid #00ffcc;
 }
 
 header h1 {
-  font-size: 18px;
+  font-size: 22px;
+  margin: 0;
+  color: #00ffcc;
 }
 
+/* Drawer menu button */
 #menuToggle {
-  background-color: red;
-  color: white;
+  background-color: #00ffcc;
+  color: #000;
   border: none;
-  padding: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 18px;
 }
 
+/* Drawer */
 #drawer {
-  background-color: #111;
-  padding: 10px;
   display: none;
+  background-color: #000;
+  padding: 16px;
+  border-right: 2px solid #00ffcc;
 }
 
 #drawer ul {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
 }
 
-#drawer li {
-  padding: 10px;
-  border-bottom: 1px solid #333;
-  cursor: pointer;
+#drawer ul li {
+  margin: 10px 0;
+  font-size: 18px;
 }
 
-#drawer li:hover {
-  background-color: #222;
+#drawer ul li a {
+  color: #00ffcc;
+  text-decoration: none;
 }
 
+#drawer ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Content area */
 main {
-  padding: 20px;
+  padding: 16px;
 }
 
-.section {
-  display: none;
+section {
+  margin-bottom: 40px;
 }
 
-.section.active {
-  display: block;
+h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #00ffcc;
+  padding-bottom: 4px;
 }
 
+/* Inputs & Buttons */
 input, textarea {
-  width: 90%;
+  width: 100%;
   padding: 10px;
-  margin-top: 10px;
-  font-family: monospace;
-  font-size: 16px;
+  margin: 6px 0 16px;
+  border: 1px solid #00ffcc;
+  background-color: #000;
+  color: #00ffcc;
+  border-radius: 5px;
 }
 
 button {
-  margin-top: 10px;
-  padding: 10px;
-  font-size: 16px;
-  font-family: monospace;
-  background-color: white;
-  color: black;
+  background-color: #00ffcc;
+  color: #000;
+  padding: 10px 16px;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+}
+
+button:hover {
+  background-color: #00e6b8;
+}
+
+/* QR preview */
+#qrPreview {
+  max-width: 200px;
+  margin-top: 10px;
+  border: 2px solid #00ffcc;
+  border-radius: 8px;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #drawer {
+    width: 100%;
+    border-right: none;
+    border-bottom: 2px solid #00ffcc;
+  }
 }
