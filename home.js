@@ -35,21 +35,36 @@ function switchTab(tabName) {
 // Load Products
 function loadProducts() {
   const container = document.getElementById("productList");
-  container.innerHTML = "";
+  if (!container) {
+    console.error("productList container not found in HTML");
+    return;
+  }
+  container.innerHTML = "Loading products...";
   database.ref("products").once("value", snapshot => {
+    container.innerHTML = "";
+    if (!snapshot.exists()) {
+      container.innerHTML = "<p>No products available.</p>";
+      return;
+    }
+
     snapshot.forEach(child => {
       const product = child.val();
+      console.log("Loaded product:", product);
+
       const card = document.createElement("div");
       card.className = "product";
       card.innerHTML = `
-        <img src="${product.imageUrl}" alt="${product.name}" />
-        <h3>${product.name}</h3>
-        <p>${product.description}</p>
+        <img src="${product.imageUrl || 'default-image.jpg'}" alt="${product.name || 'Product'}" />
+        <h3>${product.name || 'No Name'}</h3>
+        <p>${product.description || 'No Description'}</p>
         <p><strong>Price:</strong> ₹${product.price || "N/A"}</p>
         <button class="red-button" onclick="buyProduct('${child.key}')">Buy</button>
       `;
       container.appendChild(card);
     });
+  }, error => {
+    container.innerHTML = "<p>Error loading products.</p>";
+    console.error("Error fetching products:", error);
   });
 }
 
@@ -61,6 +76,10 @@ function buyProduct(productId) {
 // Load Orders
 function loadOrders(uid) {
   const container = document.getElementById("orderList");
+  if (!container) {
+    console.error("orderList container not found in HTML");
+    return;
+  }
   container.innerHTML = "Loading...";
   database.ref("orders").orderByChild("userId").equalTo(uid).once("value", snapshot => {
     container.innerHTML = "";
@@ -68,6 +87,7 @@ function loadOrders(uid) {
       container.innerHTML = "<p>No orders yet.</p>";
       return;
     }
+
     snapshot.forEach(child => {
       const order = child.val();
       const div = document.createElement("div");
